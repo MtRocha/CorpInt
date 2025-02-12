@@ -1,0 +1,88 @@
+﻿@import url(https://fonts.googleapis.com/css?family=Fira+Sans:400,300,700,500,400italic,500italic,700italic,300italic);
+
+:root {
+    overflow: hidden; /* esconde qualquer parte do sol abaixo do horizonte */
+    /*background-color: lightblue;*/
+    display: flex;
+    justify-content: center; /* centraliza o sol ao fundo */
+}
+
+.sun {
+    background-color: #ff6000;
+    border-radius: 50%; /* cria um fundo circular */
+    height: 0; /* torna o sol do tamanho da viewport */
+    left: 30%;
+    aspect-ratio: 1 / 1;
+    animation: 4s linear 0s alternate sun-rise;
+}
+
+
+
+.imagem-fixa {
+    position: fixed;
+    bottom: 0; /* Posiciona a imagem na parte inferior da página */
+    left: 30%; /* Centraliza a imagem horizontalmente */
+    transform: translateX(-50%); /* Ajusta o posicionamento horizontal para centralizar a imagem */
+    animation: 3s linear 0s alternate sun-rise;
+}
+
+@keyframes sun-rise {
+    from {
+        /* empurra o sol para além da janela de visualização */
+        opacity: 0;
+        left: 0%
+    }
+
+    to {
+        /* retorna o sol à sua posição padrão */
+        opacity:1;
+        left: 30%
+    }
+}
+
+
+.imagem-logotipo {
+    position: fixed;
+    bottom: 0; /* Posiciona a imagem na parte inferior da página */
+    right: 10%; /* Centraliza a imagem horizontalmente */
+    transform: translateX(-50%); /* Ajusta o posicionamento horizontal para centralizar a imagem */
+    animation: 1s linear 0s alternate sun-logotipo;
+}
+
+@keyframes sun-logotipo {
+    from {
+        /* empurra o sol para além da janela de visualização */
+        opacity: 0;
+        right: -30%
+    }
+
+    to {
+        /* retorna o sol à sua posição padrão */
+        opacity: 1;
+        right: 10%
+    }
+}
+
+
+.div-login {
+    position: fixed;
+    bottom: 30px;
+    top: 40%; /* Centraliza a imagem horizontalmente */
+    transform: translateX(-50%); /* Ajusta o posicionamento horizontal para centralizar a imagem */
+    animation: 2s linear 0s alternate sun-div-login;
+}
+
+@keyframes sun-div-login {
+    from {
+        /* empurra o sol para além da janela de visualização */
+        opacity: 0;
+        top: -30%
+    }
+
+    to {
+        /* retorna o sol à sua posição padrão */
+        opacity: 1;
+        top: 40%
+    }
+}
+
