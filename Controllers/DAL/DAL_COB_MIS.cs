@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
+using System.Data.SqlClient;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Intranet_NEW.Controllers.DAL
+namespace Intranet.DAL
 {
-    public class DAL_PROC_ROVERI
+
+    public class DAL_COB_MIS
     {
         string strConexao;
         SqlConnection SQLConexao;
-        static DAL_PROC_ROVERI instancia;
+        static DAL_COB_MIS instancia;
 
-        public DAL_PROC_ROVERI()
+        public DAL_COB_MIS()
         {
             /* BASE DESENVOLVIMENTO */
-            strConexao = "Server=172.20.1.248; Database=DB_PROC_ROVERI; User Id=SisIntranet; Password=_P@ssw0rdEX!T0; Max Pool Size=600;Connection Timeout=540";
+            strConexao = "Server=172.20.1.246; Database=DB_COB_MIS; User Id=SisIntranet; Password=_P@ssw0rdEX!T0;";
             SQLConexao = new SqlConnection(strConexao);
         }
 
-        public static DAL_PROC_ROVERI Instancia
+        public static DAL_COB_MIS Instancia
         {
             get
             {
                 if (instancia == null)
-                    instancia = new DAL_PROC_ROVERI();
+                    instancia = new DAL_COB_MIS();
                 return instancia;
             }
         }
@@ -63,7 +62,7 @@ namespace Intranet_NEW.Controllers.DAL
             {
                 sqltran.Rollback();
                 DesconectaDataBase();
-                throw new Exception("DAL_PROC_001: " + ex.Message, ex);
+                throw new Exception("DAL_COB_MIS_N_001: " + ex.Message, ex);
             }
         }
 
@@ -91,7 +90,7 @@ namespace Intranet_NEW.Controllers.DAL
             {
                 sqltran.Rollback();
                 DesconectaDataBase();
-                throw new Exception("DAL_PROC_002: " + ex.Message, ex);
+                throw new Exception("DAL_COB_MIS_N_002: " + ex.Message, ex);
             }
         }
 
@@ -106,12 +105,12 @@ namespace Intranet_NEW.Controllers.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return 1;
+                return (1);
             }
             catch (Exception ex)
             {
                 DesconectaDataBase();
-                throw new Exception("DAL_PROC_003: " + ex.Message, ex);
+                throw new Exception("DAL_COB_MIS_N_003: " + ex.Message, ex);
             }
         }
         public int ExecutaBulkCopySQL(DataRow[] TabelaCarga, string TabelaDestino)
@@ -125,12 +124,12 @@ namespace Intranet_NEW.Controllers.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return 1;
+                return (1);
             }
             catch (Exception ex)
             {
                 DesconectaDataBase();
-                throw new Exception("DAL_PROC_004: " + ex.Message, ex);
+                throw new Exception("DAL_COB_MIS_N_004: " + ex.Message, ex);
             }
         }
     }

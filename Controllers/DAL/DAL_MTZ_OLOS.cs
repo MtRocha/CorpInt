@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace Intranet_NEW.Controllers.DAL
+namespace Intranet.DAL
 {
     public class DAL_MTZ_OLOS
     {
@@ -15,7 +15,7 @@ namespace Intranet_NEW.Controllers.DAL
         public DAL_MTZ_OLOS()
         {
             /* BASE DESENVOLVIMENTO */
-            strConexao = "Server=192.168.2.93; Database=espelho_olos; User Id=sa; Password=P@ssw0rd;";
+            strConexao = "Server=192.168.0.2; Database=ExportData; User Id=sa; Password=P@ssw0rd;";
             SQLConexao = new SqlConnection(strConexao);
         }
 
@@ -104,7 +104,7 @@ namespace Intranet_NEW.Controllers.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return 1;
+                return (1);
             }
             catch (Exception ex)
             {
@@ -123,7 +123,7 @@ namespace Intranet_NEW.Controllers.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return 1;
+                return (1);
             }
             catch (Exception ex)
             {

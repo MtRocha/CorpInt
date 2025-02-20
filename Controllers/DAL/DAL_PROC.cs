@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace Intranet_NEW.Controllers.DAL
+namespace Intranet.DAL
 {
     public class DAL_PROC
     {
@@ -104,7 +104,7 @@ namespace Intranet_NEW.Controllers.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return 1;
+                return (1);
             }
             catch (Exception ex)
             {
@@ -123,7 +123,7 @@ namespace Intranet_NEW.Controllers.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return 1;
+                return (1);
             }
             catch (Exception ex)
             {

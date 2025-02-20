@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace Intranet_NEW.Controllers.DAL
+namespace Intranet.DAL
 {
     public class DAL_TOTVS
     {
@@ -15,7 +15,7 @@ namespace Intranet_NEW.Controllers.DAL
         public DAL_TOTVS()
         {
             /* BASE DESENVOLVIMENTO */
-            strConexao = "Server=172.20.1.248; Database=DB_TOTVS; User Id=SisEspelhoPonto; Password=#sp#lh0; Max Pool Size=600";
+            strConexao = "Server=172.20.1.236; Database=TOTVS12; User Id=totvs; Password=totvs;";
             SQLConexao = new SqlConnection(strConexao);
         }
 
@@ -104,7 +104,7 @@ namespace Intranet_NEW.Controllers.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return 1;
+                return (1);
             }
             catch (Exception ex)
             {
@@ -123,7 +123,7 @@ namespace Intranet_NEW.Controllers.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return 1;
+                return (1);
             }
             catch (Exception ex)
             {
