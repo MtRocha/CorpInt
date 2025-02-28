@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Intranet_NEW.Models.WEB;
 
-    public class ComboAtividade
-    {
-        public string NR_ATIVIDADE { get; set; }
-        public string NM_ATIVIDADE { get; set; }
-        
-    }
+public class ComboAtividade
+{
+    public string NR_ATIVIDADE { get; set; }
+    public string NM_ATIVIDADE { get; set; }
 
 }
+
