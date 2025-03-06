@@ -1,5 +1,7 @@
-using Intranet_NEW.Controllers.DAL;
+using Intranet_NEW.DAL;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Intranet_NEW.Services.Validadores;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddValidatorsFromAssemblyContaining<UsuarioValidator>();
 
 var app = builder.Build();
 
@@ -30,6 +33,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}");
 
 app.Run();

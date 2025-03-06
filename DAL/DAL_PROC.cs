@@ -4,27 +4,27 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Text;
 
-namespace Intranet.DAL
+namespace Intranet_NEW.DAL
 {
-    public class DAL_MTZ_OLOS
+    public class DAL_PROC
     {
         string strConexao;
         SqlConnection SQLConexao;
-        static DAL_MTZ_OLOS instancia;
+        static DAL_PROC instancia;
 
-        public DAL_MTZ_OLOS()
+        public DAL_PROC()
         {
             /* BASE DESENVOLVIMENTO */
-            strConexao = "Server=192.168.0.2; Database=ExportData; User Id=sa; Password=P@ssw0rd;";
+            strConexao = "Server=172.20.1.248; Database=DB_PROC; User Id=SisIntranet; Password=_P@ssw0rdEX!T0; Max Pool Size=600";
             SQLConexao = new SqlConnection(strConexao);
         }
 
-        public static DAL_MTZ_OLOS Instancia
+        public static DAL_PROC Instancia
         {
             get
             {
                 if (instancia == null)
-                    instancia = new DAL_MTZ_OLOS();
+                    instancia = new DAL_PROC();
                 return instancia;
             }
         }
@@ -61,7 +61,7 @@ namespace Intranet.DAL
             {
                 sqltran.Rollback();
                 DesconectaDataBase();
-                throw new Exception("DAL_MTZ_PROC_001: " + ex.Message, ex);
+                throw new Exception("DAL_PROC_001: " + ex.Message, ex);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Intranet.DAL
             {
                 sqltran.Rollback();
                 DesconectaDataBase();
-                throw new Exception("DAL_MTZ_PROC_002: " + ex.Message, ex);
+                throw new Exception("DAL_PROC_002: " + ex.Message, ex);
             }
         }
 
@@ -104,12 +104,12 @@ namespace Intranet.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return (1);
+                return 1;
             }
             catch (Exception ex)
             {
                 DesconectaDataBase();
-                throw new Exception("DAL_MTZ_PROC_003: " + ex.Message, ex);
+                throw new Exception("DAL_PROC_003: " + ex.Message, ex);
             }
         }
         public int ExecutaBulkCopySQL(DataRow[] TabelaCarga, string TabelaDestino)
@@ -123,12 +123,12 @@ namespace Intranet.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return (1);
+                return 1;
             }
             catch (Exception ex)
             {
                 DesconectaDataBase();
-                throw new Exception("DAL_MTZ_PROC_004: " + ex.Message, ex);
+                throw new Exception("DAL_PROC_004: " + ex.Message, ex);
             }
         }
     }

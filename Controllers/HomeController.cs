@@ -1,32 +1,67 @@
 using System.Diagnostics;
+using FluentValidation;
 using Intranet_NEW.Models;
+using Intranet_NEW.Models.WEB;
+using Intranet_NEW.Services;
+using Intranet_NEW.Services.Validadores;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Intranet_NEW.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly UsuarioService usuarioService;
+        private readonly UsuarioValidator usuarioValidator;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
+            usuarioService = new UsuarioService();
+            usuarioValidator = new UsuarioValidator();
         }
 
-        public IActionResult Index()
+        #region Acesso 
+
+        public IActionResult Login()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult RealizarLogin(Colaborador model)
         {
-            return View();
+            var senhaEstacorreta = usuarioValidator.Validate(model,options => options.IncludeRuleSets("VerificarSenha"));
+
+            if (senhaEstacorreta.IsValid)
+            {
+                model = usuarioService.GetColaborador(model.NR_CPF.Replace("-","").Replace(".",""));
+                return View("Feed",model);
+            }
+            else
+            {
+                ViewBag.ErroLog = true;
+                return View("Login");
+            }
+
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> ResetarSenha([FromBody] Colaborador model)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var modelstate = usuarioValidator.Validate(model,options => options.IncludeRuleSets("AlterarSenha"));
+
+            if (!modelstate.IsValid)
+            {
+                return BadRequest(new { erro = modelstate.Errors.Select(e => e.ErrorMessage)});
+            }
+            else
+            {
+                usuarioService.AlteraSenhaUsuario(model);
+                return Ok(new { sucesso = "Senha Alterada" });
+            }
         }
+
+        #endregion
+
+
     }
+
+
 }

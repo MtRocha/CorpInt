@@ -4,27 +4,28 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Text;
 
-namespace Intranet.DAL
+namespace Intranet_NEW.DAL
 {
-    public class DAL_TOTVS
+
+    public class DAL_COB_MIS
     {
         string strConexao;
         SqlConnection SQLConexao;
-        static DAL_TOTVS instancia;
+        static DAL_COB_MIS instancia;
 
-        public DAL_TOTVS()
+        public DAL_COB_MIS()
         {
             /* BASE DESENVOLVIMENTO */
-            strConexao = "Server=172.20.1.236; Database=TOTVS12; User Id=totvs; Password=totvs;";
+            strConexao = "Server=172.20.1.246; Database=DB_COB_MIS; User Id=SisIntranet; Password=_P@ssw0rdEX!T0;";
             SQLConexao = new SqlConnection(strConexao);
         }
 
-        public static DAL_TOTVS Instancia
+        public static DAL_COB_MIS Instancia
         {
             get
             {
                 if (instancia == null)
-                    instancia = new DAL_TOTVS();
+                    instancia = new DAL_COB_MIS();
                 return instancia;
             }
         }
@@ -61,7 +62,7 @@ namespace Intranet.DAL
             {
                 sqltran.Rollback();
                 DesconectaDataBase();
-                throw new Exception("DAL_TOTVS_N_001: " + ex.Message, ex);
+                throw new Exception("DAL_COB_MIS_N_001: " + ex.Message, ex);
             }
         }
 
@@ -89,7 +90,7 @@ namespace Intranet.DAL
             {
                 sqltran.Rollback();
                 DesconectaDataBase();
-                throw new Exception("DAL_TOTVS_N_002: " + ex.Message, ex);
+                throw new Exception("DAL_COB_MIS_N_002: " + ex.Message, ex);
             }
         }
 
@@ -104,12 +105,12 @@ namespace Intranet.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return (1);
+                return 1;
             }
             catch (Exception ex)
             {
                 DesconectaDataBase();
-                throw new Exception("DAL_TOTVS_N_003: " + ex.Message, ex);
+                throw new Exception("DAL_COB_MIS_N_003: " + ex.Message, ex);
             }
         }
         public int ExecutaBulkCopySQL(DataRow[] TabelaCarga, string TabelaDestino)
@@ -123,12 +124,12 @@ namespace Intranet.DAL
                 sqlCopy.WriteToServer(TabelaCarga);
 
                 DesconectaDataBase();
-                return (1);
+                return 1;
             }
             catch (Exception ex)
             {
                 DesconectaDataBase();
-                throw new Exception("DAL_TOTVS_N_004: " + ex.Message, ex);
+                throw new Exception("DAL_COB_MIS_N_004: " + ex.Message, ex);
             }
         }
     }

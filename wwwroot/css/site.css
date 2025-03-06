@@ -1,22 +1,125 @@
-html {
-  font-size: 14px;
+@import url('animacao.css');
+
+:root {
+    --cor-principal: #ff6000;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+
+/* Mantém a rotação apenas no texto vertical */
+.vertical-text {
+    font-size: 11rem;
+    writing-mode: vertical-rl; /* Mantém o texto na vertical */
+    font-weight: bold;
+    color: #fff;
+    position: absolute; /* Remove o impacto na página */
+    z-index: 1;
+    opacity: 0;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.vertical-text.start {
+    left: -25%; /* Fixa o texto 1 à esquerda */
+    bottom: 1%; /* Começa de baixo para cima */
+    animation:FadeUpTextVertical 1s forwards;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.vertical-text.end {
+    top: 2%; /* Fixa o texto 2 à direita */
+    left: -5%; /* Começa de baixo para cima */
+    animation:FadeDownTextVertical 1s forwards;
+
 }
 
-body {
-  margin-bottom: 60px;
+/* Estilização das labels */
+.custom-label {
+    font-weight: bold;
+    font-size: 1.7rem;
+    color: #ff6000;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 5px;
 }
+
+/* Estilização dos inputs */
+.custom-input {
+    border: 2px solid #ff6000;
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+    .custom-input:focus {
+        border: 2px solid #ff6000;
+        box-shadow: 0 0 32px rgba(255, 96, 0, 0.5);
+    }
+
+/* Botão estilizado */
+.custom-btn {
+    background-color: #ff6000;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    border:none;
+    border-radius: 8px;
+    width: 100%;
+    transition: 0.3s ease-in-out;
+}
+
+    .custom-btn:hover {
+        background-color: #FFF;
+        color: var(--cor-principal);
+        font-size:1.01rem;
+        border: solid 2px var(--cor-principal);
+        box-shadow: 0 4px 10px rgba(255, 96, 0, 0.5);
+    }
+
+
+
+.modal-erro {
+    background-color: rgba(194, 196, 195, 0.5); /* Fundo escuro transparente */
+}
+
+    .modal-erro .modal-dialog {
+        max-width: 600px; /* Define um tamanho menor para o modal */
+    }
+
+    .modal-erro .modal-content {
+        background-color: #fff; /* Vermelho para erro */
+        color: black; /* Texto branco */
+        border-radius: 10px; /* Bordas arredondadas */
+        border: 2px solid #ce4343; /* Borda vermelha */
+        box-shadow: 0px 4px 16px #ce4343; /* Sombra para destacar */
+    }
+
+    .modal-erro .modal-header {
+        border-bottom: none; /* Remove a borda inferior do cabeçalho */
+    }
+
+    .modal-erro .modal-title {
+        font-weight: bolder;
+        font-size: 1.4rem;
+    }
+
+    .modal-erro .modal-body {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .modal-erro .modal-footer {
+        border-top: none; /* Remove a borda superior */
+        justify-content: center;
+    }
+
+    .modal-erro .btn-fechar {
+        background-color: white;
+        color: #ff0000;
+        border: 1px solid #ff0000;
+        font-weight: bold;
+    }
+
+        .modal-erro .btn-fechar:hover {
+            background-color: #ff0000;
+            color: white;
+        }
+
+
+
+
