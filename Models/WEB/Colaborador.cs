@@ -32,5 +32,6 @@ namespace Intranet_NEW.Models.WEB
         public string TP_TURNO { get; set; }
         public string NM_COORDENADOR { get; set; }
         public string NM_SUPERVISOR { get; set; }
+        public int TP_PRIORIDADE_ACESSO { get; set; }
     }
 }

@@ -5,6 +5,9 @@ using System.Data;
 using System.Text;
 using System.Security.Cryptography;
 using Intranet_NEW.Services.Validadores;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Intranet_NEW.Services
 {
@@ -24,32 +27,35 @@ namespace Intranet_NEW.Services
             SqlCommand cmd = new();
 
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "SELECT NR_COLABORADOR,"+
-                                "NR_EMPRESA,         "+
-                                "NR_MATRICULA,       "+
-                                "DT_ADMISSAO,        "+
-                                "DT_NASCIMENTO,      "+
-                                "NM_COLABORADOR,     "+
-                                "NR_CPF,             "+
-                                "TP_SEXO,            "+
-                                "NR_RAMAL,           "+
-                                "NM_EMAIL,           "+
-                                "NR_GESTOR,          "+
-                                "NR_FILIAL,          "+
-                                "NM_FUNCAO_RH,       "+
-                                "NR_ATIVIDADE_RH,    "+
-                                "NM_SENHA,           "+
-                                "NM_CONFIRMACAO_SENHA,"+
-                                "NR_COORDENADOR,     "+
-                                "NR_SUPERVISOR,      "+
-                                "NM_EQUIPE,          "+
-                                "NR_OLOS,            "+
-                                "NM_LOGIN_OLOS,      "+
-                                "TP_TURNO,           "+
-                                "NM_COORDENADOR,     "+
-                                "NM_SUPERVISOR       "+
-                                "FROM TBL_WEB_COLABORADOR_DADOS "+
-                                "WHERE NR_CPF = '@NR_CPF'";
+            cmd.CommandText = "SELECT    A.NR_COLABORADOR "+
+                              ",A.NR_EMPRESA      "+
+                              ",A.NR_MATRICULA    "+
+                              ",A.DT_ADMISSAO     "+
+                              ",A.DT_NASCIMENTO   "+
+                              ",A.NM_COLABORADOR  "+
+                              ",A.NR_CPF          "+
+                              ",A.TP_SEXO         "+
+                              ",A.NR_RAMAL        "+
+                              ",A.NM_EMAIL        "+
+                              ",A.NR_GESTOR       "+
+                              ",A.NR_FILIAL       "+
+                              ",B.NM_FUNCAO       "+
+                              ",A.NR_ATIVIDADE_RH "+
+                              ",A.NM_SENHA        "+
+                              ",A.NR_COORDENADOR  "+
+                              ",A.NR_SUPERVISOR   "+
+                              ",A.NM_EQUIPE       "+
+                              ",A.NR_OLOS         "+
+                              ",A.NM_LOGIN_OLOS   "+
+                              ",A.TP_TURNO        "+
+                              ",C.NM_COLABORADOR AS NM_SUPERVISOR   "+
+                              ",D.NM_COLABORADOR AS NM_COORDENADOR  "+
+                              ",A.TP_PRIORIDADE_ACESSO  "+
+                              "FROM TBL_WEB_COLABORADOR_DADOS A                                           "+
+                              "LEFT JOIN TBL_WEB_RH_COMBO_FUNCAO B ON A.NR_FUNCAO_RH = B.NR_FUNCAO             "+
+                              "LEFT JOIN TBL_WEB_COLABORADOR_DADOS C ON A.NR_SUPERVISOR = C.NR_COLABORADOR     "+
+                              "LEFT JOIN TBL_WEB_COLABORADOR_DADOS D ON A.NR_COORDENADOR = D.NR_COLABORADOR    "+
+                              "WHERE A.NR_CPF = @NR_CPF";
             cmd.Parameters.Add(new SqlParameter("@NR_CPF", cpf));
 
             DataSet ds = dao_MIS.ConsultaSQL(cmd);
@@ -61,7 +67,7 @@ namespace Intranet_NEW.Services
         {
             return new Colaborador
             {
-                NR_COLABORADOR = row["NR_COLABORADOR"].ToString(),
+                NR_COLABORADOR = row["NR_COLABORADOR"].ToString(),    
                 NR_EMPRESA = row["NR_EMPRESA"].ToString(),
                 NR_MATRICULA = row["NR_MATRICULA"].ToString(),
                 DT_ADMISSAO = row["DT_ADMISSAO"].ToString(),
@@ -73,10 +79,9 @@ namespace Intranet_NEW.Services
                 NM_EMAIL = row["NM_EMAIL"].ToString(),
                 NR_GESTOR = row["NR_GESTOR"].ToString(),
                 NR_FILIAL = row["NR_FILIAL"].ToString(),
-                NM_FUNCAO_RH = row["NM_FUNCAO_RH"].ToString(),
+                NM_FUNCAO_RH = row["NM_FUNCAO"].ToString(),
                 NR_ATIVIDADE_RH = row["NR_ATIVIDADE_RH"].ToString(),
                 NM_SENHA = row["NM_SENHA"].ToString(),
-                NM_CONFIRMACAO_SENHA = row["NM_CONFIRMACAO_SENHA"].ToString(),
                 NR_COORDENADOR = row["NR_COORDENADOR"].ToString(),
                 NR_SUPERVISOR = row["NR_SUPERVISOR"].ToString(),
                 NM_EQUIPE = row["NM_EQUIPE"].ToString(),
@@ -84,7 +89,8 @@ namespace Intranet_NEW.Services
                 NM_LOGIN_OLOS = row["NM_LOGIN_OLOS"].ToString(),
                 TP_TURNO = row["TP_TURNO"].ToString(),
                 NM_COORDENADOR = row["NM_COORDENADOR"].ToString(),
-                NM_SUPERVISOR = row["NM_SUPERVISOR"].ToString()
+                NM_SUPERVISOR = row["NM_SUPERVISOR"].ToString(),
+                TP_PRIORIDADE_ACESSO = Convert.ToInt32(row["TP_PRIORIDADE_ACESSO"])
             };
         }
 

@@ -1,0 +1,178 @@
+﻿@model Intranet_NEW.Models.WEB.Colaborador
+@{
+    ViewData["Title"] = "Bem Vindo";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/animacao.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/Usuario.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+</head>
+<body class="d-flex flex-column" style="min-height: 100vh;overflow:hidden;">
+    <!-- Container principal com 2 colunas -->
+    <div class="container-fluid flex-grow-1 d-flex flex-column">
+        <div class="row flex-grow-1">
+            <!-- Coluna maior -->
+            <div class="col-lg-7 col-md-6 col-12 d-flex justify-content-end align-items-end position-relative bg-primary">
+                <p class="vertical-text start">Roveri</p>
+                <p class="vertical-text end">News</p>
+                <img src="~/imagens/AnaBracoCruzado.png" style="position:relative;right:-30%; z-index:2;opacity:0;animation:FadeLeft 1s forwards" width="750" />
+            </div>
+
+            <!-- Coluna menor -->
+            <div id="coluna-login" class="col-lg-5 col-md-6 col-12 d-flex flex-column justify-content-between">
+
+                <div class="container-fluid d-flex justify-content-center align-self-center flex-grow-1">
+                    <!-- Encher linguiça -->
+                </div>
+
+                <div class="container-fluid d-flex justify-content-center align-self-center flex-grow-1" style="z-index:10;opacity:0;animation:FadeRight 1s forwards;">
+
+
+                    <form class="container w-75 p-4 rounded shadow-lg bg-light text-center" style="height:fit-content;" asp-controller="Login" asp-action="RealizarLogin">
+                        <div class="mb-3">
+                            <label for="staticEmail" class="form-label custom-label">Login</label>
+                            <input type="text" asp-for="NR_CPF" data-mask="cpf" required class="form-control custom-input" id="staticEmail" placeholder="Insira seu CPF">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label custom-label">Senha</label>
+                            <input type="password" asp-for="NM_SENHA" required class="form-control custom-input" id="inputPassword" placeholder="Digite sua senha">
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn custom-btn">Confirmar</button>
+                        </div>
+                        <!-- Botão para Resetar a senha -->
+                        <button type="button" class="btn btn-link text-primary mt-4" data-bs-toggle="modal" data-bs-target="#modalRecuperarSenha">
+                            Esqueceu a senha?
+                        </button>
+                    </form>
+
+                </div>
+
+                <div class="container-fluid d-flex justify-content-center mt-auto">
+                    <img src="~/imagens/Logotipo.png" class="m-3" style="z-index:2;opacity:0;animation:FadeUp 1s forwards" width="300" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de erro --> 
+    <div class="modal fade modal-erro" id="modalErroLogin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="modalErroLabel">Erro no Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-5">
+                    CPF ou senha incorretos. Tente novamente.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Sessao Expirada -->
+    <div class="modal fade modal-erro" id="sessionExpiredModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="sessionExpiredLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="sessionExpiredLabel">Sessão Expirada</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    Sua sessão expirou devido à inatividade. Por favor, faça login novamente para continuar.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Resetar senha-->
+    <div class="modal fade" id="modalRecuperarSenha" tabindex="-1" data-bs-backdrop="static" aria-labelledby="modalRecuperarSenhaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title custom-label" id="modalRecuperarSenhaLabel">Recuperar Senha</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div id="divMensagem" class="d-flex justify-content-center" style="display:none">
+                    <div id="divError" runat="server" style="display:none" class="alert alert-danger text-center mt-5">
+                        <h4>Alteração não confirmada :</h4>
+                        <p id="divErrorMsg" ></p>
+                    </div>
+                    <div id="divSuccess" style="display:none" class="alert alert-success text-center mt-5">
+                        <h4>Alteração Confirmada</h4>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="formRecuperarSenha" onsubmit="AlterarSenhaUsuario()">
+                        <!-- Campo CPF -->
+                        <div class="mb-3">
+                            <label for="cpf" class="form" >CPF</label>
+                            <input type="text" data-mask="cpf" class="custom-input form-control" id="cpf" placeholder="Digite seu CPF" required>
+                        </div>
+
+                        <!-- Campo Data de Nascimento -->
+                        <div class="mb-3">
+                            <label for="dataNascimento" class="form">Data de Nascimento</label>
+                            <input type="date" class="custom-input form-control" id="dataNascimento" required>
+                        </div>
+
+                        <!-- Campo Senha -->
+                        <div class="mb-3">
+                            <label for="senha" class="form">Senha</label>
+                            <input type="password" class="custom-input form-control" minlength="8" maxlength="8" id="senha" placeholder="Digite sua nova senha" required>
+                        </div>
+
+                        <!-- Campo Confirmação de Senha -->
+                        <div class="mb-3">
+                            <label for="confirmacaoSenha" class="form">Confirmar Senha</label>
+                            <input type="password" class="custom-input form-control" id="confirmacaoSenha" maxlength="8" minlength="8" placeholder="Confirme sua senha" required>
+                        </div>
+
+                        <button type="submit" class="custom-btn">Alterar Senha</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Script para Validacao-->
+    <script>
+        $(document).ready(function () {
+            var erroLogin = '@ViewBag.ErroLog';
+            var sessaoExpirou = '@ViewBag.TimeOut';
+
+            if (erroLogin === 'True') {
+                $("#modalErroLogin").modal('show'); // Exibir modal erro
+            }
+           
+            if (sessaoExpirou === 'True') {
+                $("#sessionExpiredModal").modal('show'); // Exibir modal sessao
+            }
+        });
+    </script>
+
+    <!--Script para mascarar o cpf -->
+    <script>
+        $(document).ready(function () {
+            $('input[data-mask="cpf"]').mask('000.000.000-00', { reverse: true });
+        });
+    </script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+

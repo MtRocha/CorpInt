@@ -24,7 +24,7 @@ async function AlterarSenhaUsuario()
     }
     else {
 
-        const response = await fetch("/Home/ResetarSenha",
+        const response = await fetch("/Login/ResetarSenha",
             {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },

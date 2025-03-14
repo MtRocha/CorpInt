@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "_Layout_Administrativo";
+    ViewData["Title"] = "Home - Admistrativo";
+}
+<div class="row justify-content-evenly w-100" style="margin-top:15%;">
+    <!-- Botão Colaboradores -->
+    <div class="col-md-4 d-flex justify-content-center">
+        <a href="/Colaboradores" class="d-flex flex-column btn administrativo-menu-button">
+            <img src="~/imagens/audience-icon.png" width="200"/>
+            <span>Colaboradores</span>
+
+        </a>
+    </div> 
+    
+    <!-- Botão Publicações -->
+    <div class="col-md-4 d-flex justify-content-center">
+        <a  class="d-flex flex-column btn administrativo-menu-button" asp-controller="Publicacao" asp-action="Index">
+            <img src="~/imagens/blog-post-icon.png" width="160" />
+           <br/>
+            <span>Publicações</span>
+
+        </a>
+    </div>
+
+    <!-- Botão Advertências e Folgas -->
+    <div class="col-md-4 d-flex justify-content-center">
+        <a href="/Colaboradores" class="d-flex flex-column align-items-center btn administrativo-menu-button">
+            <img src="~/imagens/notes-icon.png" style="margin-left:35px" width="160" />
+            <br/>
+            <span>Folgas & Escalas</span>
+        </a>
+    </div>
+
+</div>
