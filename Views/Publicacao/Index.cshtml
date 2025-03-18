@@ -24,9 +24,20 @@
 
 </div>
 
-
-
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var myModal = document.getElementById('postModal'); 
+        let titulo = document.getElementById('titulo')
+        myModal.addEventListener('hidden.bs.modal', function () {
+            tinymce.get('editor').setContent(''); 
+            titulo.value = ''
+        });
+    });
+
+
+
+
     tinymce.init({
       selector: '#editor',
       plugins: 'image media',
@@ -66,6 +77,8 @@
             });
         }
     });
+
+
 </script>
 
 
