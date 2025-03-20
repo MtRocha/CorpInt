@@ -1,0 +1,55 @@
+﻿@model Intranet_NEW.Models.WEB.PublicacaoModel
+
+<div class="publicacao-card">
+    <div class="publicacao-header">
+        <div class="d-flex justify-content-start align-items-center" style="width:50%;">
+        <div class="profile-circle-small" style="background: url('/imagens/conta-icon.png') no-repeat center center;background-size:110% 116%;">
+        </div>
+        <span class="publicacao-autor">@Model.Autor</span>
+
+        </div>
+        <div class="publicacao-options dropdown">
+            <span class="publicacao-data">@Model.DataPublicacao.ToString("dd/MM/yyyy HH:mm")</span>
+            <p style="display:none"> @Model.Id</P>
+            @if (ViewBag.PermitirExclusao)
+            {
+                <button class="btn btn-link dropdown-toggle options-btn" type="button" id="dropdownMenuButton-@Model.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton-@Model.Id">
+                    <li><a class="dropdown-item d-none" href="#" disabled onclick="editarPublicacao(@Model.Id)">✏️ Editar</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="confirmarExclusao(@Model.Id)">🗑️ Apagar Publicação</a></li>
+                </ul>
+            }
+        </div>
+    </div>
+
+    <div class="publicacao-conteudo">
+        @Html.Raw(Model.Conteudo)
+    </div>
+
+    <div class="publicacao-footer">
+        <div class="publicacao-botoes">
+            <!-- Botão Curtir -->
+            <button class="btn-curtir @(Model.TipoReacao == 1 ? "btn-selecionado" : "")"
+                    onclick="curtirPublicacao(@Model.Id, this)"
+                    data-id="@Model.Id"
+                    @(Model.FoiReagido ? "disabled" : "")>
+                <i class="fas fa-thumbs-up"></i>
+                <span id="curtidas-@Model.Id">@Model.Curtidas</span>
+            </button>
+
+            <!-- Botão Descurtir -->
+            <button class="btn-descurtir @(Model.TipoReacao == 2 ? "btn-selecionado" : "")"
+                    onclick="descurtirPublicacao(@Model.Id, this)"
+                    data-id="@Model.Id"
+                    @(Model.FoiReagido ? "disabled" : "")>
+                <i class="fas fa-thumbs-down"></i>
+                <span id="descurtidas-@Model.Id">@Model.Descurtidas</span>
+            </button>
+        </div>
+    </div>
+
+
+
+</div>
+

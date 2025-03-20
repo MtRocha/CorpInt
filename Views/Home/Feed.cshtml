@@ -4,4 +4,10 @@
     ViewData["Title"] = "Home";
 }
 
-<p style="font-size:3rem;">Teste</p>
+<div class="d-flex w-100 p-2 flex-column justify-content-evenly align-items-center" style="width:82%">
+    @foreach (Intranet_NEW.Models.WEB.PublicacaoModel item in ViewBag.Publicacoes)
+    {
+        @await Html.PartialAsync("_CompPublicacao", item)
+    }
+
+</div>

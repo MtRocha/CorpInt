@@ -127,10 +127,13 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="9.0.2" />
     <PackageReference Include="System.Text.Json" Version="9.0.2" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
+    <PackageReference Include="tinymce" Version="7.7.2" />
     <PackageReference Include="TweetinviAPI" Version="5.0.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ViewComponents\" />
+    <Folder Include="Views\Shared\Components\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

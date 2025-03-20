@@ -14,13 +14,25 @@ namespace Intranet_NEW.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly PublicacaoService _publicacaoService;
+
+        public HomeController()
+        {
+
+            _publicacaoService = new PublicacaoService();
         
+        }
+
         [Authorize]
         public IActionResult Feed()
         {
+            List<PublicacaoModel> publicacoes = _publicacaoService.ListaPublicacoesParaFeed(User.FindFirst(ClaimTypes.GroupSid).Value, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            ViewBag.Publicacoes = publicacoes;
+            ViewBag.PermitirExclusao = false;
             return View();
         }
 
+        
 
     }
 

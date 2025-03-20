@@ -7,13 +7,18 @@
     <title>Home</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/animacao.css" />
+    <link rel="stylesheet" href="~/css/componentes.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/js/Usuario.js"></script>
-    <script src="~/js/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/Usuario.js"></script>
+    <script src="~/js/Reacao.js"></script>
+    <script src="~/js/Animacao.js"></script>
+    <script src="~/js/site.js"></script>
 </head>
 <body class="bg-light vh-100 d-flex flex-column justify-content-end">
 
@@ -27,12 +32,12 @@
 
     <div class="d-flex" style="height:82%;" >
         <div class="sidebar">
-            <a class="menu-btn active" onclick="activateButton(this)">Feed</a>
+            <a class="menu-btn disabled" onclick="activateButton(this)">Feed</a>
             <a class="menu-btn" onclick="activateButton(this)">Perfil</a>
             <a class="menu-btn" onclick="activateButton(this)">Meu Acompanhamento</a>
             <a class="menu-btn" onclick="activateButton(this)">Treinamentos</a>
             <a class="menu-btn" onclick="activateButton(this)">Quizz</a>
-            <a class="menu-btn" onclick="activateButton(this)">Meu RH</a>
+            <a class="menu-btn" href="http://extobrasil142922.protheus.cloudtotvs.com.br:1604/meurh00/#/login" onclick="activateButton(this)">Meu RH</a>
             @if (User.FindFirst(ClaimTypes.Role).Value == "1")
             {
                 <a asp-controller="Administrativo" asp-action="Index" class="menu-btn" onclick="activateButton(this)">Administrativo</a>
@@ -43,7 +48,7 @@
         </div>
 
         <!-- Conteúdo Principal -->
-        <main class="p-4" style="width:82%;">
+        <main class="p-2" style="width:82%;overflow:auto;">
             @RenderBody()
         </main>
     </div>

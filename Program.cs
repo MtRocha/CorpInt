@@ -12,7 +12,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 { 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
+builder.WebHost.UseIISIntegration();
 builder.Services.AddControllersWithViews();
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioValidator>();
 builder.Services.AddHttpContextAccessor();

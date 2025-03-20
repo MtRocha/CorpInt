@@ -1,29 +1,65 @@
-﻿
-@using Microsoft.AspNetCore.Components
+﻿@using Microsoft.AspNetCore.Components
+@model Intranet_NEW.Models.WEB.PublicacaoModel
 @{
     Layout = "_Layout_Administrativo";
     ViewData["Title"] = "Publicação";
-    var data = new ImportMapDefinition(
-        new Dictionary<string, string>
-        {
-        { "ckeditor5", "/lib/ckeditor5/ckeditor5.js" },
-        { "ckeditor5/", "/lib/ckeditor5/" },
-        }, null, null);
 }
 
-<div class="sidebar">
-    <a asp-controller="Administrativo" asp-action="Index" class="logout-btn">
-        <img width="25" style="margin-right:10px" src="~/imagens/sair-icon.png" />
-        <span>Sair</span>
-    </a>
-</div >
 
-<div class="d-flex" style="width:82%">
+    <div class="sidebar">
+        <a asp-controller="Administrativo" asp-action="Index" class="logout-btn">
+            <img width="25" style="margin-right:13px" src="~/imagens/sair-icon.png" />
+            <span>Voltar</span>
+        </a>
+    </div >
 
-    <button class="custom-btn me-2" data-bs-toggle="modal" data-bs-target="#postModal">Criar Publicação</button>
+    <div class="d-flex flex-column justify-content-start align-items-center" style="width:82%">
+        <br/>
+            <button class="custom-btn p-3" style="border-radius:150px; width:80%;opacity:0;animation:FadeRight 0.6s forwards" data-bs-toggle="modal" data-bs-target="#postModal">Criar Publicação</button>
+        <br />
+    <div class="container d-flex flex-column w-100 justify-content-start align-items-center p-3" style="overflow:auto;overflow-x:hidden;">
+                @foreach (Intranet_NEW.Models.WEB.PublicacaoModel item in ViewBag.Publicacoes)
+                {
+                  @await Html.PartialAsync("_CompPublicacao", item)
+                }
+        </div>
+    </div> 
 
+<!-- Modal de Publicação -->
+<div class="modal fade" id="postModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="custom-label">Nova Publicação</h5>
+                <button type="button" id="btnFechaModalPub" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="alert-danger p-3 text-danger rounded-2 shadow-sm mb-2" id="divErro" style="display:none;">
+                    @foreach (var erro in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@erro.ErrorMessage</p>
+                    }
+                </div>
+                <form asp-action="Publicar">
+                    <div class="d-flex flex-column mb-3 flex-grow-1">
+                        <label for="carteiraSelect" class="custom-label-small">Carteira</label>
+                        <select class="custom-input" id="carteiraSelect" asp-for="Carteira" asp-items="ViewBag.Carteiras">
+                        </select>
+                    </div>
+                    <div class="d-flex flex-column mb-3 flex-grow-1">
+                        <label for="titulo" class="custom-label-small">Titulo</label>
+                        <input type="text" id="titulo" asp-for=Titulo class="custom-input" maxlength="120" name="Titulo" />
+                    </div>
+                    <label for="editor" class="custom-label">Conteúdo</label>
+                    <!-- Editor de Texto -->
+                    <textarea id="editor" asp-for="Conteudo"></textarea>
+                    <button type="submit" class="custom-btn mt-3 w-100">Publicar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -42,45 +78,91 @@
       selector: '#editor',
       plugins: 'image media',
       toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | image media',
-      images_upload_url: '/upload',
+      images_upload_url: '/upload', 
       automatic_uploads: true,
       height:450,
       file_picker_types: 'image,media',
-      images_file_types: 'jpeg,jpg,png,gif,webp', 
+      images_file_types: 'jpeg,jpg,png,gif,webp',
+      image_dimensions: true, // Permite definir dimensões
+      image_class_list: [
+        {title: 'Responsive', value: 'img-fluid'} // Usa Bootstrap para imagens responsivas
+      ],
+      setup: function (editor) {
+        editor.on('change', function () {
+          editor.save();
+        });
+      },
       media_live_embeds: true,
-      images_upload_handler: async function  (blobInfo, success, failure) {
-            var formData = new FormData();
-            formData.append('file', blobInfo.blob(), blobInfo.filename());
-
-            console.log('Enviando imagem:', blobInfo.filename());
-            console.log([...formData]); // Verifique os dados antes do envio
+      images_upload_handler: function (blobInfo, success, failure) {
+            let formData = new FormData();
+            formData.append('file', blobInfo.blob());
 
             fetch('/Publicacao/Upload', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => {
-                console.log('Resposta recebida:', response);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(result => {
-                console.log('Resultado JSON:', result);
-                if (result.location) {
-                    success(result.location);
-                } else {
-                    failure('Erro: resposta do servidor inválida.');
+                console.log("Resposta do servidor:", result);
+
+                if (!result || !result.location) {
+                    throw new Error("Resposta inválida do servidor");
                 }
+
+                success(result.location);
             })
             .catch(error => {
-                console.error('Erro ao enviar imagem:', error);
-                failure('Erro ao enviar imagem: ' + error.message);
+                console.error("Erro no upload:", error);
+                failure("Falha ao fazer upload da imagem.");
             });
-        }
+        },
+        relative_urls: false,
+        remove_script_host: false,
+        convert_urls: false
     });
 
 
 </script>
 
+<!-- Modal de Confirmação de Exclusão -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir esta publicação? Essa ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn" onclick="apagarPublicacao()">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Ações-->
+<script>
+    let idParaExcluir = null;
+
+    function confirmarExclusao(id) {
+        idParaExcluir = id;
+        let modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+        if (idParaExcluir !== null) {
+            apagarPublicacao(idParaExcluir);
+        }
+    });
+
+    function apagarPublicacao(id) {
+        window.location.href = `\Excluir?pubId=${id}`;
+    }
+</script>
 
 
 

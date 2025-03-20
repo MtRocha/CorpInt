@@ -75,6 +75,7 @@ namespace Intranet_NEW.Controllers
                 new Claim(ClaimTypes.Name, model.NM_COLABORADOR),
                 new Claim(ClaimTypes.NameIdentifier, model.NR_COLABORADOR),
                 new Claim(ClaimTypes.Actor, model.NM_FUNCAO_RH),
+                new Claim(ClaimTypes.GroupSid, model.NR_ATIVIDADE_RH),
                 new Claim(ClaimTypes.Role, model.TP_PRIORIDADE_ACESSO.ToString())
             };
 

@@ -1,0 +1,157 @@
+﻿
+/*COMPONENTE - PUBLICACAO*/
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.publicacao-options {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.options-btn {
+    border: none;
+    background: none;
+    color: #555;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+    .options-btn:hover {
+        color: #ff6000;
+    }
+
+.options-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    overflow: hidden;
+    min-width: 100px;
+    z-index: 10;
+}
+
+    .options-menu button {
+        width: 100%;
+        padding: 8px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        text-align: left;
+        font-size: 14px;
+    }
+
+        .options-menu button:hover {
+            background: #ff6000;
+            color: white;
+        }
+
+
+
+
+.header, .footer {
+    height: 80px; /* Define altura fixa */
+    background-color: #ff6000;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-content {
+    flex: 1; /* Ocupa o espaço restante */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.publicacao-card {
+    width: 90%;
+    min-height: fit-content;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Evita que o conteúdo ultrapasse o card */
+    opacity:0;
+    animation:FadeUp 0.5s forwards ;
+    animation-delay:0.2s;
+}
+
+    .publicacao-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+.publicacao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.publicacao-autor {
+    font-weight: bold;
+    color: #333;
+}
+
+.publicacao-conteudo {
+    flex-grow: 1;
+    min-height: fit-content; /* Define um tamanho mínimo */
+    max-height: 1300px; /* Limite máximo para evitar que ultrapasse */
+    font-size: 16px;
+    color: #555;
+    overflow-y: auto; /* Ativa o scroll vertical quando necessário */
+    overflow-x: hidden;
+    padding-right: 10px; /* Para evitar que o conteúdo encoste na borda */
+    word-wrap: break-word;
+}
+
+.publicacao-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.publicacao-botoes {
+    display: flex;
+    gap: 10px;
+}
+
+
+
+.btn-curtir, .btn-descurtir {
+    background: none;
+    border: none;
+    color: #ff6000;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: color 0.3s ease-in-out;
+}
+
+.btn-selecionado {
+    color: #fff;
+    background-color: #ff6000;
+    border-radius: 5px;
+}
+
+    .btn-curtir:hover, .btn-descurtir:hover {
+        transform: scale(1.2) ;
+        transition:0.3s;
+    }
+/*COMPONENTE - PUBLICACAO*/
