@@ -18,7 +18,10 @@
     <script src="~/lib/tinymce/tinymce.min.js"></script>
     <script src="~/js/Animacao.js"></script>
     <script src="~/js/Reacao.js"></script>
+    <script src="~/js/Publicacao.js"></script>
     <script src="~/js/site.js"></script>
+    <script src="~/js/FiltroDinamico.js"></script>
+
 
 </head>
 <body style="background-color:#f3f3f3" class="vh-100 d-flex flex-column justify-content-between">
@@ -26,7 +29,7 @@
     <header class="administrativo-header">
 
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 h-100">
-                <img src="~/imagens/LOGO_ROVERI_NEW.png" style="height:75px;width:180px;padding:10px" />
+                <img src="~/imagens/logotipo_Black.png" width="250" style="padding:10px;margin-top:1%;" />
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -68,6 +71,36 @@
                 divErro.style.display = 'block';
             }
         });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let container = document.getElementById("pub-container");
+
+            if (container) {
+                container.addEventListener("scroll", verificarScroll);
+                ListaFeedPaginado(0); // Carrega a primeira página ao iniciar
+            }
+        });
+
+       function verificarScroll() {
+            let container = document.getElementById("pub-container");
+
+            if (carregando) return; // Se já está carregando, não faz nada
+
+            let posicaoScroll = container.scrollTop + container.clientHeight;
+            let alturaTotal = container.scrollHeight;
+
+            // Quando o scroll estiver a 90% da altura total, carrega mais posts
+            if (posicaoScroll >= alturaTotal * 0.9) {
+                carregando = true;
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        ListaFeedPaginado(0);
+                    }, 300); // Aguarda 300ms para evitar múltiplas chamadas
+                });
+            }
+        }
     </script>
 
 </body>

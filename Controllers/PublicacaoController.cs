@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Intranet_NEW.Models.WEB;
 using Intranet_NEW.Services;
+using Intranet_NEW.Services.Handlers;
 using Intranet_NEW.Services.Validadores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +17,16 @@ namespace Intranet_NEW.Controllers
         private readonly PublicacaoValidator _publicacaoValidator;
         private readonly CarteiraService _carteiraService;
         private readonly ReacaoService _reacaoService;
-
-        public PublicacaoController()
+        private readonly TipoAcaoService _tipoAcaoService;
+        private readonly IViewRenderService _viewRenderService;
+        public PublicacaoController(IViewRenderService viewRenderService)
         {
             _publicacaoService = new PublicacaoService();
             _publicacaoValidator = new PublicacaoValidator();
             _carteiraService = new CarteiraService();
             _reacaoService = new ReacaoService();
+            _tipoAcaoService = new TipoAcaoService();
+            _viewRenderService = viewRenderService;
         }
 
         private async void CarregarItems()
@@ -30,13 +34,20 @@ namespace Intranet_NEW.Controllers
             List<SelectListItem> carteiras = new List<SelectListItem>();
             List<CarteiraModel> listaCarteiras = _carteiraService.ListaCarteiras();
             List<PublicacaoModel> publicacoes = _publicacaoService.ListaPublicacoes(Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            List<TipoAcaoModel> listaAcoes = _tipoAcaoService.ListaTipoAcao();
+            List<SelectListItem> acoes = new();
             carteiras.Add(new SelectListItem("Todas as Carteiras", "0"));
             foreach (CarteiraModel carteira in listaCarteiras)
             {
-                carteiras.Add(new SelectListItem { Value = carteira.Name, Text = carteira.Name });
+                carteiras.Add(new SelectListItem { Value = carteira.Id, Text = carteira.Name });
+            }
+            foreach (TipoAcaoModel item in listaAcoes)
+            {
+                acoes.Add(new SelectListItem { Value = item.Id, Text = item.Name });
             }
             ViewBag.Carteiras = carteiras;
             ViewBag.Publicacoes = publicacoes;
+            ViewBag.TipoAcao = acoes;
             ViewBag.PermitirExclusao = true;
 
         }
@@ -48,6 +59,8 @@ namespace Intranet_NEW.Controllers
             CarregarItems();
             return View("Index",model);
         }
+
+        #region Metodos de Assincronos
 
         [HttpPost]
         [Authorize]
@@ -109,6 +122,25 @@ namespace Intranet_NEW.Controllers
             return Json(new { location = fileUrl });
         }
 
+        public async Task<IActionResult> ListaFeed(int quantidade, int pagina, int tipo)
+        {
+            ViewBag.PermitirExclusao = tipo == 1 ? false: true;
+            List<PublicacaoModel> publicacoes = _publicacaoService.ListaPublicacoesParaFeed(User.FindFirst(ClaimTypes.GroupSid).Value, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value), pagina, quantidade);
+            List<string> publicacoesRenderizadas = new List<string>();
+            foreach (PublicacaoModel item in publicacoes)
+            {
+                publicacoesRenderizadas.Add(await _viewRenderService.RenderToStringAsync(this, "_CompPublicacao", item));
+            }
+
+            return Json(publicacoesRenderizadas);
+        }
+
+
+
+        #endregion
+
+        #region CRUD
+
         [Authorize]
         public IActionResult Publicar(PublicacaoModel model)
         {
@@ -141,6 +173,6 @@ namespace Intranet_NEW.Controllers
             _publicacaoService.ExcluirPublicacao(pubId);
             return RedirectToAction("Index");
         }
-
+        #endregion
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model Intranet_NEW.Models.WEB.PublicacaoModel
 
-<div class="publicacao-card">
+<div class="publicacao-card item-filtravel" data-titulo="@Model.Conteudo" data-data ="@Model.DataPublicacao.ToString("yyyy-MM-dd")" data-tipo="@Model.Tipo">
     <div class="publicacao-header">
         <div class="d-flex justify-content-start align-items-center" style="width:50%;">
         <div class="profile-circle-small" style="background: url('/imagens/conta-icon.png') no-repeat center center;background-size:110% 116%;">

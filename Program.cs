@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Intranet_NEW.Services.Validadores;
 using Intranet_NEW.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Intranet_NEW.Services.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.WebHost.UseIISIntegration();
 builder.Services.AddControllersWithViews();
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioValidator>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IViewRenderService,ViewRenderService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.Cookie.Name = "LoginCookie";
@@ -40,6 +42,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

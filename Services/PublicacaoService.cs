@@ -36,6 +36,7 @@ namespace Intranet_NEW.Services
                 IdAutor = row["NR_COLABORADOR_AUTOR"] == DBNull.Value ? 0 : row.Field<int>("NR_COLABORADOR_AUTOR"),
                 Arquivada = row["TP_EXCLUIDA"] == DBNull.Value ? 0 : row.Field<int>("TP_EXCLUIDA"),
                 DataPublicacao = row.Field<DateTime>("DT_PUBLICACAO"),
+                Tipo = row["TP_PUBLICACAO"] == DBNull.Value ? 0 : row.Field<int>("TP_PUBLICACAO"),
                 FoiReagido = reacao == 0 ? false : true,
                 TipoReacao = reacao
             };
@@ -84,11 +85,15 @@ namespace Intranet_NEW.Services
             return publicacoes;
         }
 
-        public List<PublicacaoModel> ListaPublicacoesParaFeed(string carteira,int idUsuario)
+        public List<PublicacaoModel> ListaPublicacoesParaFeed(string carteira,int idUsuario,int pagina,int quantidade)
         {
             List<PublicacaoModel> publicacoes = new List<PublicacaoModel>();
-            SqlCommand command = new SqlCommand("SELECT A.*,NM_COLABORADOR FROM TBL_WEB_PUBLICACAO A \r\n      JOIN TBL_WEB_COLABORADOR_DADOS B ON A.NR_COLABORADOR_AUTOR = B.NR_COLABORADOR\r\n      WHERE TP_EXCLUIDA = '0' \r\n      AND (CARTEIRA = '0' OR (CARTEIRA IN (SELECT NM_CARTEIRA FROM TBL_WEB_RH_COMBO_ATIVIDADE_ATIVA WHERE NR_ATIVIDADE = @CARTEIRA)))\r\n      ORDER BY DT_PUBLICACAO DESC   ");
+            SqlCommand command = new SqlCommand("SP_WEB_LISTA_PUB");
+            command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter("@CARTEIRA", carteira));
+            command.Parameters.Add(new SqlParameter("@NR_COLABORADOR", idUsuario));
+            command.Parameters.Add(new SqlParameter("@PAGINA", pagina));
+            command.Parameters.Add(new SqlParameter("@QUANTIDADE", quantidade));
             DataSet ds = _daoMis.ConsultaSQL(command);
             foreach (DataRow row in ds.Tables[0].Rows)
             {
@@ -118,13 +123,14 @@ namespace Intranet_NEW.Services
         {
             if (publicacao == null)
                 throw new ArgumentNullException(nameof(publicacao), "A publicação fornecida é nula.");
-            SqlCommand command = new SqlCommand("INSERT INTO TBL_WEB_PUBLICACAO (CARTEIRA,TITULO, CONTEUDO,DT_PUBLICACAO,TP_EXCLUIDA,NR_COLABORADOR_AUTOR) VALUES (@CARTEIRA,@TITULO, @CONTEUDO,@DT_PUBLICACAO,@TP_EXCLUIDA,@NR_COLABORADOR_AUTOR)");
+            SqlCommand command = new SqlCommand("INSERT INTO TBL_WEB_PUBLICACAO (CARTEIRA,TITULO, CONTEUDO,DT_PUBLICACAO,TP_EXCLUIDA,NR_COLABORADOR_AUTOR,TP_PUBLICACAO) VALUES (@CARTEIRA,@TITULO, @CONTEUDO,@DT_PUBLICACAO,@TP_EXCLUIDA,@NR_COLABORADOR_AUTOR,@TP_ACAO)");
             command.Parameters.AddWithValue("@TITULO", publicacao.Titulo);
             command.Parameters.AddWithValue("@CONTEUDO", publicacao.Conteudo);
             command.Parameters.AddWithValue("@CARTEIRA", publicacao.Carteira.Trim());
             command.Parameters.AddWithValue("@DT_PUBLICACAO", publicacao.DataPublicacao);
             command.Parameters.AddWithValue("@TP_EXCLUIDA",0);
             command.Parameters.AddWithValue("@NR_COLABORADOR_AUTOR",publicacao.IdAutor);
+            command.Parameters.AddWithValue("@TP_ACAO", publicacao.Id);
             _daoMis.ExecutaComandoSQL(command);
         }
 

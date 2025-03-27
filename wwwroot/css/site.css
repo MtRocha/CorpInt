@@ -1,39 +1,81 @@
 @import url('animacao.css');
 
-:root {
-    --cor-principal: #ff6000;
+/* Estilizando a barra de rolagem */
+::-webkit-scrollbar {
+    width: 12px; /* Largura da barra de rolagem */
+    height: 12px; /* Altura da barra de rolagem, para o scroll horizontal */
 }
 
+/* Estilizando a parte de "track" (fundo) da barra de rolagem */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Cor de fundo da barra de rolagem */
+    border-radius: 10px; /* Arredonda os cantos do fundo */
+}
+
+/* Estilizando o "thumb" (parte que desliza) da barra de rolagem */
+::-webkit-scrollbar-thumb {
+    background: #ff6000; /* Cor do thumb */
+    border-radius: 10px; /* Arredonda os cantos do thumb */
+    border: 3px solid #f1f1f1; /* Borda para separar o thumb do track */
+}
+
+    /* Estilizando o "thumb" quando ele está sendo clicado */
+    ::-webkit-scrollbar-thumb:active {
+        background: #c85d00; /* Cor quando o thumb estiver sendo clicado */
+    }
+
+/* Estilizando a barra de rolagem horizontal */
+::-webkit-scrollbar-horizontal {
+    height: 12px; /* Altura do scroll horizontal */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #ff6000;
+    border-radius: 10px;
+}
+
+
+:root {
+    --cor-principal: #fa6400;
+    --cor-principal2: #c85d00;
+    --cor-principal3: #ff8024;
+    --cor-secundaria: #454545;
+    --cor-secundaria2: #707070;
+    --cor-secundaria3: #b2b2b2;
+}
+
+body {
+
+}
 
 /* Mantém a rotação apenas no texto vertical */
 .vertical-text {
     font-size: 11rem;
-    writing-mode: vertical-rl; /* Mantém o texto na vertical */
+    writing-mode: vertical-rl;
     font-weight: bold;
     color: #fff;
-    position: absolute; /* Remove o impacto na página */
+    position: absolute;
     z-index: 1;
     opacity: 0;
 }
 
-.vertical-text.start {
-    left: -25%; /* Fixa o texto 1 à esquerda */
-    bottom: 1%; /* Começa de baixo para cima */
-    animation:FadeUpTextVertical 1s forwards;
-}
+    .vertical-text.start {
+        left: -25%;
+        bottom: 1%;
+        animation: FadeUpTextVertical 1s forwards;
+    }
 
-.vertical-text.end {
-    top: 2%; /* Fixa o texto 2 à direita */
-    left: -5%; /* Começa de baixo para cima */
-    animation:FadeDownTextVertical 1s forwards;
-
-}
+    .vertical-text.end {
+        top: 2%;
+        left: -5%;
+        animation: FadeDownTextVertical 1s forwards;
+    }
 
 /* Estilização das labels */
 .custom-label {
     font-weight: bold;
     font-size: 1.7rem;
-    color: #ff6000;
+    color: var(--cor-principal);
     transition: all 0.3s ease-in-out;
     margin-bottom: 5px;
 }
@@ -41,39 +83,39 @@
 .custom-label-big {
     font-weight: bold;
     font-size: 4rem;
-    color: #ff6000;
+    color: var(--cor-principal);
     transition: all 0.3s ease-in-out;
     margin-bottom: 5px;
 }
 
 .custom-label-small {
     font-weight: bold;
-    font-size: 1.3rem;
-    color: #ff6000;
+    font-size: 1rem;
+    color: var(--cor-principal);
     transition: all 0.3s ease-in-out;
     margin-bottom: 5px;
 }
 
 /* Estilização dos inputs */
 .custom-input {
-    border: 2px solid #ff6000;
+    border: 2px solid var(--cor-principal);
     border-radius: 8px;
     padding: 10px;
     transition: all 0.3s ease-in-out;
 }
 
     .custom-input:focus {
-        border: 2px solid #ff6000;
+        border: 2px solid var(--cor-principal);
         box-shadow: 0 0 32px rgba(255, 96, 0, 0.5);
     }
 
 /* Botão estilizado */
 .custom-btn {
-    background-color: #ff6000;
+    background-color: var(--cor-principal);
     color: white;
     font-weight: bold;
     padding: 12px;
-    border:none;
+    border: none;
     border-radius: 8px;
     width: 100%;
     transition: 0.3s ease-in-out;
@@ -82,31 +124,29 @@
     .custom-btn:hover {
         background-color: #FFF;
         color: var(--cor-principal);
-        font-size:1.01rem;
+        font-size: 1.01rem;
         border: solid 2px var(--cor-principal);
         box-shadow: 0 4px 10px rgba(255, 96, 0, 0.5);
     }
 
-
-
 .modal-erro {
-    background-color: rgba(194, 196, 195, 0.5); /* Fundo escuro transparente */
+    background-color: rgba(194, 196, 195, 0.5);
 }
 
     .modal-erro .modal-dialog {
-        max-width: 600px; /* Define um tamanho menor para o modal */
+        max-width: 600px;
     }
 
     .modal-erro .modal-content {
-        background-color: #fff; /* Vermelho para erro */
-        color: black; /* Texto branco */
-        border-radius: 10px; /* Bordas arredondadas */
-        border: 1px solid #ce4343; /* Borda vermelha */
-        box-shadow: 2px 2px 1px #ce4343; /* Sombra para destacar */
+        background-color: #fff;
+        color: black;
+        border-radius: 10px;
+        border: 1px solid #ce4343;
+        box-shadow: 2px 2px 1px #ce4343;
     }
 
     .modal-erro .modal-header {
-        border-bottom: none; /* Remove a borda inferior do cabeçalho */
+        border-bottom: none;
     }
 
     .modal-erro .modal-title {
@@ -120,7 +160,7 @@
     }
 
     .modal-erro .modal-footer {
-        border-top: none; /* Remove a borda superior */
+        border-top: none;
         justify-content: center;
     }
 
@@ -136,7 +176,6 @@
             color: white;
         }
 
-
 /* Header com imagem de fundo */
 .custom-header {
     background: url('/imagens/Banner.png') no-repeat center center;
@@ -147,7 +186,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: end;
-    z-index:650;
+    z-index: 650;
 }
 
 /* Círculo para a foto do usuário */
@@ -156,7 +195,7 @@
     height: 55%;
     border-radius: 50%;
     background-color: white;
-    border: 2px solid #ffc799;
+    border: 2px solid var(--cor-principal3);
     margin-bottom: 8px;
     margin-top: 8px;
     text-align: center;
@@ -165,9 +204,9 @@
 .profile-circle-small {
     border-radius: 50%;
     background-color: white;
-    border: 2px solid #ffc799;
-    padding:20px;
-    margin-right:3%; 
+    border: 2px solid var(--cor-principal3);
+    padding: 20px;
+    margin-right: 3%;
     text-align: center;
 }
 
@@ -175,35 +214,36 @@
 .user-name {
     font-size: 1rem;
     font-weight: bold;
-    color:#343a40;
+    color: var(--cor-secundaria);
     text-align: center;
-    margin:0;
+    margin: 0;
 }
 
 .user-function {
     font-size: 0.7rem;
     font-weight: bold;
     text-align: center;
-    color:#343a40;
-    margin:0;
+    color: var(--cor-secundaria);
+    margin: 0;
 }
 
 .sidebar {
     width: 20%;
     height: 100%;
-    background-color: #666;
+    background-color: var(--cor-secundaria);
     display: flex;
     gap: 10px;
     flex-direction: column;
     padding: 12px;
     justify-content: start;
-    opacity:0;
-    animation:FadeLeft 0.4s forwards;
+    opacity: 0;
+    animation: FadeLeft 0.4s forwards;
 }
+
     .sidebar .menu-btn {
-        opacity:0;
-        animation:FadeLeft 0.1s forwards;
-        animation-delay:0.2s;
+        opacity: 0;
+        animation: FadeLeft 0.1s forwards;
+        animation-delay: 0.2s;
     }
 
 .menu-btn {
@@ -218,45 +258,46 @@
     transition: 0.3s;
     border-radius: 0px;
     text-decoration: none;
-    border-bottom: solid 1px rgba(194, 196, 195, 0.5)
+    border-bottom: solid 1px rgba(194, 196, 195, 0.5);
 }
 
     .menu-btn:hover {
-        border-radius:5px;
-        background-color: #ff6000;
+        border-radius: 5px;
+        background-color: var(--cor-principal);
         color: white;
     }
 
     .menu-btn.active {
-        border-radius:5px;
-        background-color: #ff6000;
+        border-radius: 5px;
+        background-color: var(--cor-principal);
         color: white;
         font-weight: bold;
     }
 
 .logout-btn {
-    background-color: #888; /* Cor diferente do menu */
+    background-color: var(--cor-secundaria2);
     color: white;
     border: none;
-    position:absolute;
-    left:0;
-    bottom:0;
-    width:100%;
-    height:8%;
-    padding:13px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 8%;
+    padding: 13px;
     text-align: left;
-    margin-top:auto;
+    margin-top: auto;
     font-size: 1.4rem;
-    text-decoration:none;
+    text-decoration: none;
 }
-.logout-btn:hover {
-    color:#ff6000;
-}
+
+    .logout-btn:hover {
+        color: var(--cor-principal);
+    }
 
 /* ================= HEADER ADMINISTRATIVO ================= */
 .administrativo-header {
     width: 100%;
-    height:11%;
+    height: 11%;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 999;
 }
@@ -265,7 +306,7 @@
 .administrativo-menu-button {
     width: 80%;
     height: 50%;
-    background-color: #ff6000;
+    background-color: var(--cor-principal);
     color: white;
     font-size: 1.3rem;
     font-weight: bold;
@@ -287,7 +328,78 @@
 
 /* ================= FOOTER ADMINISTRATIVO ================= */
 .administrativo-footer {
-    height:10%;
+    height: 10%;
     bottom: 0;
     width: 100%;
+}
+
+
+.header-feed {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: start;
+}
+
+.container-filtros {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+
+.filtro {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+    .filtro label {
+        font-size: 14px;
+        font-weight: bold;
+        color: var(--cor-principal);
+        margin-bottom: 3px;
+    }
+
+.input-filtro {
+    padding: 4px;
+    border-radius: 35px;
+    border: 2px solid var(--cor-principal);
+    font-size: 14px;
+    font-weight:bold;
+    color: var(--cor-principal);
+    background: white;
+    transition: all 0.3s ease-in-out;
+}
+
+    .input-filtro:focus,
+    .input-filtro:active {
+        background: var(--cor-principal);
+        color: white;
+        border-color: var(--cor-principal2);
+        outline: none;
+    }
+
+    /* Estiliza os selects */
+    .input-filtro option {
+        background: white;
+        color: var(--cor-principal);
+    }
+
+    .input-filtro:focus option {
+        background: var(--cor-principal);
+        color: white;
+    }
+
+.item-filtravel {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.filtrado {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    display: none !important; /* Mantém o display para evitar conflitos */
 }

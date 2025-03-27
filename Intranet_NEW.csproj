@@ -57,7 +57,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\imagens\AnaBracoCruzado.png" />
     <None Include="wwwroot\imagens\LOGO_ROVERI_NEW.png" />
     <None Include="wwwroot\imagens\RoveriNews02.png" />
   </ItemGroup>
@@ -132,8 +131,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewComponents\" />
-    <Folder Include="Views\Shared\Components\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

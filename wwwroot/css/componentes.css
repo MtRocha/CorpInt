@@ -1,5 +1,13 @@
-﻿
-/*COMPONENTE - PUBLICACAO*/
+﻿:root {
+    --cor-principal: #fa6400;
+    --cor-principal2: #c85d00;
+    --cor-principal3: #ff8024;
+    --cor-secundaria: #454545;
+    --cor-secundaria2: #707070;
+    --cor-secundaria3: #b2b2b2;
+}
+
+/* COMPONENTE - PUBLICACAO */
 html, body {
     height: 100%;
     margin: 0;
@@ -16,13 +24,13 @@ html, body {
 .options-btn {
     border: none;
     background: none;
-    color: #555;
+    color: var(--cor-secundaria2);
     font-size: 18px;
     cursor: pointer;
 }
 
     .options-btn:hover {
-        color: #ff6000;
+        color: var(--cor-principal);
     }
 
 .options-menu {
@@ -46,19 +54,17 @@ html, body {
         cursor: pointer;
         text-align: left;
         font-size: 14px;
+        color: var(--cor-secundaria);
     }
 
         .options-menu button:hover {
-            background: #ff6000;
+            background: var(--cor-principal);
             color: white;
         }
 
-
-
-
 .header, .footer {
     height: 80px; /* Define altura fixa */
-    background-color: #ff6000;
+    background-color: var(--cor-principal);
     color: white;
     display: flex;
     align-items: center;
@@ -84,10 +90,8 @@ html, body {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Evita que o conteúdo ultrapasse o card */
-    opacity:0;
-    animation:FadeUp 0.5s forwards ;
-    animation-delay:0.2s;
+    overflow: hidden;
+    animation-delay: 0.2s;
 }
 
     .publicacao-card:hover {
@@ -99,25 +103,25 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--cor-secundaria3);
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
 
 .publicacao-autor {
     font-weight: bold;
-    color: #333;
+    color: var(--cor-secundaria);
 }
 
 .publicacao-conteudo {
     flex-grow: 1;
-    min-height: fit-content; /* Define um tamanho mínimo */
-    max-height: 1300px; /* Limite máximo para evitar que ultrapasse */
+    min-height: fit-content;
+    max-height: 1300px;
     font-size: 16px;
-    color: #555;
-    overflow-y: auto; /* Ativa o scroll vertical quando necessário */
+    color: var(--cor-secundaria2);
+    overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 10px; /* Para evitar que o conteúdo encoste na borda */
+    padding-right: 10px;
     word-wrap: break-word;
 }
 
@@ -133,12 +137,10 @@ html, body {
     gap: 10px;
 }
 
-
-
 .btn-curtir, .btn-descurtir {
     background: none;
     border: none;
-    color: #ff6000;
+    color: var(--cor-principal);
     cursor: pointer;
     font-size: 1.5rem;
     transition: color 0.3s ease-in-out;
@@ -146,12 +148,20 @@ html, body {
 
 .btn-selecionado {
     color: #fff;
-    background-color: #ff6000;
+    background-color: var(--cor-principal);
     border-radius: 5px;
 }
 
-    .btn-curtir:hover, .btn-descurtir:hover {
-        transform: scale(1.2) ;
-        transition:0.3s;
-    }
-/*COMPONENTE - PUBLICACAO*/
+.btn-curtir:hover, .btn-descurtir:hover {
+    transform: scale(1.2);
+    transition: 0.3s;
+}
+
+.Hidden-Frame {
+
+    opacity:0;
+    display:flex;
+    justify-content:center;
+    animation:FadeUp 0.5s forwards;
+
+}

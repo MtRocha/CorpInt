@@ -8,6 +8,7 @@
         public int Curtidas { get; set; }
         public int Descurtidas { get; set; }
         public string Carteira { get; set; }
+        public int Tipo { get; set; }
         public string Autor { get; set; }
         public int IdAutor { get; set; }
         public int Arquivada { get; set; }

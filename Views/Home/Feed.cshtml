@@ -3,11 +3,33 @@
     Layout = "_Layout_Home";
     ViewData["Title"] = "Home";
 }
+<header class="header-feed">
+    <div class="container-filtros">
+        <div class="filtro">
+            <label>🔎 Busca</label>
+            <input type="text" id="titulo" placeholder="Pesquisar..." class="input-filtro">
+        </div>
+
+        <div class="filtro">
+            <label>📅 Data</label>
+            <input type="date" id="data" class="input-filtro">
+        </div>
+
+        <div class="filtro">
+            <label>📌 Tipo</label>
+            <select id="tipo" asp-items=ViewBag.TipoAcao class="input-filtro">
+            </select>
+        </div>
+        <button id="btnLimparFiltros" class="btn btn-secondary">Limpar Filtros</button>
+
+    </div>
+</header>
 
 <div class="d-flex w-100 p-2 flex-column justify-content-evenly align-items-center" style="width:82%">
-    @foreach (Intranet_NEW.Models.WEB.PublicacaoModel item in ViewBag.Publicacoes)
-    {
-        @await Html.PartialAsync("_CompPublicacao", item)
-    }
-
+    @await Html.PartialAsync("_CompPubContainer")
 </div>
+
+<!-- Importando o Arquivo da Classe -->
+<script>
+    const filtro = new FiltroDinamico("#pub-container", ".input-filtro");
+</script>
