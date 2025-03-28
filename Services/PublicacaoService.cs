@@ -85,7 +85,7 @@ namespace Intranet_NEW.Services
             return publicacoes;
         }
 
-        public List<PublicacaoModel> ListaPublicacoesParaFeed(string carteira,int idUsuario,int pagina,int quantidade)
+        public List<PublicacaoModel> ListaPublicacoesParaFeed(string carteira,int idUsuario,int pagina,int quantidade,DateTime data,int tipo,string conteudo)
         {
             List<PublicacaoModel> publicacoes = new List<PublicacaoModel>();
             SqlCommand command = new SqlCommand("SP_WEB_LISTA_PUB");
@@ -94,6 +94,11 @@ namespace Intranet_NEW.Services
             command.Parameters.Add(new SqlParameter("@NR_COLABORADOR", idUsuario));
             command.Parameters.Add(new SqlParameter("@PAGINA", pagina));
             command.Parameters.Add(new SqlParameter("@QUANTIDADE", quantidade));
+            command.Parameters.Add("@TIPO", SqlDbType.Int).Value = (tipo == 0) ? DBNull.Value : tipo;
+            command.Parameters.Add("@DATA", SqlDbType.DateTime).Value =  data == DateTime.MinValue ? DBNull.Value : (object) data.ToString("yyyy-MM-dd");
+            command.Parameters.Add("@CONTEUDO", SqlDbType.VarChar).Value = string.IsNullOrEmpty(conteudo) ? DBNull.Value : "%" + conteudo + "%";
+
+
             DataSet ds = _daoMis.ConsultaSQL(command);
             foreach (DataRow row in ds.Tables[0].Rows)
             {

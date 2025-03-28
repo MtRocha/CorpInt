@@ -18,7 +18,6 @@
     <script src="~/js/Reacao.js"></script>
     <script src="~/js/Animacao.js"></script>
     <script src="~/js/Publicacao.js"></script>
-    <script src="~/js/FiltroDinamico.js"></script>
     <script src="~/js/site.js"></script>
 </head>
 <body class="bg-light vh-100 d-flex flex-column justify-content-end">
@@ -53,37 +52,6 @@
             @RenderBody()
         </main>
     </div>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let container = document.getElementById("pub-container");
-    
-        if (container) {
-            container.addEventListener("scroll", verificarScroll);
-            ListaFeedPaginado(1); // Carrega a primeira página ao iniciar
-        }
-    });
-
-      function verificarScroll() {
-            let container = document.getElementById("pub-container");
-
-            if (carregando) return; // Se já está carregando, não faz nada
-
-            let posicaoScroll = container.scrollTop + container.clientHeight;
-            let alturaTotal = container.scrollHeight;
-
-            // Quando o scroll estiver a 90% da altura total, carrega mais posts
-            if (posicaoScroll >= alturaTotal * 0.9) {
-                carregando = true;
-                requestAnimationFrame(() => {
-                    setTimeout(() => {
-                        ListaFeedPaginado(1);
-                    }, 300); // Aguarda 300ms para evitar múltiplas chamadas
-                });
-            }
-        }
-
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

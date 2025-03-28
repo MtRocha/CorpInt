@@ -7,20 +7,20 @@
     <div class="container-filtros">
         <div class="filtro">
             <label>🔎 Busca</label>
-            <input type="text" id="titulo" placeholder="Pesquisar..." class="input-filtro">
+            <input type="text" id="termoFiltro" placeholder="Pesquisar..." class="input-filtro">
         </div>
 
         <div class="filtro">
             <label>📅 Data</label>
-            <input type="date" id="data" class="input-filtro">
+            <input type="date" id="dataFiltro" class="input-filtro">
         </div>
 
         <div class="filtro">
             <label>📌 Tipo</label>
-            <select id="tipo" asp-items=ViewBag.TipoAcao class="input-filtro">
+            <select id="tipoFiltro" asp-items=ViewBag.TipoAcao class="input-filtro">
             </select>
         </div>
-        <button id="btnLimparFiltros" class="btn btn-secondary">Limpar Filtros</button>
+        <button id="limparFiltros" class="btn btn-secondary">Limpar Filtros</button>
 
     </div>
 </header>
@@ -29,7 +29,16 @@
     @await Html.PartialAsync("_CompPubContainer")
 </div>
 
-<!-- Importando o Arquivo da Classe -->
-<script>
-    const filtro = new FiltroDinamico("#pub-container", ".input-filtro");
-</script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+                new FeedPaginado("pub-container", "loading", {
+                tipo: document.getElementById("tipoFiltro"),
+                    termo: document.getElementById("termoFiltro"),
+                    data: document.getElementById("dataFiltro"),
+                    limpar: document.getElementById("limparFiltros")
+                });
+        });
+    </script>
+

@@ -122,10 +122,10 @@ namespace Intranet_NEW.Controllers
             return Json(new { location = fileUrl });
         }
 
-        public async Task<IActionResult> ListaFeed(int quantidade, int pagina, int tipo)
+        public async Task<IActionResult> ListaFeed(int quantidade, int pagina, int tipo,DateTime data,string conteudo)
         {
             ViewBag.PermitirExclusao = tipo == 1 ? false: true;
-            List<PublicacaoModel> publicacoes = _publicacaoService.ListaPublicacoesParaFeed(User.FindFirst(ClaimTypes.GroupSid).Value, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value), pagina, quantidade);
+            List<PublicacaoModel> publicacoes = _publicacaoService.ListaPublicacoesParaFeed(User.FindFirst(ClaimTypes.GroupSid).Value, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value), pagina,quantidade,data,tipo,conteudo);
             List<string> publicacoesRenderizadas = new List<string>();
             foreach (PublicacaoModel item in publicacoes)
             {
