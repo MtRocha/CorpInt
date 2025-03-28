@@ -8,10 +8,8 @@
         this.carregando = false;
 
         this.inicializarEventos();
-        // Chama a primeira carga de publicações
         this.ListaFeedPaginado();
 
-        // Adiciona o evento de scroll ao container
         this.container.addEventListener("scroll", () => this.verificarScroll());
     }
 
@@ -23,65 +21,56 @@
 
         if (!this.filtros) return;
 
-        // Ativa a filtragem automática
-        this.filtros.tipo?.addEventListener("change", () => this.listar(true));
+        this.filtros.tipo?.addEventListener("change", () => this.listar(false)); // Mantém a página
         this.filtros.termo?.addEventListener("input", () => this.verificarFiltroTermo());
         this.filtros.data?.addEventListener("change", () => this.verificarFiltroData());
         this.filtros.limpar?.addEventListener("click", () => this.limparFiltros());
     }
 
     verificarScroll() {
-        if (this.carregando) return; // Evita múltiplas chamadas
+        if (this.carregando) return;
 
         let posicaoScroll = this.container.scrollTop + this.container.clientHeight;
         let alturaTotal = this.container.scrollHeight;
 
-        // Quando o scroll estiver a 90% da altura total, carrega mais posts
         if (posicaoScroll >= alturaTotal * 0.9) {
             requestAnimationFrame(() => {
                 setTimeout(() => {
-                    this.ListaFeedPaginado(false);
-                }, 300); // Aguarda 300ms para evitar múltiplas chamadas
+                    this.ListaFeedPaginado();
+                }, 300);
             });
         }
     }
 
     verificarFiltroTermo() {
         if (this.filtros.termo.value.trim() === "") {
+            this.listar(true); // Reseta página se termo for apagado
+        } else {
             this.listar(false);
-        }
-        else {
-            this.listar(true);
         }
     }
 
     verificarFiltroData() {
         if (!this.filtros.data.value) {
+            this.listar(true); // Reseta página se data for apagada
+        } else {
             this.listar(false);
-        }
-        else {
-            this.listar(true);
         }
     }
 
     listar(resetPagina = false) {
         if (resetPagina) {
-            this.pagina = 0; // Resetar a página para 0
-            this.container.innerHTML = ""; // Limpar o conteúdo atual
+            this.pagina = 0; // Resetar página quando necessário
+            this.container.innerHTML = ""; // Limpar conteúdo
         }
-        this.ListaFeedPaginado(resetPagina);
+        this.ListaFeedPaginado();
     }
 
-    ListaFeedPaginado(resetPagina = false) {
+    ListaFeedPaginado() {
         if (this.carregando) return;
         this.carregando = true;
 
         if (!this.container || !this.loading) return;
-
-        if (resetPagina) {
-            this.pagina = 0;
-            this.container.innerHTML = "";
-        }
 
         // Obtendo valores dos filtros
         let tipo = this.filtros.tipo?.value.trim() || "";
@@ -90,11 +79,8 @@
 
         // Construindo a URL da requisição
         let url = `/Publicacao/ListaFeed?quantidade=${this.quantidade}&pagina=${this.pagina}`;
-        if (tipo || termo || data) {
-            url += `&tipo=${tipo}&conteudo=${termo}&data=${data}`;
-        }
+        url += `&tipo=${tipo}&conteudo=${termo}&data=${data}`;
 
-        // Exibindo o loader
         this.loading.style.display = "block";
 
         fetch(url)
@@ -110,13 +96,12 @@
                     let div = document.createElement("div");
                     div.style.width = "100%";
                     div.innerHTML = publicacao;
-                    div.classList.add("Hidden-Frame"); // Animação nos novos elementos
+                    div.classList.add("Hidden-Frame");
                     this.container.appendChild(div);
                 });
 
-                if (!resetPagina) {
-                    this.pagina += 5;
-                }
+                this.pagina += 5; // Continua de onde parou
+
                 this.carregando = false;
             })
             .catch(error => console.error("Erro ao carregar publicações:", error))
@@ -131,6 +116,6 @@
         if (this.filtros.termo) this.filtros.termo.value = "";
         if (this.filtros.data) this.filtros.data.value = "";
 
-        this.listar(true);
+        this.listar(true); // Agora reseta corretamente
     }
 }
