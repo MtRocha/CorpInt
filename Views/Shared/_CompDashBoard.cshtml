@@ -1,0 +1,39 @@
+﻿@model Intranet_NEW.Models.WEB.PowerBiModel
+
+<div class="dashboard-card">
+    <div class="dashboard-header">
+        <img src="@Model.CaminhoImagem" alt="Dashboard" class="dashboard-img" />
+        <div class="dashboard-info">
+            <h4 class="dashboard-title">@Model.Titulo</h4>
+            <p class="dashboard-subtitle">@Model.Descricao</p>
+        </div>
+
+        <!-- Nav de ações -->
+        <div class="dropdown dashboard-options">
+            <button class="btn btn-light btn-sm" data-bs-toggle="dropdown">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                <li>
+                    <a class="dropdown-item text-primary btn-editar" data-id="@Model.Id">
+                        <i class="fas fa-edit me-2"></i>Editar
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item text-danger" href="#" onclick="confirmarExclusao('@Model.Id')">
+                        <i class="fas fa-trash me-2"></i>Excluir
+                    </a>
+                </li>
+@*                 <li>
+                    <a class="dropdown-item text-secondary" href="#" data-bs-toggle="modal" data-bs-target="#modalHistorico">
+                        <i class="fas fa-history me-2"></i>Ver Histórico
+                    </a>
+                </li> *@
+            </ul>
+        </div>
+    </div>
+
+    <div class="dashboard-actions mt-3">
+        <button onclick="window.open('VisualizarBI?id=@Model.Id', '_blank')" class="btn-dashboard">Acessar Dashboard</button>
+    </div>
+</div>

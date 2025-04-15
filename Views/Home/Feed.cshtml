@@ -4,23 +4,24 @@
     ViewData["Title"] = "Home";
 }
 <header class="header-feed">
-    <div class="container-filtros">
-        <div class="filtro">
+
+    <div class="container-filtros" >
+        <div class="filtro" style="width:50%;">
             <label>🔎 Busca</label>
             <input type="text" id="termoFiltro" placeholder="Pesquisar..." class="input-filtro">
         </div>
 
-        <div class="filtro">
+        <div class="filtro" style="width:25%;">
             <label>📅 Data</label>
             <input type="date" id="dataFiltro" class="input-filtro">
         </div>
 
-        <div class="filtro">
+        <div class="filtro" style="width:25%;">
             <label>📌 Tipo</label>
             <select id="tipoFiltro" asp-items=ViewBag.TipoAcao class="input-filtro">
             </select>
         </div>
-        <button id="limparFiltros" class="btn btn-secondary">Limpar Filtros</button>
+
 
     </div>
 </header>
@@ -41,4 +42,43 @@
                 });
         });
     </script>
+
+
+<!-- Modal de Confirmação de Exclusão -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir esta publicação? Essa ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ações -->
+<script>
+    let selectedPostId = null;  // Variável global para armazenar o ID da publicação a ser excluída
+
+    function confirmarExclusao(publicacaoId) {
+        selectedPostId = publicacaoId;  // Guarda o ID da publicação
+        $('#confirmDeleteModal').modal('show');  // Exibe o modal de confirmação
+    }
+
+    function apagarPublicacao(pubId) {
+        window.location.href = `/Publicacao/Excluir?pubId=${pubId}`; // Redireciona para exclusão
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+        if (selectedPostId !== null) {
+            apagarPublicacao(selectedPostId);
+        }
+    });
+</script>
 

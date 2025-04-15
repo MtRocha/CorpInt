@@ -6,6 +6,8 @@
         this.quantidade = 5;
         this.pagina = 0;
         this.carregando = false;
+        this.scroll = false;
+        this.baseName = window.location.pathname.split('/')[1]; // Pega a primeira parte do caminho
 
         this.inicializarEventos();
         this.ListaFeedPaginado();
@@ -25,6 +27,9 @@
         this.filtros.termo?.addEventListener("input", () => this.verificarFiltroTermo());
         this.filtros.data?.addEventListener("change", () => this.verificarFiltroData());
         this.filtros.limpar?.addEventListener("click", () => this.limparFiltros());
+
+        // Configura o botão de confirmação de exclusão
+        document.getElementById('confirmDeleteButton')?.addEventListener('click', () => this.apagarPublicacao());
     }
 
     verificarScroll() {
@@ -36,6 +41,7 @@
         if (posicaoScroll >= alturaTotal * 0.9) {
             requestAnimationFrame(() => {
                 setTimeout(() => {
+                    this.scroll = true;
                     this.ListaFeedPaginado();
                 }, 300);
             });
@@ -44,17 +50,17 @@
 
     verificarFiltroTermo() {
         if (this.filtros.termo.value.trim() === "") {
-            this.listar(true); // Reseta página se termo for apagado
+            this.ListaFeedPaginado(true); // Reseta página se termo for apagado
         } else {
-            this.listar(false);
+            this.ListaFeedPaginado(false);
         }
     }
 
     verificarFiltroData() {
         if (!this.filtros.data.value) {
-            this.listar(true); // Reseta página se data for apagada
+            this.ListaFeedPaginado(true); // Reseta página se data for apagada
         } else {
-            this.listar(false);
+            this.ListaFeedPaginado(false);
         }
     }
 
@@ -77,9 +83,14 @@
         let termo = this.filtros.termo?.value || "";
         let data = this.filtros.data?.value || "";
 
+        if ((tipo != '' || termo != '' || data != '') && !this.scroll) {
+            this.pagina = 0
+            this.container.innerHTML = ''
+        }
+
         // Construindo a URL da requisição
         let url = `/Publicacao/ListaFeed?quantidade=${this.quantidade}&pagina=${this.pagina}`;
-        url += `&tipo=${tipo}&conteudo=${termo}&data=${data}`;
+        url += `&tipo=${tipo}&conteudo=${termo}&data=${data}&aba=${this.baseName}`;
 
         this.loading.style.display = "block";
 
@@ -88,8 +99,17 @@
             .then(data => {
                 if (data.length === 0 && this.pagina === 0) {
                     console.log("Nenhuma publicação encontrada.");
-                    this.container.innerHTML = "<p>Nenhuma publicação encontrada.</p>";
+                    this.container.innerHTML = `
+                        <div class="card-sem-publicacoes">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <p>Nenhuma publicação encontrada.</p>
+                        </div>
+                    `;
                     return;
+                }
+
+                if (!this.scroll) {
+                    this.container.innerHTML = "";
                 }
 
                 data.forEach(publicacao => {
@@ -97,6 +117,17 @@
                     div.style.width = "100%";
                     div.innerHTML = publicacao;
                     div.classList.add("Hidden-Frame");
+
+                    // Adiciona a ação de exclusão para cada publicação
+                    let deleteButton = div.querySelector('.delete-publication');
+                    if (deleteButton) {
+                        deleteButton.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const postId = deleteButton.getAttribute('data-post-id');
+                            this.confirmarExclusao(postId);
+                        });
+                    }
+
                     this.container.appendChild(div);
                 });
 
@@ -108,6 +139,10 @@
             .finally(() => {
                 this.carregando = false;
                 this.loading.style.display = "none";
+
+                if (this.scroll) {
+                    this.scroll = false;
+                }
             });
     }
 
@@ -118,4 +153,5 @@
 
         this.listar(true); // Agora reseta corretamente
     }
+
 }

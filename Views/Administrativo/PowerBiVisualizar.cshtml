@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Components
+@model Intranet_NEW.Models.WEB.PowerBiModel
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Power BI";
+}
+
+<iframe title="Dash Control Caixa_NEW" id="dashboardFrame" style="width:100%;height:100%;" src="@Model.Link" frameborder="0" allowFullScreen="true"></iframe>
+
+<script>
+    setInterval(() => {
+        const iframe = document.getElementById("dashboardFrame");
+        iframe.src = iframe.src;
+    }, @Model.IntervaloAtualizacao * 10000); 
+</script>

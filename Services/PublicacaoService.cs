@@ -10,10 +10,12 @@ namespace Intranet_NEW.Services
 {
     public class PublicacaoService
     {
+        private readonly DAL_INTRANET _daoIntranet;
         private readonly DAL_MIS _daoMis;
         public PublicacaoService() {
         
             _daoMis = new DAL_MIS();
+            _daoIntranet = new DAL_INTRANET();
 
         }
 
@@ -45,9 +47,9 @@ namespace Intranet_NEW.Services
         public PublicacaoModel BuscaPublicacao(int id)
         {
             PublicacaoModel publicacoes = new();
-            SqlCommand command = new SqlCommand("SELECT A.*,NM_COLABORADOR FROM TBL_WEB_PUBLICACAO A \r\nJOIN TBL_WEB_COLABORADOR_DADOS B ON A.NR_COLABORADOR_AUTOR = B.NR_COLABORADOR\r\nWHERE TP_EXCLUIDA = 0 AND ID = @ID ORDER BY DT_PUBLICACAO DESC ");
+            SqlCommand command = new SqlCommand("SELECT A.*,NM_COLABORADOR FROM TBL_WEB_PUBLICACAO A \r\nJOIN DB_MIS..TBL_WEB_COLABORADOR_DADOS B ON A.NR_COLABORADOR_AUTOR = B.NR_COLABORADOR\r\nWHERE TP_EXCLUIDA = 0 AND ID = @ID ORDER BY DT_PUBLICACAO DESC ");
             command.Parameters.Add(new SqlParameter("@ID",id));
-            DataSet ds = _daoMis.ConsultaSQL(command);
+            DataSet ds = _daoIntranet.ConsultaSQL(command);
 
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -61,7 +63,7 @@ namespace Intranet_NEW.Services
             SqlCommand command = new($"UPDATE TBL_WEB_PUBLICACAO SET CURTIDAS = @NOVO_VALOR WHERE ID = @ID ");
             command.Parameters.Add(new SqlParameter("@ID", id));
             command.Parameters.Add(new SqlParameter("@NOVO_VALOR", novoValor));
-            _daoMis.ExecutaComandoSQL (command);
+            _daoIntranet.ExecutaComandoSQL (command);
         }
 
         public void AtualizaDescurtida(int id, int novoValor)
@@ -69,14 +71,14 @@ namespace Intranet_NEW.Services
             SqlCommand command =  new($"UPDATE TBL_WEB_PUBLICACAO SET DESCURTIDAS = @NOVO_VALOR WHERE ID = @ID ");
             command.Parameters.Add(new SqlParameter("@ID", id));
             command.Parameters.Add(new SqlParameter("@NOVO_VALOR", novoValor));
-            _daoMis.ExecutaComandoSQL(command);
+            _daoIntranet.ExecutaComandoSQL(command);
         }
 
         public List<PublicacaoModel> ListaPublicacoes(int idUsuario)
         {
             List<PublicacaoModel> publicacoes = new List<PublicacaoModel>();
-            SqlCommand command = new SqlCommand("SELECT A.*,NM_COLABORADOR FROM TBL_WEB_PUBLICACAO A \r\nJOIN TBL_WEB_COLABORADOR_DADOS B ON A.NR_COLABORADOR_AUTOR = B.NR_COLABORADOR\r\nWHERE TP_EXCLUIDA = 0 ORDER BY DT_PUBLICACAO DESC ");
-            DataSet ds = _daoMis.ConsultaSQL(command);
+            SqlCommand command = new SqlCommand("SELECT A.*,NM_COLABORADOR FROM TBL_WEB_PUBLICACAO A \r\nJOIN DB_MIS..TBL_WEB_COLABORADOR_DADOS B ON A.NR_COLABORADOR_AUTOR = B.NR_COLABORADOR\r\nWHERE TP_EXCLUIDA = 0 ORDER BY DT_PUBLICACAO DESC ");
+            DataSet ds = _daoIntranet.ConsultaSQL(command);
             foreach (DataRow row in ds.Tables[0].Rows)
             {
                 PublicacaoModel publicacao = MontaPublicacao(row,idUsuario);
@@ -99,7 +101,7 @@ namespace Intranet_NEW.Services
             command.Parameters.Add("@CONTEUDO", SqlDbType.VarChar).Value = string.IsNullOrEmpty(conteudo) ? DBNull.Value : "%" + conteudo + "%";
 
 
-            DataSet ds = _daoMis.ConsultaSQL(command);
+            DataSet ds = _daoIntranet.ConsultaSQL(command);
             foreach (DataRow row in ds.Tables[0].Rows)
             {
                 PublicacaoModel publicacao = MontaPublicacao(row,idUsuario);
@@ -115,7 +117,7 @@ namespace Intranet_NEW.Services
             command.Parameters.Add(new SqlParameter("@ID_PUB", idPub));
             command.Parameters.Add(new SqlParameter("@NR_USUARIO", idUsuario));
 
-            DataSet ds = _daoMis.ConsultaSQL(command);
+            DataSet ds = _daoIntranet.ConsultaSQL(command);
 
             if (ds.Tables[0].Rows.Count == 0)
                 return 0;
@@ -135,15 +137,15 @@ namespace Intranet_NEW.Services
             command.Parameters.AddWithValue("@DT_PUBLICACAO", publicacao.DataPublicacao);
             command.Parameters.AddWithValue("@TP_EXCLUIDA",0);
             command.Parameters.AddWithValue("@NR_COLABORADOR_AUTOR",publicacao.IdAutor);
-            command.Parameters.AddWithValue("@TP_ACAO", publicacao.Id);
-            _daoMis.ExecutaComandoSQL(command);
+            command.Parameters.AddWithValue("@TP_ACAO", publicacao.Tipo);
+            _daoIntranet.ExecutaComandoSQL(command);
         }
 
         public void ExcluirPublicacao(int id)
         {
             SqlCommand command = new SqlCommand("UPDATE TBL_WEB_PUBLICACAO SET TP_EXCLUIDA = 1 WHERE ID = @ID");
             command.Parameters.Add(new SqlParameter("@ID", id));
-            _daoMis.ExecutaComandoSQL(command);
+            _daoIntranet.ExecutaComandoSQL(command);
         }
 
 

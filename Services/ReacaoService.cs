@@ -7,11 +7,11 @@ namespace Intranet_NEW.Services
 {
     public class ReacaoService
     {
-        private readonly DAL_MIS _daoMis;
+        private readonly DAL_INTRANET _daoMis;
         private readonly PublicacaoService _publicacaoService;
         public ReacaoService() {
         
-            _daoMis = new DAL_MIS();
+            _daoMis = new DAL_INTRANET();
             _publicacaoService = new PublicacaoService();
         }
 

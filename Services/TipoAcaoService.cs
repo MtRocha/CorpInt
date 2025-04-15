@@ -8,11 +8,11 @@ namespace Intranet_NEW.Services
 {
     public class TipoAcaoService
     {
-        private readonly DAL_MIS _daoMis;
+        private readonly DAL_INTRANET _daoMis;
         public TipoAcaoService()
         {
 
-            _daoMis = new DAL_MIS();
+            _daoMis = new DAL_INTRANET();
         }
         public TipoAcaoModel MontaTipoAcao(DataRow row)
         {

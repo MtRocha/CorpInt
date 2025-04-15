@@ -2,9 +2,9 @@
     Layout = "_Layout_Administrativo";
     ViewData["Title"] = "Home - Admistrativo";
 }
-<div class="row justify-content-evenly w-100" style="margin-top:15%;">
+<div class="row justify-content-center align-items-center h-100" style="width:101%;overflow:auto;">
     <!-- Botão Colaboradores -->
-    <div class="col-md-4 d-flex justify-content-center disabled">
+    <div class="administrativo-div-button">
         <a href="#" class="d-flex flex-column btn administrativo-menu-button disabled">
             <img src="~/imagens/audience-icon.png" width="200"/>
             <span>Colaboradores</span>
@@ -13,8 +13,8 @@
     </div> 
     
     <!-- Botão Publicações -->
-    <div class="col-md-4 d-flex justify-content-center">
-        <a  class="d-flex flex-column btn administrativo-menu-button" asp-controller="Publicacao" asp-action="Index">
+    <div class="administrativo-div-button">
+        <a  class="d-flex flex-column btn administrativo-menu-button" asp-controller="Publicacao" asp-action="Publicacao">
             <img src="~/imagens/blog-post-icon.png" width="160" />
            <br/>
             <span>Publicações</span>
@@ -22,13 +22,12 @@
         </a>
     </div>
 
-    <!-- Botão Advertências e Folgas -->
-    <div class="col-md-4 d-flex justify-content-center">
-        <a href="#" class="d-flex flex-column align-items-center btn administrativo-menu-button disabled">
-            <img src="~/imagens/notes-icon.png" style="margin-left:35px" width="160" />
-            <br/>
-            <span>Folgas & Escalas</span>
+    <!-- Botão Power BI -->
+    <div class="administrativo-div-button">
+        <a class="d-flex flex-column align-items-center btn administrativo-menu-button" asp-controller="PowerBI" disabled asp-action="PowerBI">
+            <img src="~/imagens/Power_BI_Logo.svg.png"  width="160" />
+            <br />
+            <span>Power BI</span>
         </a>
-    </div>
-
+    </div> 
 </div>

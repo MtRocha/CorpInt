@@ -32,6 +32,7 @@ namespace Intranet_NEW.Controllers
             List<SelectListItem> acoes = new List<SelectListItem>();
             List<TipoAcaoModel> listaAcoes = _tipoAcaoService.ListaTipoAcao();
             acoes.Add(new SelectListItem("Todas","0"));
+
             foreach (TipoAcaoModel item in listaAcoes)
             {
                 acoes.Add(new SelectListItem { Value = item.Id, Text = item.Name });

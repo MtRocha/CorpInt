@@ -36,28 +36,32 @@ namespace Intranet_NEW.Controllers
             List<PublicacaoModel> publicacoes = _publicacaoService.ListaPublicacoes(Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             List<TipoAcaoModel> listaAcoes = _tipoAcaoService.ListaTipoAcao();
             List<SelectListItem> acoes = new();
+            List<SelectListItem> acoesFiltro = new();
+            acoesFiltro.Add(new SelectListItem("Todas", "0"));
             carteiras.Add(new SelectListItem("Todas as Carteiras", "0"));
             foreach (CarteiraModel carteira in listaCarteiras)
             {
-                carteiras.Add(new SelectListItem { Value = carteira.Id, Text = carteira.Name });
+                carteiras.Add(new SelectListItem { Value = carteira.Name, Text = carteira.Name });
             }
             foreach (TipoAcaoModel item in listaAcoes)
             {
                 acoes.Add(new SelectListItem { Value = item.Id, Text = item.Name });
+                acoesFiltro.Add(new SelectListItem { Value = item.Id, Text = item.Name });
             }
+            ViewBag.TipoAcao = acoes;
+            ViewBag.TipoAcaoFiltro = acoesFiltro;
             ViewBag.Carteiras = carteiras;
             ViewBag.Publicacoes = publicacoes;
-            ViewBag.TipoAcao = acoes;
             ViewBag.PermitirExclusao = true;
 
         }
 
         [Authorize]
-        public IActionResult Index()
+        public IActionResult Publicacao()
         {
             PublicacaoModel model = new();
             CarregarItems();
-            return View("Index",model);
+            return View("Publicacao",model);
         }
 
         #region Metodos de Assincronos
@@ -122,9 +126,9 @@ namespace Intranet_NEW.Controllers
             return Json(new { location = fileUrl });
         }
 
-        public async Task<IActionResult> ListaFeed(int quantidade, int pagina, int tipo,DateTime data,string conteudo)
+        public async Task<IActionResult> ListaFeed(int quantidade, int pagina, int tipo,DateTime data,string conteudo,string aba)
         {
-            ViewBag.PermitirExclusao = tipo == 1 ? false: true;
+            ViewBag.PermitirExclusao = aba != "Publicacao" ? false: true;
             List<PublicacaoModel> publicacoes = _publicacaoService.ListaPublicacoesParaFeed(User.FindFirst(ClaimTypes.GroupSid).Value, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value), pagina,quantidade,data,tipo,conteudo);
             List<string> publicacoesRenderizadas = new List<string>();
             foreach (PublicacaoModel item in publicacoes)
@@ -152,7 +156,7 @@ namespace Intranet_NEW.Controllers
                 model.DataPublicacao = DateTime.Now;
                 model.IdAutor = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 _publicacaoService.InserirPublicacao(model);
-                return RedirectToAction("Index", "Publicacao");
+                return RedirectToAction("Publicacao", "Publicacao");
 
             }
             else
@@ -163,7 +167,7 @@ namespace Intranet_NEW.Controllers
                 }
                 ViewBag.ErroPub = true;
                 CarregarItems();
-                return View("Index",model);
+                return RedirectToAction("Publicacao", "Publicacao");
             }
         }
 
@@ -171,7 +175,7 @@ namespace Intranet_NEW.Controllers
         public IActionResult Excluir(int pubId)
         {
             _publicacaoService.ExcluirPublicacao(pubId);
-            return RedirectToAction("Index");
+            return RedirectToAction("Publicacao", "Publicacao");
         }
         #endregion
     }

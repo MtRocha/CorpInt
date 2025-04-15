@@ -1,0 +1,258 @@
+﻿@using Microsoft.AspNetCore.Components
+@model Intranet_NEW.Models.WEB.PowerBiModel
+@using System.Security.Claims
+@{
+    Layout = "_Layout_Administrativo";
+    ViewData["Title"] = "Power BI";
+}
+
+<div class="d-flex flex-column justify-content-start align-items-center w-100">
+    @if (Convert.ToInt32(User.FindFirst(ClaimTypes.Role).Value) <= 4)
+    {
+        <br />
+            <button class="custom-btn p-3" style="border-radius:150px; width:80%;opacity:0;animation:FadeRight 0.6s forwards;" data-bs-toggle="modal" data-bs-target="#postModal">Criar DashBoard</button>
+        <br />
+        
+    }
+
+     <div class="container d-flex flex-row justify-content-center align-items-center p-3" id="dash-container">
+        
+         
+         <!-- Loader -->
+        <div id="loading" style="display:none;text-align: center; margin-top: 20px; position:relative;bottom:-10%">
+            <img src="~/imagens/loader.gif" width="100" />
+        </div>
+
+
+     </div>
+
+</div>
+
+<!-- Modal de Edição -->
+<div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="custom-label">Editar Dashboard</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-danger p-2 text-danger text-center rounded-2 shadow-sm mb-2" id="divErroEdit" style="display:none;">
+                    @foreach (var erro in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@erro.ErrorMessage</p>
+                    }
+                </div>
+
+                <form enctype="multipart/form-data" id="editForm" method="post" asp-action="EditarDashBoard">
+                    <input type="hidden" id="edit-id" name="Id" asp-for=Id />
+                    <div class="d-flex flex-column gap-3">
+
+                        <!-- Título -->
+                        <div class="d-flex flex-column">
+                            <label for="titulo" class="custom-label-small">Título</label>
+                            <input type="text" id="titulo" required asp-for="Titulo" class="custom-input" maxlength="120" name="Titulo" />
+                        </div>
+
+                        <!-- Tipo de Acesso -->
+                        <div class="d-flex flex-column">
+                            <label for="carteiraSelect" class="custom-label-small">Tipo de Acesso</label>
+                            <select class="custom-input" required id="carteiraSelect" asp-for="TipoAcesso" asp-items="ViewBag.Acessos">
+                            </select>
+                        </div>
+
+                        <!-- Link do Power BI -->
+                        <div class="d-flex flex-column">
+                            <label for="link" class="custom-label-small">Link do Power BI</label>
+                            <input type="text" id="link" required asp-for="Link" class="custom-input" name="Link" />
+                        </div>  
+                        
+                        <!-- Intervalo de Atualizacao -->
+                        <div class="d-flex flex-column">
+                            <label for="link" class="custom-label-small">Taxa de Atualização - Minutos</label>
+                            <input type="number" id="intAtt" required asp-for="IntervaloAtualizacao" class="custom-input" min="1" />
+                        </div>
+
+                        <!-- Descrição -->
+                        <div class="d-flex flex-column">
+                            <label for="editor" class="custom-label-small">Descrição</label>
+                            <textarea class="custom-input" required id="descricao" asp-for="Descricao"></textarea>
+                        </div>
+
+                        <!-- Botão -->
+                        <div class="d-flex">
+                            <button type="submit" class="custom-btn mt-3 w-100">Salvar Alterações</button>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Inclusao -->
+<div class="modal fade" id="postModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="custom-label">Novo DashBoard</h5>
+                <button type="button" onclick="limparFormulario('Form-Dash')" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-danger p-2 text-danger text-center rounded-2 shadow-sm mb-2" id="divErro" style="display:none;">
+                    @foreach (var erro in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@erro.ErrorMessage</p>
+                    }
+                </div>
+                <form enctype="multipart/form-data" asp-action="CriarDashboard" id="Form-Dash">
+                    <div class="d-flex flex-column gap-3">
+
+                        <!-- Título -->
+                        <div class="d-flex flex-column">
+                            <label for="titulo" class="custom-label-small">Título</label>
+                            <input type="text" id="titulo" required asp-for="Titulo" class="custom-input" maxlength="120" name="Titulo" />
+                        </div>
+
+                        <!-- Upload da Imagem -->
+                        <div class="d-flex flex-column">
+                            <label for="caminhoImagem" class="custom-label-small">Imagem (Opcional)</label>
+                            <input type="file" id="caminhoImagem" asp-for="Imagem" class="custom-file-input" accept="image/*" />
+                        </div>
+
+                        <!-- Tipo de Acesso -->
+                        <div class="d-flex flex-column">
+                            <label for="carteiraSelect" class="custom-label-small">Tipo de Acesso</label>
+                            <select class="custom-input" required id="carteiraSelect" asp-for="TipoAcesso" asp-items="ViewBag.Acessos">
+                            </select>
+                        </div>
+
+                        <!-- Link do Power BI -->
+                        <div class="d-flex flex-column">
+                            <label for="link" class="custom-label-small">Link do Power BI</label>
+                            <input type="text" id="link" required asp-for="Link" class="custom-input" name="Link" />
+                        </div>
+
+                        <!-- Intervalo de Atualizacao -->
+                        <div class="d-flex flex-column">
+                            <label for="link" class="custom-label-small">Taxa de Atualização - Minutos</label>
+                            <input type="number" id="intAtt" required asp-for="IntervaloAtualizacao" class="custom-input"  min="1" />  
+                        </div>
+
+                        <!-- Descrição -->
+                        <div class="d-flex flex-column">
+                            <label for="editor" class="custom-label-small">Descrição</label>
+                            <textarea class="custom-input" required id="editor" asp-for="Descricao"></textarea>
+                        </div>
+
+                        <!-- Botão -->
+                        <div class="d-flex">
+                            <button type="submit" class="custom-btn mt-3 w-100">Publicar</button>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Modal de Confirmação de Exclusão -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir este DashBoard? Essa ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL DE HISTORICO-->
+<div class="modal fade" id="modalHistorico" tabindex="-1" aria-labelledby="modalHistoricoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Histórico de alterações - @Model.Titulo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <div id="historico-lista" class="list-group">
+                    <div class="list-group-item">
+                        <strong>10/04/2025 -</strong> Dashboard atualizado.
+                    </div>
+                    <div class="list-group-item">
+                        <strong>08/04/2025 -</strong> Descrição editada.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function confirmarExclusao(id) {
+        selectedPostId = id;  // Guarda o ID da publicação
+        $('#confirmDeleteModal').modal('show');  // Exibe o modal de confirmação
+    }
+
+    function apagarDashboard(pubId) {
+        window.location.href = `/PowerBi/Excluir?id=${pubId}`; // Redireciona para exclusão
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+        if (selectedPostId !== null) {
+            apagarDashboard(selectedPostId);
+        }
+    });
+
+
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        new PowerBI("dash-container", "loading");
+
+        let erro = '@ViewBag.Erro';
+        let erroEdit = '@ViewBag.ErroEdit';
+        let edicao = '@ViewBag.Edicao'
+        let divErro = document.getElementById('divErro')
+        let divErroEdit = document.getElementById('divErroEdit')
+        if(erro === 'True')
+        {
+             divErro.style.display = 'flex'
+             $("#postModal").modal('show'); // Exibir modal erro
+        }
+
+
+
+        if (erroEdit === 'True' && edicao === 'True') {
+             divErroEdit.style.display = 'flex'
+            $('#editModal').modal('show');
+
+        }
+
+    
+    });
+
+</script>
+
+
+
+
+
+

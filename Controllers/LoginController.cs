@@ -58,6 +58,10 @@ namespace Intranet_NEW.Controllers
 
                 await AutenticarUsuario(model);
 
+                if (model.TP_PRIORIDADE_ACESSO != 10)
+                {
+                    return RedirectToAction( "Index", "Administrativo"); 
+                }
                 return RedirectToAction("Feed", "Home"); 
             }
             else

@@ -4,28 +4,31 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="/favcon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/animacao.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/Usuario.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 </head>
-<body class="d-flex flex-column" style="min-height: 100vh;overflow:hidden;">
+<body class="d-flex flex-column" style="height:100vh; overflow:hidden;flex-wrap:nowrap;">
     <!-- Container principal com 2 colunas -->
-    <div class="container-fluid flex-grow-1 d-flex flex-column">
+    <div class="container-fluid flex-grow-1 d-flex flex-column flex-nowrap">
         <div class="row flex-grow-1">
             <!-- Coluna maior -->
             <div class="col-lg-7 col-md-6 col-12 d-flex justify-content-end align-items-end position-relative bg-primary">
                 <p class="vertical-text start">Roveri</p>
                 <p class="vertical-text end">News</p>
-                <img src="~/imagens/AnaBracoCruzado.png" style="position:relative;right:-15%; z-index:2;opacity:0;animation:FadeLeft 1s forwards" width="450" />
+                <img src="~/imagens/AnaBracoCruzado.png" class="img-ana" />
+                <img src="~/imagens/logotipo_Black.png" class="img-logo-resp" width="300"  />
             </div>
 
             <!-- Coluna menor -->
@@ -59,7 +62,7 @@
                 </div>
 
                 <div class="container-fluid d-flex justify-content-center mt-auto">
-                    <img src="~/imagens/Logotipo.png" class="m-1" style="z-index:2;opacity:0;animation:FadeUp 1s forwards" width="300" />
+                    <img src="~/imagens/Logotipo.png" class="img-logo" width="300" />
                 </div>
             </div>
         </div>
@@ -148,8 +151,8 @@
     <!--Script para Validacao-->
     <script>
         $(document).ready(function () {
-            var erroLogin = '@ViewBag.ErroLog';
-            var sessaoExpirou = '@ViewBag.TimeOut';
+            let erroLogin = '@ViewBag.ErroLog';
+            let sessaoExpirou = '@ViewBag.TimeOut';
 
             if (erroLogin === 'True') {
                 $("#modalErroLogin").modal('show'); // Exibir modal erro

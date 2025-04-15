@@ -1,40 +1,6 @@
-@import url('animacao.css');
+﻿@import url('animacao.css');
 
-/* Estilizando a barra de rolagem */
-::-webkit-scrollbar {
-    width: 12px; /* Largura da barra de rolagem */
-    height: 12px; /* Altura da barra de rolagem, para o scroll horizontal */
-}
-
-/* Estilizando a parte de "track" (fundo) da barra de rolagem */
-::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Cor de fundo da barra de rolagem */
-    border-radius: 10px; /* Arredonda os cantos do fundo */
-}
-
-/* Estilizando o "thumb" (parte que desliza) da barra de rolagem */
-::-webkit-scrollbar-thumb {
-    background: #ff6000; /* Cor do thumb */
-    border-radius: 10px; /* Arredonda os cantos do thumb */
-    border: 3px solid #f1f1f1; /* Borda para separar o thumb do track */
-}
-
-    /* Estilizando o "thumb" quando ele est� sendo clicado */
-    ::-webkit-scrollbar-thumb:active {
-        background: #c85d00; /* Cor quando o thumb estiver sendo clicado */
-    }
-
-/* Estilizando a barra de rolagem horizontal */
-::-webkit-scrollbar-horizontal {
-    height: 12px; /* Altura do scroll horizontal */
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #ff6000;
-    border-radius: 10px;
-}
-
-
+/* Variáveis de cores */
 :root {
     --cor-principal: #fa6400;
     --cor-principal2: #c85d00;
@@ -44,13 +10,30 @@
     --cor-secundaria3: #b2b2b2;
 }
 
-body {
-
+/* Estilização da barra de rolagem */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
 }
 
-/* Mant�m a rota��o apenas no texto vertical */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ff6000;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+}
+
+    ::-webkit-scrollbar-thumb:active {
+        background: #c85d00;
+    }
+
+/* Estilização do texto vertical */
 .vertical-text {
-    font-size: 11rem;
+    font-size: 20vh;
     writing-mode: vertical-rl;
     font-weight: bold;
     color: #fff;
@@ -60,43 +43,40 @@ body {
 }
 
     .vertical-text.start {
-        left: -25%;
-        bottom: 1%;
+        left: -8vw;
+        bottom: 1vh;
         animation: FadeUpTextVertical 1s forwards;
     }
 
     .vertical-text.end {
-        top: 2%;
-        left: -5%;
+        top: 2vh;
+        left: 4vw;
         animation: FadeDownTextVertical 1s forwards;
     }
 
-/* Estiliza��o das labels */
-.custom-label {
+/* Estilização das labels */
+.custom-label,
+.custom-label-big,
+.custom-label-small {
     font-weight: bold;
-    font-size: 1.7rem;
     color: var(--cor-principal);
     transition: all 0.3s ease-in-out;
     margin-bottom: 5px;
+}
+
+.custom-label {
+    font-size: 1.7rem;
 }
 
 .custom-label-big {
-    font-weight: bold;
     font-size: 4rem;
-    color: var(--cor-principal);
-    transition: all 0.3s ease-in-out;
-    margin-bottom: 5px;
 }
 
 .custom-label-small {
-    font-weight: bold;
     font-size: 1rem;
-    color: var(--cor-principal);
-    transition: all 0.3s ease-in-out;
-    margin-bottom: 5px;
 }
 
-/* Estiliza��o dos inputs */
+/* Estilização dos inputs */
 .custom-input {
     border: 2px solid var(--cor-principal);
     border-radius: 8px;
@@ -109,7 +89,19 @@ body {
         box-shadow: 0 0 32px rgba(255, 96, 0, 0.5);
     }
 
-/* Bot�o estilizado */
+.custom-file-input {
+    border: 2px solid var(--cor-principal);
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+    .custom-file-input:focus {
+        border: 2px solid var(--cor-principal);
+        box-shadow: 0 0 32px rgba(255, 96, 0, 0.5);
+    }
+
+/* Botão estilizado */
 .custom-btn {
     background-color: var(--cor-principal);
     color: white;
@@ -129,54 +121,87 @@ body {
         box-shadow: 0 4px 10px rgba(255, 96, 0, 0.5);
     }
 
-.modal-erro {
-    background-color: rgba(194, 196, 195, 0.5);
+/* ========================= IMAGENS LOGIN ========================= */
+
+.img-ana {
+    position: relative;
+    right: -9vw;
+    z-index: 2;
+    opacity: 0;
+    animation: FadeLeft 1s forwards;
+    width: 35vw;
+    height: 90vh
 }
 
+.img-logo, .img-logo-resp {
+    z-index: 2;
+    opacity: 0;
+    animation: FadeUp 1s forwards;
+}
+
+.img-logo-resp {
+    display:none
+}
+    /* ========================= MODAL DE ERRO ========================= */
+    .modal-erro {
+        background-color: rgba(194, 196, 195, 0.5); /* Fundo levemente escurecido */
+    }
+
+    /* Define o tamanho máximo da caixa do modal */
     .modal-erro .modal-dialog {
         max-width: 600px;
     }
 
+    /* Estilização do conteúdo do modal */
     .modal-erro .modal-content {
         background-color: #fff;
         color: black;
         border-radius: 10px;
-        border: 1px solid #ce4343;
-        box-shadow: 2px 2px 1px #ce4343;
+        border: 1px solid #ce4343; /* Borda vermelha para indicar erro */
+        box-shadow: 2px 2px 1px #ce4343; /* Sombra leve na cor da borda */
     }
 
-    .modal-erro .modal-header {
-        border-bottom: none;
+    /* Remove as bordas padrão do cabeçalho e rodapé do modal */
+    .modal-erro .modal-header,
+    .modal-erro .modal-footer {
+        border: none;
     }
 
+    /* Título do modal */
     .modal-erro .modal-title {
         font-weight: bolder;
         font-size: 1.4rem;
     }
 
+    /* Corpo do modal com texto centralizado */
     .modal-erro .modal-body {
         font-size: 1.4rem;
         text-align: center;
     }
 
+    /* Rodapé do modal centralizado */
     .modal-erro .modal-footer {
-        border-top: none;
         justify-content: center;
     }
 
+    /* Botão de fechar o modal */
     .modal-erro .btn-fechar {
         background-color: white;
         color: #ff0000;
         border: 1px solid #ff0000;
         font-weight: bold;
+        transition: 0.3s ease-in-out;
     }
 
+        /* Efeito ao passar o mouse no botão */
         .modal-erro .btn-fechar:hover {
             background-color: #ff0000;
             color: white;
         }
+/* ========================= FIM DO MODAL DE ERRO ========================= */
 
-/* Header com imagem de fundo */
+
+/* ========================= HEADER PERSONALIZADO ========================= */
 .custom-header {
     background: url('/imagens/Banner.png') no-repeat center center;
     background-size: 100% 100%;
@@ -188,19 +213,22 @@ body {
     justify-content: end;
     z-index: 650;
 }
+/* ========================= FIM DO HEADER ========================= */
 
-/* C�rculo para a foto do usu�rio */
+
+/* ========================= PERFIL DO USUÁRIO ========================= */
+/* Círculo para a foto do usuário */
 .profile-circle {
     width: 7%;
     height: 55%;
     border-radius: 50%;
     background-color: white;
     border: 2px solid var(--cor-principal3);
-    margin-bottom: 8px;
-    margin-top: 8px;
+    margin: 8px 0;
     text-align: center;
 }
 
+/* Círculo menor para exibição alternativa */
 .profile-circle-small {
     border-radius: 50%;
     background-color: white;
@@ -210,7 +238,7 @@ body {
     text-align: center;
 }
 
-/* Nome do usu�rio */
+/* Nome do usuário */
 .user-name {
     font-size: 1rem;
     font-weight: bold;
@@ -219,6 +247,7 @@ body {
     margin: 0;
 }
 
+/* Cargo/função do usuário */
 .user-function {
     font-size: 0.7rem;
     font-weight: bold;
@@ -226,7 +255,10 @@ body {
     color: var(--cor-secundaria);
     margin: 0;
 }
+/* ========================= FIM DO PERFIL DO USUÁRIO ========================= */
 
+
+/* ========================= MENU LATERAL ========================= */
 .sidebar {
     width: 20%;
     height: 100%;
@@ -240,12 +272,7 @@ body {
     animation: FadeLeft 0.4s forwards;
 }
 
-    .sidebar .menu-btn {
-        opacity: 0;
-        animation: FadeLeft 0.1s forwards;
-        animation-delay: 0.2s;
-    }
-
+/* Botões do menu lateral */
 .menu-btn {
     margin-top: 5%;
     background: none;
@@ -254,19 +281,20 @@ body {
     padding: 12px;
     text-align: left;
     font-size: 18px;
+    text-decoration:none;
     color: white;
     transition: 0.3s;
-    border-radius: 0px;
-    text-decoration: none;
     border-bottom: solid 1px rgba(194, 196, 195, 0.5);
 }
 
+    /* Efeito hover no botão */
     .menu-btn:hover {
         border-radius: 5px;
         background-color: var(--cor-principal);
         color: white;
     }
 
+    /* Botão ativo */
     .menu-btn.active {
         border-radius: 5px;
         background-color: var(--cor-principal);
@@ -274,6 +302,7 @@ body {
         font-weight: bold;
     }
 
+/* Botão de logout */
 .logout-btn {
     background-color: var(--cor-secundaria2);
     color: white;
@@ -285,27 +314,46 @@ body {
     height: 8%;
     padding: 13px;
     text-align: left;
-    margin-top: auto;
     font-size: 1.4rem;
     text-decoration: none;
 }
 
+    /* Efeito hover no botão de logout */
     .logout-btn:hover {
         color: var(--cor-principal);
     }
+/* ========================= FIM DO MENU LATERAL ========================= */
 
-/* ================= HEADER ADMINISTRATIVO ================= */
+
+/* ========================= HEADER ADMINISTRATIVO ========================= */
 .administrativo-header {
     width: 100%;
     height: 11%;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 999;
 }
+/* ========================= FIM DO HEADER ADMINISTRATIVO ========================= */
 
-/* ================= BOT�ES ADMINISTRATIVOS ================= */
+
+/* ========================= BOTÕES ADMINISTRATIVOS ========================= */
+
+.administrativo-div-button {
+    width: 25%;
+    height: 38%;
+    min-height:250px;
+    min-width:200px;
+    display: flex;
+    margin: 12px;
+    justify-content: center;
+}
+
+
+
 .administrativo-menu-button {
-    width: 80%;
-    height: 50%;
+    width: 100%;
+    min-height: 250px;
+    height: 33vh;
+    max-height: 530px;
     background-color: var(--cor-principal);
     color: white;
     font-size: 1.3rem;
@@ -320,58 +368,78 @@ body {
     box-shadow: 10px 10px 26px -8px black;
 }
 
+    /* Efeito hover no botão administrativo */
     .administrativo-menu-button:hover {
         transform: scale(1.1);
         box-shadow: 0px 5px 15px rgba(255, 96, 0, 0.5);
         color: white;
     }
 
-/* ================= FOOTER ADMINISTRATIVO ================= */
-.administrativo-footer {
-    height: 10%;
-    bottom: 0;
-    width: 100%;
-}
+    .administrativo-menu-button img {
+        width: 55%;
+        max-width: 220px;
+        min-width: 105px;
+        height: 50%;
+        max-height: 130px;
+        min-height: 150px;
+    }
+    /* ========================= FIM DOS BOTÕES ADMINISTRATIVOS ========================= */
+    /* ========================= FOOTER ADMINISTRATIVO ========================= */
+    .administrativo-footer {
+        height: 5%;
+        bottom: 0;
+        width: 100%;
+    }
+/* ========================= FIM DO FOOTER ADMINISTRATIVO ========================= */
 
 
+/* ========================= HEADER FEED ========================= */
 .header-feed {
     width: 100%;
     padding: 10px;
     display: flex;
-    justify-content: start;
+    justify-content: space-between; /* Espaço entre os itens no header */
 }
+/* ========================= FIM DO HEADER FEED ========================= */
 
+
+
+/* ========================= FILTROS DA PÁGINA ========================= */
 .container-filtros {
     display: flex;
     justify-content: space-between;
     width: 100%;
     gap: 10px;
+    margin: 0 17px;
 }
 
+/* Campo de filtro */
 .filtro {
     display: flex;
     flex-direction: column;
-    flex: 1;
 }
 
+    /* Estilização dos rótulos dos filtros */
     .filtro label {
         font-size: 14px;
         font-weight: bold;
+        margin: 0 12px 3px;
         color: var(--cor-principal);
-        margin-bottom: 3px;
     }
 
+/* Campos de entrada de filtro */
 .input-filtro {
-    padding: 4px;
-    border-radius: 35px;
+    padding: 10px;
+    border-radius: 95px;
     border: 2px solid var(--cor-principal);
     font-size: 14px;
-    font-weight:bold;
+    font-weight: bold;
     color: var(--cor-principal);
     background: white;
     transition: all 0.3s ease-in-out;
 }
 
+    /* Estilização ao focar no input */
     .input-filtro:focus,
     .input-filtro:active {
         background: var(--cor-principal);
@@ -379,27 +447,283 @@ body {
         border-color: var(--cor-principal2);
         outline: none;
     }
+    /* ========================= FIM DOS FILTROS ========================= */
 
-    /* Estiliza os selects */
+
+    /* ========================= ESTILIZAÇÃO DOS SELECTS ========================= */
     .input-filtro option {
         background: white;
-        color: var(--cor-principal);
+        color: var(--cor-principal); /* Cor do texto do select */
     }
 
     .input-filtro:focus option {
-        background: var(--cor-principal);
-        color: white;
+        background: var(--cor-principal); /* Cor de fundo ao focar no select */
+        color: white; /* Cor do texto ao focar no select */
     }
+/* ========================= FIM DA ESTILIZAÇÃO DOS SELECTS ========================= */
 
+
+/* ========================= ANIMAÇÕES DE FILTROS ========================= */
 .item-filtravel {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Animação de transição */
 }
 
 .filtrado {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-10px); /* Efeito para esconder o item */
     pointer-events: none;
-    display: none !important; /* Mant�m o display para evitar conflitos */
+    display: none !important; /* Mantém o display para evitar conflitos */
 }
+/* ========================= FIM DAS ANIMAÇÕES DE FILTROS ========================= */
+
+
+/* ========================= BOTÃO DE LIMPAR ========================= */
+.btn-limpar {
+    background-color: var(--cor-principal);
+    border: 2px solid var(--cor-principal);
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(250, 100, 0, 0.4); /* Sombra na cor principal */
+}
+
+    /* Efeito hover no botão de limpar */
+    .btn-limpar:hover {
+        background-color: white;
+        color: var(--cor-principal);
+        border: 2px solid var(--cor-principal);
+        transform: scale(1.05);
+    }
+
+    /* Efeito ao clicar no botão de limpar */
+    .btn-limpar:active {
+        background-color: var(--cor-principal2);
+        color: white;
+        transform: scale(0.95);
+    }
+/* ========================= FIM DO BOTÃO DE LIMPAR ========================= */
+
+
+/* ========================= CARD SEM PUBLICAÇÕES ========================= */
+.card-sem-publicacoes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px dashed var(--cor-principal);
+    color: var(--cor-principal);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+    /* Ícone dentro do card de sem publicações */
+    .card-sem-publicacoes i {
+        font-size: 40px;
+        margin-bottom: 10px;
+        color: var(--cor-secundaria);
+    }
+/* ========================= FIM DO CARD SEM PUBLICAÇÕES ========================= */
+
+
+@media (max-width:1170px) {
+
+
+    .vertical-text {
+        visibility: hidden;
+    }
+    .img-ana {
+        width: 50vw;
+        right: -2vw;
+    }
+
+}
+
+@media (max-width: 730px) {
+
+    .vertical-text {
+        visibility:hidden;
+    }
+
+    .administrativo-menu-button {
+        width: 90% !important;
+        font-size: 1rem !important;
+    }
+
+    .img-ana {
+        display: none !important;
+    }
+
+    .img-logo-resp {
+        display:block;
+        position:relative;
+        left:-69px;
+  
+    }
+
+     .img-logo  ,  .img-logo-resp {
+        width:70%;
+    }
+
+}
+
+/* ========================= CARD DE COMENTARIOS ========================= */
+
+
+.comentarios-container {
+    background-color: var(--cor-secundaria3);
+    border: 1px solid var(--cor-principal2);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 0 10px var(--cor-principal3);
+}
+
+.comentario-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--cor-secundaria2);
+    color: var(--cor-secundaria);
+}
+
+    .comentario-item:last-child {
+        border-bottom: none;
+    }
+
+.comentario-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comentario-corpo {
+    flex: 1;
+}
+
+.comentario-usuario {
+    font-weight: bold;
+    color: var(--cor-principal);
+}
+
+.comentario-data {
+    font-size: 0.85rem;
+    color: var(--cor-secundaria2);
+}
+
+.comentario-mensagem {
+    margin: 0.25rem 0;
+}
+
+.comentario-acoes a {
+    font-size: 0.85rem;
+    color: var(--cor-principal3);
+    text-decoration: none;
+    margin-right: 1rem;
+}
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    max-height: 500px;
+    max-width: 690px;
+    min-width: 290px;
+    background-color: #fff;
+    animation: FadeLeft 1s;
+    box-shadow: 20px 20px 45px -50px rgba(0,0,0,0.75);
+    border-radius: 15px;
+}
+
+    .dashboard-card:hover {
+        transform: scale(1.02);
+        transition:0.1s;
+    }
+
+.dashboard-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 0.5rem;
+}
+
+.dashboard-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align:center;
+    margin: 0;
+    color: #222;
+}
+
+.dashboard-img {
+    width:50%;
+    object-fit: fill;
+    border-radius: 16px;
+    margin-bottom: 0;
+    padding:10px;
+}
+
+.dashboard-info {
+    padding: 0 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 0.95rem;
+    text-align:center;
+    color: var(--cor-secundaria2);
+    margin-top:20px;
+}
+
+.dashboard-options {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.dashboard-meta {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items:center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+    padding: 0 0.5rem;
+}
+
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    padding: 0 0.5rem;
+}
+
+.btn-dashboard {
+    background-color: var(--cor-principal);
+    color: #fff;
+    padding: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    margin:10px;
+}
+
+    .btn-dashboard:hover {
+        background-color: #e65300;
+        transform: scale(1.05);
+    }

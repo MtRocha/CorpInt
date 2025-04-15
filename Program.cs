@@ -1,23 +1,24 @@
-using Intranet_NEW.DAL;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Intranet_NEW.Services.Validadores;
-using Intranet_NEW.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Intranet_NEW.DAL;
 using Intranet_NEW.Services.Handlers;
+using Intranet_NEW.Services.Validadores;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Adicionar serviços ao contêiner.
 builder.Services.AddDbContext<DataContext>(options =>
-{ 
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.WebHost.UseIISIntegration();
 builder.Services.AddControllersWithViews();
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioValidator>();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IViewRenderService,ViewRenderService>();
+builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
+builder.Services.AddScoped<IUploadFileService, UploadFileService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.Cookie.Name = "LoginCookie";
@@ -37,19 +38,21 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     };
 
 });
-
+builder.Services.AddControllersWithViews();
+builder.Services.Configure<RazorViewEngineOptions>(options =>
+{
+    options.ViewLocationFormats.Add("Views/Administrativo/{0}.cshtml");
+});
 
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-
-
-// Configure the HTTP request pipeline.
+// Configurar o pipeline de requisições HTTP.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    // O valor padrão de HSTS é 30 dias. Você pode querer mudar isso para cenários de produção, veja https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -57,9 +60,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Feed}/{id?}");

@@ -1,80 +1,86 @@
-﻿@keyframes FadeDown {
+﻿/* ==========================
+   ANIMAÇÕES DE FADE
+   ========================== */
 
+@keyframes FadeDown {
     0% {
-        opacity:0;
-        transform:translateY(-100px)
+        opacity: 0;
+        transform: translateY(-100px);
     }
+
     100% {
         opacity: 1;
-        transform: translateY(0px)
+        transform: translateY(0px);
     }
-
 }
 
 @keyframes FadeUp {
-
     0% {
         opacity: 0;
-        transform: translateY(100px)
+        transform: translateY(100px);
     }
 
     100% {
         opacity: 1;
-        transform: translateY(0px)
-    }
-}
-
-@keyframes FadeDownTextVertical {
-
-    0% {
-        opacity: 0;
-        transform: translateY(-100px) rotate(-180deg)
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0px) rotate(-180deg)
-    }
-}
-
-@keyframes FadeUpTextVertical {
-
-    0% {
-        opacity: 0;
-        transform: translateY(100px) rotate(-180deg)
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0px) rotate(-180deg)
+        transform: translateY(0px);
     }
 }
 
 @keyframes FadeLeft {
-
     0% {
         opacity: 0;
-        transform: translateX(-30px)
+        transform: translateX(-30px);
     }
 
     100% {
         opacity: 1;
-        transform: translateX(0px)
+        transform: translateX(0px);
     }
 }
 
 @keyframes FadeRight {
-
     0% {
         opacity: 0;
-        transform: translateX(30px)
+        transform: translateX(30px);
     }
 
     100% {
         opacity: 1;
-        transform: translateX(0px)
+        transform: translateX(0px);
     }
 }
+
+/* ==========================
+   ANIMAÇÕES DE TEXTO COM ROTAÇÃO
+   ========================== */
+
+@keyframes FadeDownTextVertical {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px) rotate(-180deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px) rotate(-180deg);
+    }
+}
+
+@keyframes FadeUpTextVertical {
+    0% {
+        opacity: 0;
+        transform: translateY(100px) rotate(-180deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px) rotate(-180deg);
+    }
+}
+
+/* ==========================
+   ANIMAÇÃO DE EXPLOSÃO
+   ========================== */
 
 @keyframes explode {
     0% {
@@ -93,6 +99,10 @@
     }
 }
 
+/* ==========================
+   ESTILOS DE EFEITOS
+   ========================== */
+
 .explosion {
     position: absolute;
     width: 10px;
@@ -102,4 +112,3 @@
     opacity: 1;
     animation: explode 0.5s ease-out forwards;
 }
-

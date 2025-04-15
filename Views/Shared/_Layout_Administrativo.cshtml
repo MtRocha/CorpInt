@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Administrativo</title>
+    <link rel="icon" type="image/x-icon" href="/favcon.ico" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/animacao.css" />
     <link rel="stylesheet" href="~/css/componentes.css" />
@@ -13,8 +14,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/Usuario.js"></script>
+    <script src="~/js/DashBoard.js"></script>
     <script src="~/lib/tinymce/tinymce.min.js"></script>
     <script src="~/js/Animacao.js"></script>
     <script src="~/js/Reacao.js"></script>
@@ -24,6 +27,8 @@
 
 </head>
 <body style="background-color:#f3f3f3" class="vh-100 d-flex flex-column justify-content-between">
+
+
 
     <header class="administrativo-header">
 
@@ -50,11 +55,11 @@
    
     </header>
 
-    <main class="d-flex w-100" style="height:82%;">
+    <main class="d-flex w-100" style=" height:85%;overflow:hidden;">
         @RenderBody()
     </main>
 
-    <footer class="administrativo-footer bg-dark text-white text-center p-3">
+    <footer class="administrativo-footer bg-dark text-white text-center p-1">
         <p class="mb-0">© @DateTime.Now.Year Intranet - Administrativo | Desenvolvido pelo MIS - Caixa</p>
     </footer>
 
@@ -72,11 +77,6 @@
         });
     </script>
 
-    <script>
-
-
-
-    </script>
-
+    <p style="display:none" id="tipoAcesso">@User.FindFirst(ClaimTypes.Role).Value</p>
 </body>
 </html>
