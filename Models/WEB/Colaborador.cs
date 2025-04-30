@@ -21,6 +21,7 @@ namespace Intranet_NEW.Models.WEB
         public string NR_GESTOR { get; set; }
         public string NR_FILIAL { get; set; }
         public string NM_FUNCAO_RH { get; set; }
+        public string NR_FUNCAO_RH { get; set; }
         public string NR_ATIVIDADE_RH { get; set; } 
         public string NM_SENHA { get; set; }
         public string NM_CONFIRMACAO_SENHA { get; set; }

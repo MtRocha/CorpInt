@@ -40,6 +40,7 @@ namespace Intranet_NEW.Services
                               ",A.NR_GESTOR       "+
                               ",A.NR_FILIAL       "+
                               ",B.NM_FUNCAO       "+
+                              ",A.NR_FUNCAO_RH    "+
                               ",A.NR_ATIVIDADE_RH "+
                               ",A.NM_SENHA        "+
                               ",A.NR_COORDENADOR  "+
@@ -80,6 +81,7 @@ namespace Intranet_NEW.Services
                 NR_GESTOR = row["NR_GESTOR"].ToString(),
                 NR_FILIAL = row["NR_FILIAL"].ToString(),
                 NM_FUNCAO_RH = row["NM_FUNCAO"].ToString(),
+                NR_FUNCAO_RH = row["NR_FUNCAO_RH"].ToString(),
                 NR_ATIVIDADE_RH = row["NR_ATIVIDADE_RH"].ToString(),
                 NM_SENHA = row["NM_SENHA"].ToString(),
                 NR_COORDENADOR = row["NR_COORDENADOR"].ToString(),

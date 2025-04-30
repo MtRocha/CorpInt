@@ -47,6 +47,7 @@ namespace Intranet_NEW.Controllers
 
             ViewBag.Acessos = listaAcessos;
             ViewBag.Edicao = false;
+            ViewBag.PerfilPlanejamento = new int[] { 1016 };
         }
 
         [Authorize]
@@ -57,13 +58,16 @@ namespace Intranet_NEW.Controllers
 
             if (modelstate.IsValid)
             {
-                string caminho = model.Imagem == null ? "PowerBI_Template.png" : await _uploadFileService.UploadFile(model.Imagem);
+                string caminho = model.Imagem == null
+                    ? "PowerBI_Template.png"
+                    : await _uploadFileService.UploadFile(model.Imagem);
+
                 model.DtCriacao = DateTime.Now;
                 model.idAutor = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 model.CaminhoImagem = $"/uploads/{caminho}";
-                model.DtCriacao = DateTime.Now;
-                model.idAutor = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
                 _powerBIService.IncluiDashBoard(model);
+
                 return RedirectToAction("PowerBI");
 
             }
@@ -80,9 +84,9 @@ namespace Intranet_NEW.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> ListarDashBoards()
+        public async Task<IActionResult> ListarDashBoards(string conteudo)
         {
-            List<PowerBiModel> dashboards = _powerBIService.ListaDashboards(Convert.ToInt32(User.FindFirst(ClaimTypes.Role).Value), Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            List<PowerBiModel> dashboards = _powerBIService.ListaDashboards(Convert.ToInt32(User.FindFirst(ClaimTypes.Role).Value), Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value),conteudo);
             List<string> dashBoardsRenderizados = new List<string>();
             foreach (PowerBiModel item in dashboards)
             {
@@ -156,6 +160,23 @@ namespace Intranet_NEW.Controllers
             else
                 return RedirectToAction("PowerBI");
         
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Favoritar(int id)
+        {
+            int estaFavoritado = _powerBIService.VerificaFavorito(id, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            if (estaFavoritado == 0)
+            {
+                _powerBIService.FavoritarBI(id, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            }
+            else
+            {
+                _powerBIService.DesfavoritarBI(id, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            }
+            estaFavoritado = _powerBIService.VerificaFavorito(id, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+
+            return Json(new { favorito = estaFavoritado });
         }
 
     }

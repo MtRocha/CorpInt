@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "_Layout_Acompanhamento";
+    ViewData["Title"] = "Meu Acompanhamento";
+}
+
+<div class="d-flex" id="chat-wrapper">
+    <!-- Sidebar de canais -->
+    <div id="chat-sidebar">
+        <div class="sidebar-header">Canais</div>
+        <div id="channel-list" class="chat-channels">
+            <div class="channel-item active">
+                <div class="channel-info">
+                    <div class="channel-name">Geral</div>
+                    <div class="channel-preview">Última mensagem aqui...</div>
+                </div>
+                <div class="channel-time">10:45</div>
+            </div>
+            <div class="channel-item">
+                <div class="channel-info">
+                    <div class="channel-name">Meu Supervisor</div>
+                    <div class="channel-preview">Atualizei o cronograma...</div>
+                </div>
+                <div class="channel-time">09:12</div>
+            </div>
+            <div class="channel-item">
+                <div class="channel-info">
+                    <div class="channel-name">Qualidade</div>
+                    <div class="channel-preview">Vamos revisar o deploy</div>
+                </div>
+                <div class="channel-time">Ontem</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Área principal do chat -->
+    <div id="chat-container" class="flex-grow-1 d-flex flex-column">
+        <div id="chat-header">Chat em Tempo Real</div>
+        <div id="chat-messages" class="d-flex flex-column"></div>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Digite sua mensagem..." />
+            <button id="chat-send-btn">Enviar</button>
+        </div>
+    </div>
+</div>

@@ -1,12 +1,12 @@
 ﻿@model Intranet_NEW.Models.WEB.ComentarioModel
 
-<div class="comentario-item">
-    <img src="~/imagens/conta-Icon.png" class="comentario-avatar" />
-    <div class="comentario-corpo">
-        <div class="d-flex justify-content-between">
-            <span class="comentario-usuario">@Model.UsuarioNome</span>
-            <span class="comentario-data">@Model.dtComentario.ToString("dd/MM/yyyy HH:mm")</span>
-        </div><img src="~/imagens/logotipo_black.png" />
-        <p class="comentario-mensagem">@Model.Conteudo</p>
+<div class="comentario-item animated-comentario">
+    <div class="comentario-corpo p-3 rounded shadow-sm">
+        <div class="d-flex justify-content-start align-items-center mb-2">
+            <img src="~/imagens/conta-Icon.png" class="comentario-avatar rounded-circle shadow-sm" />
+            <span class="comentario-usuario fw-bold text-dark">@Model.UsuarioNome</span>
+            <span class="comentario-data text-muted small">@Model.dtComentario.ToString("dd/MM/yyyy HH:mm")</span>
+        </div>
+        <p class="comentario-mensagem m-0">@Model.Conteudo</p>
     </div>
 </div>

@@ -1,20 +1,18 @@
 ﻿@model Intranet_NEW.Models.WEB.PublicacaoModel
 
-<div class="publicacao-card item-filtravel" data-titulo="@Model.Conteudo" data-data ="@Model.DataPublicacao.ToString("yyyy-MM-dd")" data-tipo="@Model.Tipo">
+<div class="publicacao-card item-filtravel" data-data="@Model.DataPublicacao.ToString("yyyy-MM-dd")" data-tipo="@Model.Tipo">
+    <p style="display:none">@Model.Id</p>
     <div class="publicacao-header">
         <div class="d-flex justify-content-start align-items-center" style="width:50%;">
-        <div class="profile-circle-small" style="background: url('/imagens/conta-icon.png') no-repeat center center;background-size:110% 116%;">
-        </div>
-        <span class="publicacao-autor">@Model.Autor</span>
-
+            <div class="profile-circle-small" style="background: url('/imagens/conta-icon.png') no-repeat center center;background-size:110% 116%;"></div>
+            <span class="publicacao-autor">@Model.Autor</span>
         </div>
         <div class="publicacao-options dropdown">
             <span class="publicacao-data">@Model.DataPublicacao.ToString("dd/MM/yyyy HH:mm")</span>
-            <p style="display:none"> @Model.Id</P>
+            <p style="display:none">@Model.Id</p>
             @if (ViewBag.PermitirExclusao)
             {
-                <button class="btn btn-link dropdown-toggle options-btn" type="button" id="dropdownMenuButton-@Model.Id" data-bs-toggle="dropdown" aria-expanded="false">
-                </button>
+                <button class="btn btn-link dropdown-toggle options-btn" type="button" id="dropdownMenuButton-@Model.Id" data-bs-toggle="dropdown" aria-expanded="false"></button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton-@Model.Id">
                     <li><a class="dropdown-item" href="#" onclick="confirmarExclusao(@Model.Id)">🗑️ Apagar Publicação</a></li>
                 </ul>
@@ -29,26 +27,46 @@
     <div class="publicacao-footer">
         <div class="publicacao-botoes">
             <!-- Botão Curtir -->
-            <button class="btn-curtir @(Model.TipoReacao == 1 ? "btn-selecionado" : "")"
-                    onclick="curtirPublicacao(@Model.Id, this)"
-                    data-id="@Model.Id"
-                    @(Model.FoiReagido ? "disabled" : "")>
+            <button class="btn-curtir @(Model.TipoReacao == 1 ? "btn-selecionado" : "")" 
+            onclick="curtirPublicacao(@Model.Id, this)" 
+            data-id="@Model.Id"
+            @(Model.FoiReagido ? "disabled" : "")
+            >
                 <i class="fas fa-thumbs-up"></i>
-                <span id="curtidas-@Model.Id">@Model.Curtidas</span>
+                <span class="jackpot-number" id="curtidas-@Model.Id">@Model.Curtidas</span>
             </button>
+        </div>
+        <!-- Botão para carregar/exibir comentários -->
+        <button type="button" class="btn-comentarios-toggle" id="btn-com-@Model.Id">
+            💬 Comentários (<span class="jackpot-number" id="count-com-@Model.Id">@Model.QuantidadeComentario</span>)
+        </button>
+    </div>
 
-            <!-- Botão Descurtir -->
-            <button class="btn-descurtir @(Model.TipoReacao == 2 ? "btn-selecionado" : "")"
-                    onclick="descurtirPublicacao(@Model.Id, this)"
-                    data-id="@Model.Id"
-                    @(Model.FoiReagido ? "disabled" : "")>
-                <i class="fas fa-thumbs-down"></i>
-                <span id="descurtidas-@Model.Id">@Model.Descurtidas</span>
+    <div class="sessao-comentarios" style="display:none;" id="section-@Model.Id">
+
+        <div id="comentarios-container-@Model.Id" class="comentarios-container bg-light">
+
+            <div id="spinner-com-@Model.Id" class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+
+        </div>
+        <div class="d-flex">
+            <input type="text" maxlength="400" id="input-comentar-@Model.Id" placeholder="Comentar..." class="custom-input" style="border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-right:none;width:85%;" />
+            <button class="custom-btn" onclick="EnviarComentario(@Model.Id,this)" style="width:15%; border-top-right-radius:0;border-top-left-radius:0;border-bottom-left-radius:0;">
+                <i class="fa-solid fa-paper-plane"></i>
             </button>
         </div>
     </div>
-
-
-
+    <div id="erro-comentar-@Model.Id" class="text-danger mt-1 small"></div>
 </div>
 
+<script>
+
+    new CommentsPaginado(
+        `comentarios-container-${@Model.Id}`,
+        `spinner-com-${@Model.Id}`
+    );
+    commentsPaginado.attachButton(@Model.Id);
+
+</script>

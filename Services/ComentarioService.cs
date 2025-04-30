@@ -11,7 +11,7 @@ namespace Intranet_NEW.Services
         private readonly DAL_INTRANET _dalIntranet;
         public ComentarioService()
         {
-            _dalIntranet = new DAL_INTRANET(); 
+            _dalIntranet = new DAL_INTRANET();
         }
 
         public void InsertComentario(ComentarioModel model)
@@ -19,9 +19,11 @@ namespace Intranet_NEW.Services
             SqlCommand cmd = new();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = "SP_INSERE_COMENTARIO";
-            cmd.Parameters.Add(new SqlParameter("@NR_USUARIO",model.IdUsuario));
-            cmd.Parameters.Add(new SqlParameter("@DT_COMENTARIO",model.dtComentario));
+            cmd.Parameters.Add(new SqlParameter("@NR_USUARIO", model.IdUsuario));
+            cmd.Parameters.Add(new SqlParameter("@DT_COMENTARIO", model.dtComentario));
             cmd.Parameters.Add(new SqlParameter("@DS_COMENTARIO", model.Conteudo));
+            cmd.Parameters.Add(new SqlParameter("@ID_PUB", model.IdPub));
+
 
             _dalIntranet.ExecutaComandoSQL(cmd);
 
@@ -52,14 +54,22 @@ namespace Intranet_NEW.Services
         {
             ComentarioModel comentario = new ComentarioModel();
             comentario.Id = Convert.ToInt32(row["ID_COMENTARIO"]);
-            comentario.IdPub = Convert.ToInt32(row["ID_PUBLICACAO"]);
+            comentario.IdPub = Convert.ToInt32(row["ID_PUB"]);
             comentario.IdUsuario = Convert.ToInt32(row["NR_USUARIO"]);
-            comentario.UsuarioNome = row["NM_USUARIO"].ToString();
+            comentario.UsuarioNome = row["NM_COLABORADOR"].ToString();
             comentario.Conteudo = row["COMENTARIO_CONTEUDO"].ToString();
             comentario.dtComentario = Convert.ToDateTime(row["DT_COMENTARIO"]);
             return comentario;
         }
 
+        public int ContarComentarios(int idPublicacao)
+        {
+            SqlCommand cmd = new();
+            cmd.CommandText = "SELECT COUNT(*) AS QT_COMENTARIO FROM TBL_WEB_PUBLICACAO_COMENTARIO WHERE TP_EXCLUIDO IS NULL AND ID_PUB = @ID_PUB";
+            cmd.Parameters.Add(new SqlParameter("@ID_PUB", idPublicacao));
+            DataSet ds = _dalIntranet.ConsultaSQL(cmd);
+            return Convert.ToInt32(ds.Tables[0].Rows[0]["QT_COMENTARIO"]);
 
+        }
     }
 }

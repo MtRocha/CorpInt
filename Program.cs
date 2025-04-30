@@ -5,6 +5,7 @@ using Intranet_NEW.Services.Validadores;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +14,17 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddSignalR();
 builder.WebHost.UseIISIntegration();
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache(); ;
+// Configura sessão
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(45);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioValidator>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
@@ -42,6 +52,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.Configure<RazorViewEngineOptions>(options =>
 {
     options.ViewLocationFormats.Add("Views/Administrativo/{0}.cshtml");
+    options.ViewLocationFormats.Add("Views/Acompanhamento/{0}.cshtml");
+    options.ViewLocationFormats.Add("Views/Home/{0}.cshtml");
 });
 
 builder.Services.AddAuthorization();
@@ -59,9 +71,19 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.MapHub<ObjectHubService>("/objecthub");
+app.MapHub<ReactionHubService>("/reactionhub");
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider("C:\\uploads"),
+    RequestPath = "/uploads"
+});
 
 
 app.MapControllerRoute(

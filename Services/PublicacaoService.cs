@@ -10,12 +10,14 @@ namespace Intranet_NEW.Services
 {
     public class PublicacaoService
     {
+        private readonly ComentarioService _comentarioService;
         private readonly DAL_INTRANET _daoIntranet;
         private readonly DAL_MIS _daoMis;
         public PublicacaoService() {
         
             _daoMis = new DAL_MIS();
             _daoIntranet = new DAL_INTRANET();
+            _comentarioService = new ComentarioService();
 
         }
 
@@ -40,7 +42,8 @@ namespace Intranet_NEW.Services
                 DataPublicacao = row.Field<DateTime>("DT_PUBLICACAO"),
                 Tipo = row["TP_PUBLICACAO"] == DBNull.Value ? 0 : row.Field<int>("TP_PUBLICACAO"),
                 FoiReagido = reacao == 0 ? false : true,
-                TipoReacao = reacao
+                TipoReacao = reacao,
+                QuantidadeComentario = _comentarioService.ContarComentarios(row.Field<int>("ID"))
             };
         }
 

@@ -15,6 +15,7 @@
         public DateTime DataPublicacao { get; set; }
         public bool FoiReagido { get; set; }
         public int TipoReacao { get; set; }
+        public int QuantidadeComentario { get; set; }
 
 
 

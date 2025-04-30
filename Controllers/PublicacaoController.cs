@@ -6,6 +6,7 @@ using Intranet_NEW.Services.Validadores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
@@ -19,7 +20,14 @@ namespace Intranet_NEW.Controllers
         private readonly ReacaoService _reacaoService;
         private readonly TipoAcaoService _tipoAcaoService;
         private readonly IViewRenderService _viewRenderService;
-        public PublicacaoController(IViewRenderService viewRenderService)
+        private readonly IUploadFileService _uploadFileService;
+        private readonly IHubContext<ReactionHubService> _reactionHubContext;
+        private readonly IHubContext<ObjectHubService> _objectHubContext;
+
+        public PublicacaoController(IViewRenderService viewRenderService
+                                  , IUploadFileService uploadFileService
+                                  , IHubContext<ReactionHubService> reactionHub
+                                  , IHubContext<ObjectHubService> objectHub)
         {
             _publicacaoService = new PublicacaoService();
             _publicacaoValidator = new PublicacaoValidator();
@@ -27,6 +35,9 @@ namespace Intranet_NEW.Controllers
             _reacaoService = new ReacaoService();
             _tipoAcaoService = new TipoAcaoService();
             _viewRenderService = viewRenderService;
+            _uploadFileService = uploadFileService;
+            _reactionHubContext = reactionHub;
+            _objectHubContext = objectHub;
         }
 
         private async void CarregarItems()
@@ -82,6 +93,8 @@ namespace Intranet_NEW.Controllers
 
             _reacaoService.Reagir(reacao,model);
 
+            await _reactionHubContext.Clients.All.SendAsync("AtualizarCurtida", model.Id, model.Curtidas);
+
             return Json(new { novaQuantidade = model.Curtidas});
         }
 
@@ -101,6 +114,8 @@ namespace Intranet_NEW.Controllers
 
              _reacaoService.Reagir(reacao, model);
 
+            await _reactionHubContext.Clients.All.SendAsync("AtualizarDescurtida", model.Id, model.Descurtidas);
+
             return Json(new { novaQuantidade = model.Descurtidas });
         }
 
@@ -114,18 +129,15 @@ namespace Intranet_NEW.Controllers
 
             var rand = new Random();
 
-            var fileName = Path.GetFileName(file.FileName.Replace("mceclip","imgupload" + rand.Next(0,999999)));
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", fileName);
+            file.FileName.Replace(file.FileName, file.FileName.Replace("mceclip","imgupload" + rand.Next(0,999999)));
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-            }
+            var fileName = await _uploadFileService.UploadFile(file);
 
             var fileUrl = $"/uploads/{fileName}";
             return Json(new { location = fileUrl });
         }
 
+        [Authorize]
         public async Task<IActionResult> ListaFeed(int quantidade, int pagina, int tipo,DateTime data,string conteudo,string aba)
         {
             ViewBag.PermitirExclusao = aba != "Publicacao" ? false: true;
@@ -165,9 +177,9 @@ namespace Intranet_NEW.Controllers
                 {
                     ModelState.AddModelError(string.Empty, erro.ErrorMessage);
                 }
-                ViewBag.ErroPub = true;
                 CarregarItems();
-                return RedirectToAction("Publicacao", "Publicacao");
+                ViewBag.ErroPub = true;
+                return View("Publicacao",model);
             }
         }
 

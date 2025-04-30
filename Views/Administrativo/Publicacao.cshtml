@@ -93,6 +93,12 @@
             titulo.value = '';
         });
 
+        let error = "@ViewBag.ErroPub"
+        if(error === "True")
+        {
+            myModal.show()
+        }
+
        new FeedPaginado("pub-container", "loading", {
             tipo: document.getElementById("tipoFiltro"),
             data: document.getElementById("dataFiltro")
@@ -101,6 +107,7 @@
     });
 
     tinymce.init({
+        notifications: false,
         selector: '#editor',
         language: 'pt_BR', // Define a linguagem para português
         plugins: 'emoticons', // Mantém imagem e adiciona emojis
@@ -117,6 +124,7 @@
         setup: function (editor) {
             editor.on('change', function () {
                 editor.save();
+                editor.notificationManager.open = function () {}; // sobrescreve a função de abrir notificação
             });
         },
         images_upload_handler: function (blobInfo, success, failure) {

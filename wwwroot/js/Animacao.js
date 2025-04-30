@@ -1,25 +1,4 @@
-﻿function createEmojiImage(emoji, size = 50) {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = size;
-    canvas.height = size;
-
-    // Define o tamanho e o alinhamento do emoji
-    ctx.font = `${size * 0.8}px serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(emoji, size / 2, size / 2);
-
-    // Retorna uma função que gera a imagem
-    return function () {
-        const img = new Image();
-        img.src = canvas.toDataURL();
-        return img;
-    };
-}
-
-// Criando o emoji 🦄 como textura de confete
-const unicornShape = createEmojiImage("🦄");
+﻿
 
 const defaults = {
     spread: 270,
@@ -55,3 +34,48 @@ function shootFromButton(button) {
     });
 
 }
+
+
+/**
+ * Anima um elemento em estilo caça-níquel (slot machine),
+ * girando verticalmente até parar em `novoValor`.
+ */
+function jackpotAnimarNumero(id, novoValor) {
+    const wrapper = document.getElementById(id);
+    if (!wrapper) return;
+
+    // Valor antigo e criação do rolo de números
+    const container = document.createElement('span');
+    container.style.display = 'block';
+
+    // Sequência de números aleatórios + valor final
+    let html = '';
+    for (let i = 0; i < 12; i++) {
+        html += `<span>${Math.floor(Math.random() * ((novoValor * 5) - novoValor)) + novoValor}</span>`;
+    }
+    html += `<span>${novoValor}</span>`;
+    container.innerHTML = html;
+
+    // Substitui o conteúdo e insere o rolo
+    wrapper.innerHTML = '';
+    wrapper.appendChild(container);
+
+    // Calcula o deslocamento vertical até o último valor
+    const altura = wrapper.offsetHeight;
+    const total = container.children.length;
+    const desloc = -(altura * (total - 1));
+
+    // Animação com velocidade constante e duração menor
+    anime({
+        targets: container,
+        translateY: desloc,
+        duration: 300,       // velocidade mais rápida
+        easing: 'linear',    // sem aceleração ou desaceleração
+        complete: () => {
+            // Ao final, escreve só o valor exato
+            wrapper.innerText = novoValor;
+        }
+    });
+}
+
+

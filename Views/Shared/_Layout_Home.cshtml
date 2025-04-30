@@ -15,9 +15,11 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/Usuario.js"></script>
     <script src="~/js/Reacao.js"></script>
+    <script src="~/js/Comentario.js"></script>
     <script src="~/js/Animacao.js"></script>
     <script src="~/js/Publicacao.js"></script>
     <script src="~/js/site.js"></script>
@@ -34,12 +36,12 @@
 
     <div class="d-flex" style="height:82%;" >
         <div class="sidebar">
-            <a class="menu-btn disabled" onclick="activateButton(this)">Feed</a>
+            <a class="menu-btn disabled" onclick="activateButton(this)" asp-action="Feed" asp-controller="Home">Feed</a>
             <a class="menu-btn" onclick="activateButton(this)">Perfil</a>
-            <a class="menu-btn" onclick="activateButton(this)">Meu Acompanhamento</a>
+            <a class="menu-btn" onclick="activateButton(this)" asp-action="Chat" asp-controller="Mensagens" >Meu Acompanhamento</a>
             <a class="menu-btn" onclick="activateButton(this)">Treinamentos</a>
             <a class="menu-btn" onclick="activateButton(this)">Quizz</a>
-            <a class="menu-btn" href="http://extobrasil142922.protheus.cloudtotvs.com.br:1604/meurh00/#/login" onclick="activateButton(this)">Meu RH</a>
+            <a class="menu-btn" target="_blank" href="http://extobrasil142922.protheus.cloudtotvs.com.br:1604/meurh00/#/login" onclick="activateButton(this)">Meu RH</a>
             @if (User.FindFirst(ClaimTypes.Role).Value != "10")
             {
                 <a asp-controller="Administrativo" asp-action="Index" class="menu-btn" onclick="activateButton(this)">Administrativo</a>

@@ -6,26 +6,43 @@
     ViewData["Title"] = "Power BI";
 }
 
-<div class="d-flex flex-column justify-content-start align-items-center w-100">
+<div class="d-flex flex-column justify-content-start align-items-start w-100" style="overflow-y:auto;overflow-x:hidden; height:contain; min-height:inherit;">
+    <br />
+    <div class="container-filtros justify-content-center align-items-center __"
+         style="height:50px; border-radius:150px; width:97%; opacity:0; animation:FadeRight 0.6s forwards; position:sticky; top:0; z-index:10;">
+        <label class="custom-label">🔎 Busca</label>
+        <div class="filtro" style="width:60%;">
+            <input type="text" id="termoFiltro" placeholder="Pesquisar..." class="input-filtro">
+        </div>
     @if (Convert.ToInt32(User.FindFirst(ClaimTypes.Role).Value) <= 4)
     {
         <br />
-            <button class="custom-btn p-3" style="border-radius:150px; width:80%;opacity:0;animation:FadeRight 0.6s forwards;" data-bs-toggle="modal" data-bs-target="#postModal">Criar DashBoard</button>
-        <br />
-        
+            <button class="custom-btn" style=" height:50px;width:25%; border-radius:150px;" data-bs-toggle="modal" data-bs-target="#postModal">Criar DashBoard</button>
+        <br /> 
     }
+    </div>
+    <br/>
+    <br/>
 
-     <div class="container d-flex flex-row justify-content-center align-items-center p-3" id="dash-container">
-        
-         
+
+    <div class=" d-flex flex-column justify-content-start align-items-start w-100 mx-3" style="height:contain;" id="fav-section">
+        <h3 class="custom-label">Meus Favoritos</h3>
+        <div class="section-divider"></div>
+    <br/>
+        <div class="d-flex flex-row justify-content-start align-items-start flex-wrap w-100" style="height:contain;" id="dash-container-fav"></div>
+    <br/>
+        <div class="section-divider"></div>
+    <br/>
+    </div>
+
+     <div class=" d-flex flex-row justify-content-start align-items-start flex-wrap w-100 h-100" id="dash-container">
+     </div>
+
          <!-- Loader -->
         <div id="loading" style="display:none;text-align: center; margin-top: 20px; position:relative;bottom:-10%">
             <img src="~/imagens/loader.gif" width="100" />
         </div>
-
-
-     </div>
-
+    <br/>
 </div>
 
 <!-- Modal de Edição -->
@@ -76,7 +93,7 @@
                         <!-- Descrição -->
                         <div class="d-flex flex-column">
                             <label for="editor" class="custom-label-small">Descrição</label>
-                            <textarea class="custom-input" required id="descricao" asp-for="Descricao"></textarea>
+                            <textarea class="custom-input" maxlength="120" required id="descricao" asp-for="Descricao"></textarea>
                         </div>
 
                         <!-- Botão -->
@@ -144,7 +161,7 @@
                         <!-- Descrição -->
                         <div class="d-flex flex-column">
                             <label for="editor" class="custom-label-small">Descrição</label>
-                            <textarea class="custom-input" required id="editor" asp-for="Descricao"></textarea>
+                            <textarea class="custom-input" maxlength="120" required id="editor" asp-for="Descricao"></textarea>
                         </div>
 
                         <!-- Botão -->
@@ -225,7 +242,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        new PowerBI("dash-container", "loading");
+        new PowerBI("dash-container","dash-container-fav","loading",{termo: document.getElementById("termoFiltro")});
 
         let erro = '@ViewBag.Erro';
         let erroEdit = '@ViewBag.ErroEdit';

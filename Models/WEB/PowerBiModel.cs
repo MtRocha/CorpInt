@@ -15,5 +15,6 @@ namespace Intranet_NEW.Models.WEB
         public IFormFile Imagem { get; set; }
         public int IntervaloAtualizacao { get; set; }
         public string Descricao { get; set; }
+        public int Favorito { get; set; }
     }
 }

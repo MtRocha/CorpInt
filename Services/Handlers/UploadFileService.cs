@@ -1,4 +1,6 @@
-﻿namespace Intranet_NEW.Services.Handlers
+﻿using Microsoft.Extensions.Configuration;
+
+namespace Intranet_NEW.Services.Handlers
 {
     public interface IUploadFileService
     {
@@ -7,15 +9,31 @@
 
     public class UploadFileService : IUploadFileService
     {
-        public async Task<string> UploadFile(IFormFile file)
+        private readonly string _uploadPath;
+
+        public UploadFileService(IConfiguration configuration)
         {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", file.FileName);
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                file.CopyTo(stream);
-                return file.FileName.ToString();
-            }
+            _uploadPath = configuration["UploadSettings:BasePath"] ?? "C:\\uploads";
+
+            // Garante que o diretório exista
+            if (!Directory.Exists(_uploadPath))
+                Directory.CreateDirectory(_uploadPath);
         }
 
+        public async Task<string> UploadFile(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return null;
+
+            var fileName = Path.GetFileName(file.FileName); // Segurança
+            string path = Path.Combine(_uploadPath, fileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return fileName;
+        }
     }
 }

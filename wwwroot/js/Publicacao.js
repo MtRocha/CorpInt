@@ -8,7 +8,7 @@
         this.carregando = false;
         this.scroll = false;
         this.baseName = window.location.pathname.split('/')[1]; // Pega a primeira parte do caminho
-
+        this.comentariosInstances = {};
         this.inicializarEventos();
         this.ListaFeedPaginado();
 
@@ -128,7 +128,9 @@
                         });
                     }
 
+                    let dataid = div.querySelector("p");
                     this.container.appendChild(div);
+                    this.inicializarComentarios(dataid.textContent);
                 });
 
                 this.pagina += 5; // Continua de onde parou
@@ -153,5 +155,28 @@
 
         this.listar(true); // Agora reseta corretamente
     }
+
+
+    inicializarComentarios(pubId) {
+        if (this.comentariosInstances[pubId]) return;
+
+        let instance = new CommentsPaginado(
+            
+            `section-${pubId}`,
+            `comentarios-container-${pubId}`,
+            `spinner-com-${pubId}`,
+            pubId
+        );
+        this.comentariosInstances[pubId] = instance;
+
+        let btn = document.getElementById(`btn-com-${pubId}`);
+        let container = document.getElementById(`comentarios-container-${pubId}`);
+
+        if (btn && container) {
+            instance.attachButton(btn)
+        }
+    }
+
+
 
 }

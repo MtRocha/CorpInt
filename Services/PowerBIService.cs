@@ -14,7 +14,7 @@ namespace Intranet_NEW.Services
             _dalIntranet = new DAL_INTRANET();
         }
 
-        public PowerBiModel MontaDashBoard(DataRow row)
+        public PowerBiModel MontaDashBoard(DataRow row,int idUsuario)
         {
 
             PowerBiModel powerBi = new PowerBiModel
@@ -28,20 +28,22 @@ namespace Intranet_NEW.Services
                 TipoAcesso = Convert.ToInt32(row["TP_ACESSO"].ToString()),
                 CaminhoImagem = row["DS_IMAGEM"].ToString(),
                 Descricao = row["DS_DESCRICAO"].ToString(),
-                IntervaloAtualizacao = Convert.ToInt32(row["NR_INT_ATUALIZACAO"])
+                IntervaloAtualizacao = Convert.ToInt32(row["NR_INT_ATUALIZACAO"]),
+                Favorito = VerificaFavorito(Convert.ToInt32(row["ID_DASH"]), idUsuario)
             };
             return powerBi;
 
 
         }
 
-        public List<PowerBiModel> ListaDashboards(int tipoAcesso,int idUsuario)
+        public List<PowerBiModel> ListaDashboards(int tipoAcesso,int idUsuario,string conteudo)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = "SP_LISTA_POWERBI";
             cmd.Parameters.Add(new SqlParameter("@TP_ACESSO", tipoAcesso));
             cmd.Parameters.Add(new SqlParameter("@NR_USUARIO_AUTOR", idUsuario));
+            cmd.Parameters.Add("@CONTEUDO", SqlDbType.VarChar).Value = string.IsNullOrEmpty(conteudo) ? DBNull.Value : "%" + conteudo + "%";
             DataSet ds = _dalIntranet.ConsultaSQL(cmd);
 
             List<PowerBiModel> lista = new List<PowerBiModel>();
@@ -51,7 +53,7 @@ namespace Intranet_NEW.Services
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
 
-                    lista.Add(MontaDashBoard(row));
+                    lista.Add(MontaDashBoard(row,idUsuario));
                 }
             }
             return lista;
@@ -66,7 +68,7 @@ namespace Intranet_NEW.Services
             DataSet ds = _dalIntranet.ConsultaSQL(cmd);
             if (ds.Tables.Count > 0)
             {
-                return MontaDashBoard(ds.Tables[0].Rows[0]);
+                return MontaDashBoard(ds.Tables[0].Rows[0],0);
             }
             return null;
         }
@@ -129,7 +131,45 @@ namespace Intranet_NEW.Services
             _dalIntranet.ExecutaComandoSQL(cmd);
         }
 
+        public void FavoritarBI(int id,int idUsuario)
+        {
+            SqlCommand cmd = new SqlCommand("SP_FAVORITAR_BI");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ID_USUARIO", idUsuario);
+            cmd.Parameters.AddWithValue("@ID_DASH", id);
+            _dalIntranet.ExecutaComandoSQL(cmd);
+        }
 
+        public void DesfavoritarBI(int id, int idUsuario)
+        {
+            SqlCommand cmd = new SqlCommand("SP_DESFAVORITAR_BI");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ID_USUARIO", idUsuario);
+            cmd.Parameters.AddWithValue("@ID_DASH", id);
+            _dalIntranet.ExecutaComandoSQL(cmd);
+        }
+
+        public int VerificaFavorito(int id,int idUsuario)
+        {
+            SqlCommand cmd = new("SELECT * FROM TBL_WEB_POWER_BI_FAVORITO WHERE ID_USUARIO = @ID_USUARIO AND ID_DASH = @ID_DASH");
+            cmd.CommandType = CommandType.Text;
+            cmd.Parameters.AddWithValue("@ID_USUARIO", idUsuario);
+            cmd.Parameters.AddWithValue("@ID_DASH", id);
+
+            DataSet ds = _dalIntranet.ConsultaSQL(cmd);
+
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+            
+
+        }
 
     }
 }

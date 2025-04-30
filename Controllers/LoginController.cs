@@ -79,10 +79,13 @@ namespace Intranet_NEW.Controllers
                 new Claim(ClaimTypes.Name, model.NM_COLABORADOR),
                 new Claim(ClaimTypes.NameIdentifier, model.NR_COLABORADOR),
                 new Claim(ClaimTypes.Actor, model.NM_FUNCAO_RH),
+                new Claim(ClaimTypes.PrimaryGroupSid,model.NR_FUNCAO_RH),
                 new Claim(ClaimTypes.GroupSid, model.NR_ATIVIDADE_RH),
                 new Claim(ClaimTypes.Role, model.TP_PRIORIDADE_ACESSO.ToString())
             };
 
+            var perfisPlanejamento = new int[] { 1016, 1051, 1067, 1076, 1210, 1233, 20, 21 };
+            var perfisOperador = new int[] { 1001, 1002, 1006, 1111, 1112};
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties { IsPersistent = false };
 

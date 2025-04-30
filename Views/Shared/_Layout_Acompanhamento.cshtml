@@ -1,0 +1,57 @@
+﻿@using System.Security.Claims
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favcon.ico" />
+    <title>Home</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/animacao.css" />
+    <link rel="stylesheet" href="~/css/componentes.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/Usuario.js"></script>
+    <script src="~/js/Reacao.js"></script>
+    <script src="~/js/Comentario.js"></script>
+    <script src="~/js/Animacao.js"></script>
+    <script src="~/js/Publicacao.js"></script>
+    <script src="~/js/site.js"></script>
+</head>
+<body class="bg-light vh-100 d-flex flex-column justify-content-end">
+
+    <!-- Header fixo com imagem de fundo -->
+    <header class="custom-header text-white py-3 px-4 fixed-top w-100">
+        <div class="profile-circle" style="background: url('/imagens/conta-icon.png') no-repeat center center;background-size:110% 115%;">
+        </div>
+        <p class="user-name">@User.Identity.Name</p>
+        <p class="user-function">@User.FindFirst(ClaimTypes.Actor)?.Value</p>
+    </header>
+
+    <div class="d-flex" style="height:81%;">
+        <div class="sidebar" style="width:12%;">
+            <a class="menu-btn" onclick="activateButton(this)" >Resultado</a>
+            <a class="menu-btn" onclick="activateButton(this)" asp-action="Chat" asp-controller="Mensagens">Chat</a>
+
+            <a asp-action="Feed" asp-controller="Home" class="logout-btn">
+                <img width="25" style="margin-right:10px" src="~/imagens/sair-icon.png" />
+                <span>Voltar</span>
+            </a>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <main class="d-flex flex-column justify-content-start align-items-center" style="width:92%;overflow:hidden;">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <p style="display:none" id="tipoAcesso">@User.FindFirst(ClaimTypes.Role).Value</p>
+</body>
+</html>
