@@ -1,0 +1,403 @@
+﻿/* Estilos para a página de login */
+:root {
+    /* Cores da empresa */
+    --cor-principal: #fa6400;
+    --cor-principal2: #c85d00;
+    --cor-principal3: #ff8024;
+    --cor-secundaria: #454545;
+    --cor-secundaria2: #707070;
+    --cor-secundaria3: #b2b2b2;
+    --cor-terciaria: #0087c1;
+    --cor-terciaria2: #00ace8;
+    --cor-terciaria3: #006786;
+}
+
+/* Estilos gerais da página de login */
+.login-body {
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    font-family: "Poppins", sans-serif;
+    position: relative;
+}
+
+/* Partículas de fundo */
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+/* Container principal */
+.login-container {
+    height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+.login-row {
+    height: 100%;
+}
+
+/* Coluna esquerda com imagem */
+.login-left-column {
+    background: linear-gradient(135deg, var(--cor-principal) 0%, var(--cor-principal3) 100%);
+    position: relative;
+    left:0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Textos verticais */
+.brand-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.vertical-text {
+    position: fixed;
+    writing-mode: vertical-rl;
+    font-size: 12vw;
+    font-weight: 800;
+    color: white;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+    .vertical-text.start {
+        top: 1%;
+        left: -10%;
+        transform: rotate(90deg);
+    }
+
+    .vertical-text.end {
+        bottom: 10%;
+        right: 55%;
+        transform: rotate(90deg);
+    }
+
+/* Container da imagem */
+.image-container {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    position: relative;
+    z-index:90;
+}
+
+.img-ana {
+    position:absolute;
+    right:-20%;
+    max-height: 90%;
+    max-width: 90%;
+}
+
+.img-logo-resp {
+    max-width: 400px;
+    width:250px;
+    display: none;
+}
+
+/* Elementos decorativos */
+.decoration-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+}
+
+.circle-1 {
+    width: 300px;
+    height: 300px;
+    top: -100px;
+    left: -100px;
+}
+
+.circle-2 {
+    width: 200px;
+    height: 200px;
+    bottom: 50px;
+    left: 50px;
+}
+
+.circle-3 {
+    width: 150px;
+    height: 150px;
+    top: 50px;
+    right: 50px;
+}
+
+/* Coluna direita com formulário */
+.login-right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    z-index:0;
+}
+
+.login-content {
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+/* Formulário de login */
+.login-form-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-form {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+    .login-form:hover {
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+    }
+
+.login-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cor-principal);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.login-subtitle {
+    font-size: 1rem;
+    color: var(--cor-secundaria2);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--cor-secundaria);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.input-group-text {
+    background-color: var(--cor-principal);
+    color: white;
+    border: none;
+}
+
+.login-input {
+    border: 1px solid var(--cor-secundaria3);
+    padding: 0.75rem;
+    border-radius: 0 5px 5px 0 !important;
+    transition: all 0.3s ease;
+}
+
+    .login-input:focus {
+        border-color: var(--cor-principal);
+        box-shadow: 0 0 0 0.2rem rgba(250, 100, 0, 0.25);
+    }
+
+.login-btn {
+    background: linear-gradient(135deg, var(--cor-principal) 0%, var(--cor-principal3) 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(250, 100, 0, 0.2);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .login-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(250, 100, 0, 0.3);
+        color: white;
+    }
+
+    .login-btn:active {
+        transform: translateY(-1px);
+    }
+
+.forgot-password {
+    color: var(--cor-terciaria);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+    .forgot-password:hover {
+        color: var(--cor-terciaria2);
+        text-decoration: underline;
+    }
+
+/* Rodapé com logo */
+.login-footer {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.img-logo {
+    max-width: 400px;
+    width:250px;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+    .img-logo:hover {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+/* Modais */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--cor-principal) 0%, var(--cor-principal3) 100%);
+    color: white;
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.modal-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.error-modal .modal-header {
+    background: linear-gradient(135deg, #f94144 0%, #f3722c 100%);
+}
+
+.error-icon {
+    font-size: 3rem;
+    color: #f94144;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--cor-secundaria);
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .vertical-text {
+        font-size: 4rem;
+    }
+
+    .login-form {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-left-column {
+        height: 40vh;
+        min-height: 300px;
+    }
+
+    .login-right-column {
+        height: 60vh;
+    }
+
+    .vertical-text {
+        display: none;
+    }
+
+    .img-logo-resp {
+        display: block;
+    }
+
+    .img-ana{
+        display:none;
+    }
+
+    .login-row {
+        flex-direction: column;
+    }
+
+    .login-content {
+        max-width: 100%;
+    }
+
+    .login-form {
+        padding: 1.5rem;
+    }
+
+    .login-title {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-left-column {
+        height: 30vh;
+        min-height: 200px;
+    }
+
+    .login-right-column {
+        height: 70vh;
+        padding: 1rem;
+    }
+
+    .login-form {
+        padding: 1.25rem;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
+
+    .login-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .img-logo {
+        max-width: 150px;
+    }
+
+    .img-logo-resp {
+        width: 400px;
+    }
+
+
+}

@@ -51,17 +51,33 @@ namespace Intranet_NEW.Services
                               ",A.TP_TURNO        "+
                               ",C.NM_COLABORADOR AS NM_SUPERVISOR   "+
                               ",D.NM_COLABORADOR AS NM_COORDENADOR  "+
-                              ",A.TP_PRIORIDADE_ACESSO  "+
+                              ",A.TP_PRIORIDADE_ACESSO " +
+                              ",E.NM_CARTEIRA " +
                               "FROM TBL_WEB_COLABORADOR_DADOS A                                           "+
                               "LEFT JOIN TBL_WEB_RH_COMBO_FUNCAO B ON A.NR_FUNCAO_RH = B.NR_FUNCAO             "+
                               "LEFT JOIN TBL_WEB_COLABORADOR_DADOS C ON A.NR_SUPERVISOR = C.NR_COLABORADOR     "+
-                              "LEFT JOIN TBL_WEB_COLABORADOR_DADOS D ON A.NR_COORDENADOR = D.NR_COLABORADOR    "+
+                              "LEFT JOIN TBL_WEB_COLABORADOR_DADOS D ON A.NR_COORDENADOR = D.NR_COLABORADOR " +
+                              "LEFT JOIN TBL_WEB_RH_COMBO_ATIVIDADE_ATIVA E ON A.NR_ATIVIDADE_RH = E.NR_ATIVIDADE " +
                               "WHERE A.NR_CPF = @NR_CPF";
             cmd.Parameters.Add(new SqlParameter("@NR_CPF", cpf));
 
             DataSet ds = dao_MIS.ConsultaSQL(cmd);
 
             return MontaColaborador(ds.Tables[0].Rows[0]);
+        }
+
+        public string ObterSenhaCopilot(string cpf)
+        {
+            SqlCommand cmd = new("\r\n  SELECT SENHA\r\n        FROM [172.20.1.66].[DB_COPILOT_ROVERI].DBO.TB_LOGIN_ATUALIZADA WITH(NOLOCK)\r\n        WHERE CPF_COLABORADOR = @NR_CPF");
+            cmd.Parameters.Add(new SqlParameter("@NR_CPF",cpf));
+
+            DataSet ds = dao_MIS.ConsultaSQL(cmd);
+
+            if (ds.Tables[0].Rows.Count == 0)
+            {
+                return null;
+            }
+            return ds.Tables[0].Rows[0]["SENHA"].ToString();
         }
 
         public static Colaborador MontaColaborador(DataRow row)
@@ -83,6 +99,7 @@ namespace Intranet_NEW.Services
                 NM_FUNCAO_RH = row["NM_FUNCAO"].ToString(),
                 NR_FUNCAO_RH = row["NR_FUNCAO_RH"].ToString(),
                 NR_ATIVIDADE_RH = row["NR_ATIVIDADE_RH"].ToString(),
+                NM_ATIVIDADE_RH = row["NM_CARTEIRA"].ToString(),
                 NM_SENHA = row["NM_SENHA"].ToString(),
                 NR_COORDENADOR = row["NR_COORDENADOR"].ToString(),
                 NR_SUPERVISOR = row["NR_SUPERVISOR"].ToString(),
@@ -101,7 +118,7 @@ namespace Intranet_NEW.Services
         #region Updates 
         public int AlteraSenhaUsuario(Colaborador model)
         {
-            
+
             SqlCommand sqlcommand = new SqlCommand();
             sqlcommand.CommandType = CommandType.Text;
             sqlcommand.CommandText = "UPDATE TBL_WEB_COLABORADOR_DADOS SET NM_SENHA = @NM_SENHA, TP_ALTERA_SENHA = 0 WHERE NR_CPF = @NR_CPF AND DT_NASCIMENTO = @DT_NASCIMENTO AND TP_STATUS = 1";
@@ -121,6 +138,8 @@ namespace Intranet_NEW.Services
 
 
         }
+
+
         public string Criptsha1(string entrada)
         {
             SHA1CryptoServiceProvider sha1 = new();

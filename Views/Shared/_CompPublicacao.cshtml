@@ -1,21 +1,37 @@
 ﻿@model Intranet_NEW.Models.WEB.PublicacaoModel
 
-<div class="publicacao-card item-filtravel" data-data="@Model.DataPublicacao.ToString("yyyy-MM-dd")" data-tipo="@Model.Tipo">
-    <p style="display:none">@Model.Id</p>
+<div class="publicacao-card item-filtravel animated fade-in" data-data="@Model.DataPublicacao.ToString("yyyy-MM-dd")" data-tipo="@Model.Tipo" data-id="@Model.Id" id="@Model.Id">
+    <p class="d-none">@Model.Id</p>
     <div class="publicacao-header">
-        <div class="d-flex justify-content-start align-items-center" style="width:50%;">
-            <div class="profile-circle-small" style="background: url('/imagens/conta-icon.png') no-repeat center center;background-size:110% 116%;"></div>
-            <span class="publicacao-autor">@Model.Autor</span>
+        <div class="publicacao-author">
+            <div class="author-avatar">
+                <img src="~/imagens/conta-icon.png" alt="Avatar" />
+            </div>
+            <div class="author-info">
+                <span class="publicacao-autor">@Model.Autor</span>
+                <span class="publicacao-data">
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    @Model.DataPublicacao.ToString("dd/MM/yyyy HH:mm")
+                </span>
+            </div>
         </div>
-        <div class="publicacao-options dropdown">
-            <span class="publicacao-data">@Model.DataPublicacao.ToString("dd/MM/yyyy HH:mm")</span>
-            <p style="display:none">@Model.Id</p>
+
+        <div class="publicacao-options">
             @if (ViewBag.PermitirExclusao)
             {
-                <button class="btn btn-link dropdown-toggle options-btn" type="button" id="dropdownMenuButton-@Model.Id" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton-@Model.Id">
-                    <li><a class="dropdown-item" href="#" onclick="confirmarExclusao(@Model.Id)">🗑️ Apagar Publicação</a></li>
-                </ul>
+                <div class="dropdown">
+                    <button class="options-btn" type="button" id="dropdownMenuButton-@Model.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton-@Model.Id">
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="confirmarExclusao(@Model.Id)">
+                                <i class="fas fa-trash-alt me-2"></i>
+                                Apagar Publicação
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             }
         </div>
     </div>
@@ -25,48 +41,154 @@
     </div>
 
     <div class="publicacao-footer">
-        <div class="publicacao-botoes">
+        <div class="publicacao-actions">
             <!-- Botão Curtir -->
-            <button class="btn-curtir @(Model.TipoReacao == 1 ? "btn-selecionado" : "")" 
-            onclick="curtirPublicacao(@Model.Id, this)" 
-            data-id="@Model.Id"
-            @(Model.FoiReagido ? "disabled" : "")
-            >
-                <i class="fas fa-thumbs-up"></i>
+            <button class="action-btn like-btn @(Model.TipoReacao == 1 ? "active" : "")"
+                    onclick="curtirPublicacao(@Model.Id, this)"
+                    data-id="@Model.Id"
+            @(Model.FoiReagido ? "disabled" : "")>
+                <i class="@(Model.TipoReacao == 1 ? "fas" : "far") fa-thumbs-up"></i>
                 <span class="jackpot-number" id="curtidas-@Model.Id">@Model.Curtidas</span>
             </button>
+
+            <!-- Botão para carregar/exibir comentários -->
+            <button type="button" class="action-btn" id="btn-com-@Model.Id">
+                <i class="far fa-comment"></i>
+                Comentários
+                <span class="jackpot-number" id="count-com-@Model.Id">@Model.QuantidadeComentario</span>
+            </button>
+
         </div>
-        <!-- Botão para carregar/exibir comentários -->
-        <button type="button" class="btn-comentarios-toggle" id="btn-com-@Model.Id">
-            💬 Comentários (<span class="jackpot-number" id="count-com-@Model.Id">@Model.QuantidadeComentario</span>)
-        </button>
     </div>
 
     <div class="sessao-comentarios" style="display:none;" id="section-@Model.Id">
-
-        <div id="comentarios-container-@Model.Id" class="comentarios-container bg-light">
-
-            <div id="spinner-com-@Model.Id" class="spinner-border text-secondary" role="status">
+        <div id="comentarios-container-@Model.Id" class="comentarios-container">
+            <div id="spinner-com-@Model.Id" class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Carregando...</span>
             </div>
-
         </div>
-        <div class="d-flex">
-            <input type="text" maxlength="400" id="input-comentar-@Model.Id" placeholder="Comentar..." class="custom-input" style="border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:0;border-right:none;width:85%;" />
-            <button class="custom-btn" onclick="EnviarComentario(@Model.Id,this)" style="width:15%; border-top-right-radius:0;border-top-left-radius:0;border-bottom-left-radius:0;">
-                <i class="fa-solid fa-paper-plane"></i>
-            </button>
+
+        <div class="comentario-form">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" maxlength="400" id="input-comentar-@Model.Id" placeholder="Escreva um comentário..." class="form-control" />
+                    <button class="btn btn-primary" onclick="EnviarComentario(@Model.Id,this)">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="erro-comentar-@Model.Id" class="text-danger mt-1 small"></div>
         </div>
     </div>
-    <div id="erro-comentar-@Model.Id" class="text-danger mt-1 small"></div>
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar comentários
+        new CommentsPaginado(
+            `comentarios-container-${@Model.Id}`,
+            `spinner-com-${@Model.Id}`
+        );
+        commentsPaginado.attachButton(@Model.Id);
 
-    new CommentsPaginado(
-        `comentarios-container-${@Model.Id}`,
-        `spinner-com-${@Model.Id}`
-    );
-    commentsPaginado.attachButton(@Model.Id);
+        // Animar entrada da publicação
+        anime({
+            targets: '[data-id="@Model.Id"]',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutExpo',
+            duration: 800
+        });
 
+        // Efeito de hover no card
+        const card = document.querySelector('[data-id="@Model.Id"]');
+        card.addEventListener('mouseenter', function() {
+            anime({
+                targets: this,
+                translateY: -5,
+                boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)',
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        card.addEventListener('mouseleave', function() {
+            anime({
+                targets: this,
+                translateY: 0,
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.05)',
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        // Efeito de hover nos botões de ação
+        document.querySelectorAll('[data-id="@Model.Id"] .action-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    translateY: -3,
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+
+                anime({
+                    targets: this.querySelector('i'),
+                    scale: 1.2,
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            btn.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    translateY: 0,
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+
+                anime({
+                    targets: this.querySelector('i'),
+                    scale: 1,
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        });
+
+        // Animação para o botão de comentários
+        document.getElementById('btn-com-@Model.Id').addEventListener('click', function() {
+            const section = document.getElementById('section-@Model.Id');
+            const isVisible = section.style.display !== 'none';
+
+            if (isVisible) {
+                anime({
+                    targets: section,
+                    opacity: [1, 0],
+                    height: [section.scrollHeight, 0],
+                    easing: 'easeOutExpo',
+                    duration: 300,
+                    complete: function() {
+                        section.style.display = 'none';
+                    }
+                });
+            } else {
+                section.style.display = 'block';
+                section.style.opacity = 0;
+                section.style.height = 0;
+
+                anime({
+                    targets: section,
+                    opacity: [0, 1],
+                    height: [0, section.scrollHeight],
+                    easing: 'easeOutExpo',
+                    duration: 300,
+                    complete: function() {
+                        section.style.height = 'auto';
+                    }
+                });
+            }
+        });
+    });
 </script>

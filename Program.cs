@@ -73,6 +73,7 @@ app.UseStaticFiles();
 
 app.MapHub<ObjectHubService>("/objecthub");
 app.MapHub<ReactionHubService>("/reactionhub");
+app.MapHub<ChatHubService>("/chathub");
 
 app.UseRouting();
 app.UseAuthentication();
@@ -88,6 +89,6 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Feed}/{id?}");
+    pattern: "{controller=Login}/{action=Login}/{id?}");
 
 app.Run();

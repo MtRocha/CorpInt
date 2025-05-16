@@ -7,92 +7,136 @@
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/x-icon" href="/favcon.ico"/>
+    <link rel="icon" type="image/x-icon" href="/favcon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/animacao.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/Usuario.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 </head>
-<body class="d-flex flex-column" style="height:100vh; overflow:hidden;flex-wrap:nowrap;">
+<body class="login-body">
+    <!-- Partículas de fundo -->
+    <div id="particles-js"></div>
+
     <!-- Container principal com 2 colunas -->
-    <div class="container-fluid flex-grow-1 d-flex flex-column flex-nowrap">
-        <div class="row flex-grow-1">
-            <!-- Coluna maior -->
-            <div class="col-lg-7 col-md-6 col-12 d-flex justify-content-end align-items-end position-relative bg-primary">
-                <p class="vertical-text start">Roveri</p>
-                <p class="vertical-text end">News</p>
-                <img src="~/imagens/AnaBracoCruzado.png" class="img-ana" />
-                <img src="~/imagens/logotipo_Black.png" class="img-logo-resp" width="300"  />
+    <div class="container-fluid login-container">
+        <div class="row login-row">
+            <!-- Coluna maior com imagem e efeitos -->
+            <div class="col-lg-7 col-md-6 col-12 login-left-column">
+                <div class="image-container animated fade-in-up animated-delay-3">
+                    <img src="~/imagens/AnaBracoCruzado.png" class="img-ana" alt="Imagem Institucional" />
+                </div>
+                <div class="brand-text">
+                    <p class="vertical-text start animated fade-in-left animated-delay-1">Roveri</p>
+                    <p class="vertical-text end animated fade-in-right animated-delay-2">News</p>
+                    <!-- Logo na parte superior-->
+                    <div class="w-100 d-flex justify-content-center align-items-center">
+                        <img src="~/imagens/logotipo_Black.png" class="img-logo-resp animated fade-in animated-delay-4" width="300" alt="Logo" />
+                    </div>
+                </div>
+                <!-- Elementos decorativos animados -->
+                <div class="decoration-circle circle-1"></div>
+                <div class="decoration-circle circle-2"></div>
+                <div class="decoration-circle circle-3"></div>
             </div>
 
-            <!-- Coluna menor -->
-            <div id="coluna-login" class="col-lg-5 col-md-6 col-12 d-flex flex-column justify-content-between">
+            <!-- Coluna menor com formulário de login -->
+            <div id="coluna-login" class="col-lg-5 col-md-6 col-12 login-right-column">
+                <div class="login-content">
+                    <!-- Formulário de login -->
+                    <div class="login-form-container animated fade-in-right animated-delay-3">
+                        <form class="login-form" asp-controller="Login" asp-action="RealizarLogin">
+                            <h2 class="login-title animated fade-in animated-delay-1">Bem-vindo</h2>
+                            <p class="login-subtitle animated fade-in animated-delay-2">Faça login para acessar a intranet</p>
 
-                <div class="container-fluid d-flex justify-content-center align-self-center flex-grow-1">
-                    <!-- Encher linguiça -->
-                </div>
+                            <div class="form-group animated fade-in-up animated-delay-3">
+                                <label for="staticEmail" class="form-label">CPF</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" asp-for="NR_CPF" data-mask="cpf" required class="form-control login-input" id="staticEmail" placeholder="Insira seu CPF">
+                                </div>
+                            </div>
 
-                <div class="container-fluid d-flex justify-content-center align-self-center flex-grow-1" style="z-index:10;opacity:0;animation:FadeRight 1s forwards;">
+                            <div class="form-group animated fade-in-up animated-delay-4">
+                                <label for="inputPassword" class="form-label">Senha</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" asp-for="NM_SENHA" required class="form-control login-input" id="inputPassword" placeholder="Digite sua senha">
+                                </div>
+                            </div>
 
+                            <div class="text-center mt-4 animated fade-in-up animated-delay-5">
+                                <button type="submit" class="btn login-btn">
+                                    <span>Entrar</span>
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
 
-                    <form class="container w-75 p-4 rounded shadow-lg bg-light text-center" style="height:fit-content;" asp-controller="Login" asp-action="RealizarLogin">
-                        <div class="mb-3">
-                            <label for="staticEmail" class="form-label custom-label">Login</label>
-                            <input type="text" asp-for="NR_CPF" data-mask="cpf" required class="form-control custom-input" id="staticEmail" placeholder="Insira seu CPF">
-                        </div>
-                        <div class="mb-3">
-                            <label for="inputPassword" class="form-label custom-label">Senha</label>
-                            <input type="password" asp-for="NM_SENHA" required class="form-control custom-input" id="inputPassword" placeholder="Digite sua senha">
-                        </div>
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn custom-btn">Confirmar</button>
-                        </div>
-                        <!-- Botão para Resetar a senha -->
-                        <button type="button" class="btn btn-link text-primary mt-4" data-bs-toggle="modal" data-bs-target="#modalRecuperarSenha">
-                            Esqueceu a senha?
-                        </button>
-                    </form>
+                            <!-- Botão para Resetar a senha -->
+                            <div class="text-center mt-3 animated fade-in-up animated-delay-6">
+                                <button type="button" class="btn btn-link forgot-password" data-bs-toggle="modal" data-bs-target="#modalRecuperarSenha">
+                                    Esqueceu a senha?
+                                </button>
+                            </div>
+                        </form>
+                    </div>
 
-                </div>
-
-                <div class="container-fluid d-flex justify-content-center mt-auto">
-                    <img src="~/imagens/Logotipo.png" class="img-logo" width="300" />
+                    <!-- Logo na parte inferior -->
+                    <div class="login-footer animated fade-in animated-delay-7">
+                        <img src="~/imagens/Logotipo.png" class="img-logo" width="200" alt="Logo" />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de erro --> 
-    <div class="modal fade modal-erro" id="modalErroLogin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <!-- Modal de erro -->
+    <div class="modal fade" id="modalErroLogin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content error-modal">
                 <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="modalErroLabel">Erro no Login</h5>
+                    <h5 class="modal-title" id="modalErroLabel">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Erro no Login
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <div class="modal-body p-5">
-                    CPF ou senha incorretos. Tente novamente.
+                <div class="modal-body">
+                    <div class="error-icon">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <p class="error-message">CPF ou senha incorretos. Tente novamente.</p>
+                    <button type="button" class="btn login-btn mt-3" data-bs-dismiss="modal">Entendi</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal de Sessao Expirada -->
-    <div class="modal fade modal-erro" id="sessionExpiredModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="sessionExpiredLabel" aria-hidden="true">
+    <div class="modal fade" id="sessionExpiredModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="sessionExpiredLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content error-modal">
                 <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="sessionExpiredLabel">Sessão Expirada</h5>
+                    <h5 class="modal-title" id="sessionExpiredLabel">
+                        <i class="fas fa-clock me-2"></i>
+                        Acesso Negado
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    Sua sessão expirou devido à inatividade. Por favor, faça login novamente para continuar.
+                    <div class="error-icon">
+                        <i class="fas fa-hourglass-end"></i>
+                    </div>
+                    <p class="error-message">Por favor, faça login novamente para continuar.</p>
+                    <button type="button" class="btn login-btn mt-3" data-bs-dismiss="modal">Entendi</button>
                 </div>
             </div>
         </div>
@@ -103,81 +147,247 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title custom-label" id="modalRecuperarSenhaLabel">Recuperar Senha</h5>
+                    <h5 class="modal-title" id="modalRecuperarSenhaLabel">
+                        <i class="fas fa-key me-2"></i>
+                        Recuperar Senha
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div id="divMensagem" class="d-flex justify-content-center" style="display:none">
-                    <div id="divError" runat="server" style="display:none" class="alert alert-danger text-center mt-5">
-                        <h4>Alteração não confirmada :</h4>
-                        <p id="divErrorMsg" ></p>
+                    <div id="divError" runat="server" style="display:none" class="alert alert-danger text-center mt-3">
+                        <h4>Alteração não confirmada:</h4>
+                        <p id="divErrorMsg"></p>
                     </div>
-                    <div id="divSuccess" style="display:none" class="alert alert-success text-center mt-5">
+                    <div id="divSuccess" style="display:none" class="alert alert-success text-center mt-3">
                         <h4>Alteração Confirmada</h4>
+                        <p>Sua senha foi alterada com sucesso!</p>
                     </div>
                 </div>
                 <div class="modal-body">
-                    <form id="formRecuperarSenha" onsubmit="AlterarSenhaUsuario()">
+                    <form id="formRecuperarSenha" onsubmit="AlterarSenhaUsuario(); return false;">
                         <!-- Campo CPF -->
-                        <div class="mb-3">
-                            <label for="cpf" class="form" >CPF</label>
-                            <input type="text" data-mask="cpf" class="custom-input form-control" id="cpf" placeholder="Digite seu CPF" required>
+                        <div class="form-group mb-3">
+                            <label for="cpf" class="form-label">CPF</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                <input type="text" data-mask="cpf" class="form-control" id="cpf" placeholder="Digite seu CPF" required>
+                            </div>
                         </div>
 
                         <!-- Campo Data de Nascimento -->
-                        <div class="mb-3">
-                            <label for="dataNascimento" class="form">Data de Nascimento</label>
-                            <input type="date" class="custom-input form-control" id="dataNascimento" required>
+                        <div class="form-group mb-3">
+                            <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                <input type="date" class="form-control" id="dataNascimento" required>
+                            </div>
                         </div>
 
                         <!-- Campo Senha -->
-                        <div class="mb-3">
-                            <label for="senha" class="form">Senha - 8 Caracteres</label>
-                            <input type="password" class="custom-input form-control" minlength="8"  maxlength="8" id="senha" placeholder="Digite sua nova senha" required>
+                        <div class="form-group mb-3">
+                            <label for="senha" class="form-label">Nova Senha (8 caracteres)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" minlength="8" maxlength="8" id="senha" placeholder="Digite sua nova senha" required>
+                            </div>
+                            <small class="form-text text-muted">A senha deve conter exatamente 8 caracteres</small>
                         </div>
 
                         <!-- Campo Confirmação de Senha -->
-                        <div class="mb-3">
-                            <label for="confirmacaoSenha" class="form">Confirmar Senha</label>
-                            <input type="password" class="custom-input form-control" id="confirmacaoSenha" maxlength="8" minlength="8" placeholder="Confirme sua senha" required>
+                        <div class="form-group mb-3">
+                            <label for="confirmacaoSenha" class="form-label">Confirmar Senha</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+                                <input type="password" class="form-control" id="confirmacaoSenha" maxlength="8" minlength="8" placeholder="Confirme sua senha" required>
+                            </div>
                         </div>
 
-                        <button type="submit" class="custom-btn">Alterar Senha</button>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn login-btn">
+                                <i class="fas fa-sync-alt me-2"></i>
+                                Alterar Senha
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!--Script para Validacao-->
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Inicializar partículas
+                        particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#fa6400"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ff8024",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            // Verificar erros de login
             let erroLogin = '@ViewBag.ErroLog';
             let sessaoExpirou = '@ViewBag.TimeOut';
 
             if (erroLogin === 'True') {
-                $("#modalErroLogin").modal('show'); // Exibir modal erro
+                $("#modalErroLogin").modal('show');
             }
-           
+
             if (sessaoExpirou === 'True') {
-                $("#sessionExpiredModal").modal('show'); // Exibir modal sessao
+                $("#sessionExpiredModal").modal('show');
             }
-        });
-    </script>
 
-    <!--Script para mascarar o cpf -->
-    <script>
-        $(document).ready(function () {
+            // Mascarar CPF
             $('input[data-mask="cpf"]').mask('000.000.000-00', { reverse: true });
+
+            // Animações adicionais
+            anime({
+                targets: '.decoration-circle',
+                scale: [0, 1],
+                opacity: [0, 0.6],
+                delay: anime.stagger(200, {start: 500}),
+                duration: 1000,
+                easing: 'easeOutExpo'
+            });
+
+            // Efeito de brilho para o botão de login
+            $('.login-btn').hover(
+                function() {
+                    anime({
+                        targets: this,
+                        scale: 1.05,
+                        boxShadow: '0 10px 20px rgba(250, 100, 0, 0.3)',
+                        duration: 300,
+                        easing: 'easeOutExpo'
+                    });
+                },
+                function() {
+                    anime({
+                        targets: this,
+                        scale: 1,
+                        boxShadow: '0 5px 15px rgba(250, 100, 0, 0.2)',
+                        duration: 300,
+                        easing: 'easeOutExpo'
+                    });
+                }
+            );
+
+            // Validação de senhas iguais
+            $('#confirmacaoSenha').on('input', function() {
+                if($(this).val() !== $('#senha').val()) {
+                    $(this).addClass('is-invalid');
+                } else {
+                    $(this).removeClass('is-invalid').addClass('is-valid');
+                }
+            });
+
+            $('#senha').on('input', function() {
+                if($('#confirmacaoSenha').val() && $(this).val() !== $('#confirmacaoSenha').val()) {
+                    $('#confirmacaoSenha').addClass('is-invalid');
+                } else if ($('#confirmacaoSenha').val()) {
+                    $('#confirmacaoSenha').removeClass('is-invalid').addClass('is-valid');
+                }
+            });
         });
     </script>
-
-
 </body>
 </html>
-
-
-
-
-
-
-

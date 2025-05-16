@@ -1,0 +1,32 @@
+﻿:root {
+    /* Color palette */
+    --cor-principal: #fa6400;
+    --cor-principal2: #c85d00;
+    --cor-principal3: #ff8024;
+    --cor-secundaria: #454545;
+    --cor-secundaria2: #707070;
+    --cor-secundaria3: #b2b2b2;
+    --cor-terciaria: #0087c1;
+    --cor-terciaria2: #00ace8;
+    --cor-terciaria3: #006786;
+    /* Layout variables */
+    --header-height: 70px;
+    --sidebar-width: 220px;
+    --sidebar-width-small: 12%;
+    --footer-height: 40px;
+    /* Animation speeds */
+    --animation-speed-fast: 0.2s;
+    --animation-speed-normal: 0.3s;
+    --animation-speed-slow: 0.5s;
+    /* Z-index layers */
+    --z-index-header: 1000;
+    --z-index-sidebar: 900;
+    --z-index-modal: 1100;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 180px;
+    }
+}

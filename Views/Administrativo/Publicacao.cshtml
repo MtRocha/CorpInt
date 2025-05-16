@@ -5,85 +5,148 @@
     ViewData["Title"] = "Publicação";
 }
 
+<div class="publication-container animated fade-in">
+    <!-- Sidebar de filtros -->
+    <div class="publication-sidebar animated fade-in-left">
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-filter me-2"></i>Filtros</h3>
+            </div>
 
-    <div class="sidebar">
+            <div class="filter-group">
+                <label for="dataFiltro" class="filter-label">
+                    <i class="fas fa-calendar-alt me-2"></i>Data
+                </label>
+                <input type="date" id="dataFiltro" class="filter-input">
+            </div>
 
-    <div class="container-filtros-column">
+            <div class="filter-group">
+                <label for="tipoFiltro" class="filter-label">
+                    <i class="fas fa-tag me-2"></i>Tipo
+                </label>
+                <select id="tipoFiltro" asp-items=ViewBag.TipoAcaoFiltro class="filter-input">
+                </select>
+            </div>
 
-        <div class="filtro">
-            <label>📅 Data</label>
-            <input type="date" id="dataFiltro" class="input-filtro">
+            <div class="sidebar-footer">
+                <a asp-controller="Administrativo" asp-action="Index" class="back-button">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    <span>Voltar</span>
+                </a>
+            </div>
         </div>
-
-        <div class="filtro">
-            <label>📌 Tipo</label>
-            <select id="tipoFiltro" asp-items=ViewBag.TipoAcaoFiltro class="input-filtro">
-            </select>
-        </div>
-
-
     </div>
 
+    <!-- Conteúdo principal -->
+    <div class="publication-content animated fade-in-right" id="pub-container-scroll">
+        <div class="content-header">
+            <button class="action-button create-button animated pulse" data-bs-toggle="modal" data-bs-target="#postModal">
+                <i class="fas fa-plus-circle me-2"></i>
+                Criar Publicação
+            </button>
+        </div>
 
-        <a asp-controller="Administrativo" asp-action="Index" class="logout-btn">
-            <img width="25" style="margin-right:13px" src="~/imagens/sair-icon.png" />
-            <span>Voltar</span>
-        </a>
-    </div >
-
-<div class="d-flex flex-column justify-content-start align-items-center" id="pub-container-scroll" style="width:82%">
-        <br/>
-            <button class="custom-btn p-3" style="border-radius:150px; width:80%;opacity:0;animation:FadeRight 0.6s forwards" data-bs-toggle="modal" data-bs-target="#postModal">Criar Publicação</button>
-        <br />
-    @await Html.PartialAsync("_CompPubContainer")
+        <div class="publications-list">
+            @await Html.PartialAsync("_CompPubContainer")
+        </div>
+    </div>
 </div>
 
+@section Modais {
 <!-- Modal de Publicação -->
 <div class="modal fade" id="postModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="custom-label">Nova Publicação</h5>
+                <h5 class="modal-title">
+                    <i class="fas fa-edit me-2"></i>
+                    Nova Publicação
+                </h5>
                 <button type="button" id="btnFechaModalPub" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <div class="alert-danger p-2 text-danger rounded-2 shadow-sm mb-2" id="divErro" style="display:none;">
+                <div class="alert alert-danger p-3 rounded-3 shadow-sm mb-3" id="divErro" style="display:none;">
+                    <i class="fas fa-exclamation-circle me-2"></i>
                     @foreach (var erro in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                     {
-                        <p>@erro.ErrorMessage</p>
+                        <p class="mb-0">@erro.ErrorMessage</p>
                     }
                 </div>
-                <form asp-action="Publicar">
-                    <div class="d-flex flex-column mb-1 p-2 flex-grow-1">
-                        <label for="carteiraSelect" class="custom-label-small">Carteira</label>
-                        <select class="custom-input" id="carteiraSelect" asp-for="Carteira" asp-items="ViewBag.Carteiras">
+
+                <form asp-action="Publicar" class="publication-form">
+                    <div class="form-group">
+                        <label for="carteiraSelect" class="form-label">
+                            <i class="fas fa-users me-2"></i>Carteira
+                        </label>
+                        <select class="form-control" id="carteiraSelect" asp-for="Carteira" asp-items="ViewBag.Carteiras">
                         </select>
                     </div>
-                    <div class="d-flex flex-grow-1">
-                        <div class="d-flex flex-column mb-1 p-2 flex-grow-1">
-                            <label for="titulo" class="custom-label-small">Titulo</label>
-                            <input type="text" id="titulo" asp-for=Titulo class="custom-input" maxlength="120" name="Titulo" />
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="titulo" class="form-label">
+                                <i class="fas fa-heading me-2"></i>Título
+                            </label>
+                            <input type="text" id="titulo" asp-for=Titulo class="form-control" maxlength="120" name="Titulo" />
                         </div>
-                        <div class="d-flex flex-column mb-1 p-2 flex-grow-1">
-                            <label for="titulo" class="custom-label-small">Tipo de Publicação</label>
-                            <select class="custom-input" id="tipoAcaoSelect" asp-for="Tipo" asp-items="ViewBag.TipoAcao"></select>
+
+                        <div class="form-group col-md-6">
+                            <label for="tipoAcaoSelect" class="form-label">
+                                <i class="fas fa-tag me-2"></i>Tipo de Publicação
+                            </label>
+                            <select class="form-control" id="tipoAcaoSelect" asp-for="Tipo" asp-items="ViewBag.TipoAcao"></select>
                         </div>
                     </div>
 
-                    <label for="editor" class="custom-label">Conteúdo</label>
-                    <!-- Editor de Texto -->
-                    <textarea id="editor" asp-for="Conteudo"></textarea>
-                    <button type="submit" class="custom-btn mt-3 w-100">Publicar</button>
+                    <div class="form-group">
+                        <label for="editor" class="form-label">
+                            <i class="fas fa-align-left me-2"></i>Conteúdo
+                        </label>
+                        <textarea id="editor" asp-for="Conteudo"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-paper-plane me-2"></i>Publicar
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Modal de Confirmação de Exclusão -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">
+                    <i class="fas fa-trash-alt me-2"></i>
+                    Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Tem certeza de que deseja excluir esta publicação? Essa ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash-alt me-2"></i>Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-
     document.addEventListener("DOMContentLoaded", function () {
         var myModal = document.getElementById('postModal');
         let titulo = document.getElementById('titulo');
@@ -94,40 +157,109 @@
         });
 
         let error = "@ViewBag.ErroPub"
-        if(error === "True")
-        {
-            myModal.show()
+        if(error === "True") {
+            myModal.show();
+
+            // Animar alerta de erro
+            anime({
+                targets: '#divErro',
+                opacity: [0, 1],
+                translateY: [-10, 0],
+                easing: 'easeOutExpo',
+                duration: 600
+            });
         }
 
-       new FeedPaginado("pub-container", "loading", {
+        new FeedPaginado("pub-container", "loading", {
             tipo: document.getElementById("tipoFiltro"),
             data: document.getElementById("dataFiltro")
         });
 
+        // Animações para elementos da página
+        anime({
+            targets: '.publication-sidebar',
+            opacity: [0, 1],
+            translateX: [-50, 0],
+            easing: 'easeOutExpo',
+            duration: 800
+        });
+
+        anime({
+            targets: '.publication-content',
+            opacity: [0, 1],
+            translateX: [50, 0],
+            easing: 'easeOutExpo',
+            duration: 800
+        });
+
+        // Efeito de hover nos botões
+        document.querySelectorAll('.create-button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    scale: 1.05,
+                    boxShadow: '0 8px 15px rgba(250, 100, 0, 0.3)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            button.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    scale: 1,
+                    boxShadow: '0 4px 10px rgba(250, 100, 0, 0.2)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        });
+
+        // Efeito de hover no botão de voltar
+        document.querySelector('.back-button')?.addEventListener('mouseenter', function() {
+            anime({
+                targets: this,
+                translateX: -5,
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        document.querySelector('.back-button')?.addEventListener('mouseleave', function() {
+            anime({
+                targets: this,
+                translateX: 0,
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
     });
 
     tinymce.init({
         notifications: false,
         selector: '#editor',
-        language: 'pt_BR', // Define a linguagem para português
-        plugins: 'emoticons', // Mantém imagem e adiciona emojis
-        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright emoticons', // Remove "media" e adiciona "emoticons"
-        images_upload_url: '/upload',
+        language: 'pt_BR',
+        plugins: 'emoticons',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright emoticons',
         automatic_uploads: true,
         height: 380,
-        file_picker_types: 'image',
+        file_picker_types: 'image media',
         images_file_types: 'jpeg,jpg,png,gif,webp',
-        image_dimensions: true, // Permite definir dimensões
+        image_dimensions: true,
         image_class_list: [
-            { title: 'Responsive', value: 'img-fluid' } // Usa Bootstrap para imagens responsivas
+            { title: 'Responsive', value: 'img-fluid' }
         ],
-        setup: function (editor) {
-            editor.on('change', function () {
-                editor.save();
-                editor.notificationManager.open = function () {}; // sobrescreve a função de abrir notificação
-            });
-        },
+        relative_urls: false,
+        remove_script_host: false,
+        convert_urls: false,
+
+        // Upload de imagens arrastadas
         images_upload_handler: function (blobInfo, success, failure) {
+            if (!blobInfo.blob().type.startsWith("image/")) {
+                failure("Apenas imagens são permitidas aqui.");
+                return;
+            }
+
             let formData = new FormData();
             formData.append('file', blobInfo.blob());
 
@@ -137,9 +269,7 @@
             })
             .then(response => response.json())
             .then(result => {
-                if (!result || !result.location) {
-                    throw new Error("Resposta inválida do servidor");
-                }
+                if (!result || !result.location) throw new Error("Resposta inválida do servidor");
                 success(result.location);
             })
             .catch(error => {
@@ -147,53 +277,133 @@
                 failure("Falha ao fazer upload da imagem.");
             });
         },
-        relative_urls: false,
-        remove_script_host: false,
-        convert_urls: false
+
+        // Upload de arquivos arrastados (vídeos incluídos)
+        file_picker_callback: function (callback, value, meta) {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+
+            if (meta.filetype === 'media') {
+                input.setAttribute('accept', 'video/mp4');
+            } else if (meta.filetype === 'image') {
+                input.setAttribute('accept', 'image/*');
+            }
+
+            input.onchange = function () {
+                const file = this.files[0];
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/Publicacao/Upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (!result || !result.location) throw new Error("Resposta inválida");
+
+                    if (file.type.startsWith("video/")) {
+                        const videoTag = `<video controls width="100%"><source src="${result.location}" type="${file.type}">Seu navegador não suporta vídeo.</video>`;
+                        callback(videoTag, { title: file.name });
+                    } else {
+                        callback(result.location);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao enviar arquivo:", error);
+                    alert("Erro ao enviar o arquivo.");
+                });
+            };
+
+            input.click();
+        },
+
+        // Trata blobs genéricos arrastados (inclusive vídeos)
+        images_reuse_filename: true,
+        paste_data_images: true,
+        setup: function (editor) {
+            editor.on('drop', function (e) {
+                const file = e.dataTransfer.files[0];
+                if (!file) return;
+
+                if (file.type.startsWith("video/")) {
+                    e.preventDefault();
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    fetch('/Publicacao/Upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        const videoTag = `<video controls width="100%"><source src="${result.location}" type="${file.type}">Seu navegador não suporta vídeo.</video>`;
+                        editor.insertContent(videoTag);
+                    })
+                    .catch(error => {
+                        console.error("Erro ao fazer upload do vídeo:", error);
+                        alert("Erro ao enviar vídeo.");
+                    });
+                }
+            });
+
+            editor.on('change', function () {
+                editor.save();
+                editor.notificationManager.open = function () {};
+            });
+        }
     });
-</script>
 
-<!-- Modal de Confirmação de Exclusão -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
-            </div>
-            <div class="modal-body">
-                Tem certeza de que deseja excluir esta publicação? Essa ação não pode ser desfeita.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Ações -->
-<script>
-    let selectedPostId = null;  // Variável global para armazenar o ID da publicação a ser excluída
+    let selectedPostId = null;
 
     function confirmarExclusao(publicacaoId) {
-        selectedPostId = publicacaoId;  // Guarda o ID da publicação
-        $('#confirmDeleteModal').modal('show');  // Exibe o modal de confirmação
+        selectedPostId = publicacaoId;
+
+        // Animação do modal
+        const modal = document.getElementById('confirmDeleteModal');
+        $('#confirmDeleteModal').modal('show');
+
+        // Animar ícone de exclusão
+        anime({
+            targets: '.delete-icon i',
+            scale: [0.5, 1],
+            opacity: [0, 1],
+            easing: 'easeOutElastic(1, .5)',
+            duration: 800
+        });
+
+        // Animar texto
+        anime({
+            targets: '.delete-message',
+            opacity: [0, 1],
+            translateY: [10, 0],
+            easing: 'easeOutExpo',
+            duration: 600,
+            delay: 300
+        });
     }
 
     function apagarPublicacao(pubId) {
-        window.location.href = `/Publicacao/Excluir?pubId=${pubId}`; // Redireciona para exclusão
+
+                window.location.href = `/Publicacao/Excluir?pubId=${pubId}`;
+
     }
 
     document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
         if (selectedPostId !== null) {
-            apagarPublicacao(selectedPostId);
+            // Animar botão ao clicar
+            anime({
+                targets: this,
+                scale: 0.95,
+                duration: 100,
+                easing: 'easeOutQuad',
+                complete: function() {
+                    $('#confirmDeleteModal').modal('hide');
+                    apagarPublicacao(selectedPostId);
+                }
+            });
         }
     });
 </script>
-
-
-
-
-
-
-
+}

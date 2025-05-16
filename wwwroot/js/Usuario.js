@@ -3,6 +3,20 @@
 async function AlterarSenhaUsuario()
 {
     event.preventDefault();
+
+    if ($('#senha').val() !== $('#confirmacaoSenha').val()) {
+        $('#divError').show();
+        $('#divErrorMsg').text('As senhas não coincidem.');
+        $('#divMensagem').show();
+        return false;
+    }
+    $('#divError').hide();
+    $('#divMensagem').show();
+
+    // Desabilitar o formulário após envio
+    $('#formRecuperarSenha input, #formRecuperarSenha button').prop('disabled', true);
+
+
     const form = document.getElementById("formRecuperarSenha");
     let divMensagem = document.getElementById("divMensagem");
     let divErro = document.getElementById("divError");
@@ -52,3 +66,24 @@ async function AlterarSenhaUsuario()
     }
 
 }
+
+    async function LoginApi() {
+        const formData = new FormData();
+
+        const response = await fetch('/Login/LoginCopilot', {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            alert("Erro ao logar");
+            return;
+        }
+
+        const data = await response.json();
+
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("usuario", data.nome);
+
+        // Redireciona
+        window.location.href = "http://copilotroveri.grupo.roveri/home";
+    }

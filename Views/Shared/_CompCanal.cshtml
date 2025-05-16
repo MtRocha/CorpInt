@@ -1,0 +1,72 @@
+﻿@model Intranet_NEW.Models.WEB.CanalModel
+
+<btn class="channel-item @(Model.QtdMensagens > 0 ? "novo" : "") animated fade-in" data-group="@Model.Nome" id="@Model.Nome">
+    <div class="channel-icon">
+        <i class="fas fa-comments"></i>
+        @if (Model.QtdMensagens > 0)
+        {
+            <span class="nova-msg-flag">@Model.QtdMensagens</span>
+        }
+    </div>
+    <div class="channel-info">
+        <div class="channel-name">
+            <p id="chat-name-view">@Model.NomeExibicao</p>
+        </div>
+        <div class="channel-preview">@Model.UltimaMensagem.Mensagem</div>
+    </div>
+    <div class="channel-time">
+        @Model.PeriodoMensagem
+    </div>
+</btn>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animar entrada do canal
+        anime({
+            targets: '#@Model.Nome',
+            opacity: [0, 1],
+            translateX: [0, 0],
+            easing: 'easeOutExpo',
+            duration: 600
+        });
+
+        // Efeito de hover
+        const channelItem = document.getElementById('@Model.Nome');
+        channelItem.addEventListener('mouseenter', function() {
+            anime({
+                targets: this,
+                translateX: 5,
+                backgroundColor: 'rgba(var(--primary-rgb), 0.05)',
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        channelItem.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('active')) {
+                anime({
+                    targets: this,
+                    translateX: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            }
+        });
+
+        // Animação para o badge de novas mensagens
+    @if (Model.QtdMensagens > 0)
+    {
+        <text>
+                anime({
+                    targets: '#@Model.Nome .nova-msg-flag',
+                    scale: [0, 1],
+                    opacity: [0, 1],
+                    easing: 'easeOutElastic(1, .5)',
+                    duration: 800,
+                    delay: 300
+                });
+        </text>
+    }
+    });
+</script>

@@ -3,83 +3,236 @@
     Layout = "_Layout_Home";
     ViewData["Title"] = "Home";
 }
-<header class="header-feed">
 
-    <div class="container-filtros" >
-        <div class="filtro" style="width:50%;">
-            <label>🔎 Busca</label>
-            <input type="text" id="termoFiltro" placeholder="Pesquisar..." class="input-filtro">
+<!-- Campo oculto para verificar aniversário pessoal -->
+<input type="hidden" id="is-birthday" value="@(ViewBag.Aniversario == true ? "true" : "false")" />
+
+<!-- Campos ocultos para aniversário da empresa -->
+<input type="hidden" id="is-company-anniversary" value="@(ViewBag.AniversarioEmpresa == true ? "true" : "false")" />
+<input type="hidden" id="founding-year" value="@(ViewBag.AnoFundacao ?? "2010")" />
+<input type="hidden" id="company-years" value="@(ViewBag.AnosEmpresa ?? "")" />
+
+<!-- Campos ocultos para aniversário de tempo de empresa -->
+<input type="hidden" id="is-work-anniversary" value="@(ViewBag.TempoEmpresa == true ? "true" : "false")" />
+<input type="hidden" id="work-years" value="@(ViewBag.AnosTrabalho ?? "1")" />
+<input type="hidden" id="company-name" value="@(ViewBag.NomeEmpresa ?? "GRUPO ROVERI")" />
+
+<div class="feed-container animated fade-in">
+    <header class="feed-header animated fade-in-down">
+        <div class="filter-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="termoFiltro" placeholder="Pesquisar publicações..." class="search-input">
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <input type="date" id="dataFiltro" class="filter-input">
+                </div>
+
+                <div class="filter-item">
+                    <i class="fas fa-tag"></i>
+                    <select id="tipoFiltro" asp-items=ViewBag.TipoAcao class="filter-input">
+                    </select>
+                </div>
+            </div>
         </div>
+    </header>
 
-        <div class="filtro" style="width:25%;">
-            <label>📅 Data</label>
-            <input type="date" id="dataFiltro" class="input-filtro">
-        </div>
-
-        <div class="filtro" style="width:25%;">
-            <label>📌 Tipo</label>
-            <select id="tipoFiltro" asp-items=ViewBag.TipoAcao class="input-filtro">
-            </select>
-        </div>
-
-
+    <div class="feed-content animated fade-in-up">
+        @await Html.PartialAsync("_CompPubContainer")
     </div>
-</header>
-
-<div class="d-flex w-100 p-2 flex-column justify-content-evenly align-items-center" style="width:82%">
-    @await Html.PartialAsync("_CompPubContainer")
 </div>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-                new FeedPaginado("pub-container", "loading", {
-                tipo: document.getElementById("tipoFiltro"),
-                    termo: document.getElementById("termoFiltro"),
-                    data: document.getElementById("dataFiltro"),
-                    limpar: document.getElementById("limparFiltros")
-                });
-
-
-        });
-    </script>
 
 <!-- Modal de Confirmação de Exclusão -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
+                <h5 class="modal-title" id="confirmDeleteLabel">
+                    <i class="fas fa-trash-alt me-2"></i>
+                    Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body">
-                Tem certeza de que deseja excluir esta publicação? Essa ação não pode ser desfeita.
+            <div class="modal-body text-center">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Tem certeza de que deseja excluir esta publicação? Essa ação não pode ser desfeita.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash-alt me-2"></i>Excluir
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Ações -->
 <script>
-    let selectedPostId = null;  // Variável global para armazenar o ID da publicação a ser excluída
+    document.addEventListener("DOMContentLoaded", function () {
+        // Inicializar feed paginado
+        new FeedPaginado("pub-container", "loading", {
+            tipo: document.getElementById("tipoFiltro"),
+            termo: document.getElementById("termoFiltro"),
+            data: document.getElementById("dataFiltro"),
+            limpar: document.getElementById("limparFiltros")
+        });
+
+        // Animações para elementos da página
+        anime({
+            targets: '.feed-header',
+            opacity: [0, 1],
+            translateY: [-20, 0],
+            easing: 'easeOutExpo',
+            duration: 800
+        });
+
+        anime({
+            targets: '.feed-content',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutExpo',
+            duration: 800,
+            delay: 200
+        });
+
+        // Efeito de hover nos inputs
+        document.querySelectorAll('.search-input, .filter-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                anime({
+                    targets: this,
+                    boxShadow: '0 0 0 3px rgba(250, 100, 0, 0.25)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            input.addEventListener('blur', function() {
+                anime({
+                    targets: this,
+                    boxShadow: '0 0 0 0 rgba(250, 100, 0, 0)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        });
+
+        // Efeito de hover nos ícones
+        document.querySelectorAll('.filter-item i').forEach(icon => {
+            icon.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    scale: 1.2,
+                    color: 'var(--cor-principal)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            icon.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    scale: 1,
+                    color: 'var(--cor-secundaria)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        });
+
+        // Para testes - forçar a exibição da animação de aniversário
+        setTimeout(() => {
+            // Verificar se é aniversário de tempo de empresa, da empresa ou pessoal
+            const isWorkAnniversary = document.getElementById("is-work-anniversary").value === "true";
+            const isCompanyAnniversary = document.getElementById("is-company-anniversary").value === "true";
+            const isPersonalBirthday = document.getElementById("is-birthday").value === "true";
+
+            // Se não estiver com aniversários ativos, podemos forçar a animação para teste
+            if (!isWorkAnniversary && !isCompanyAnniversary && !isPersonalBirthday) {
+                // Descomente uma das linhas abaixo para testar as animações
+                // window.showWorkAnniversary();
+                 window.showCompanyAnniversary();
+                // window.showPersonalBirthday();
+            }
+
+            // Exemplo de outra conquista após alguns segundos
+            setTimeout(() => {
+                if (window.showAchievement) {
+                    window.showAchievement({
+                        title: 'PROGRESSO',
+                        message: 'Publicações Populares',
+                        description: 'Suas publicações receberam mais de 50 curtidas esta semana!',
+                        icon: 'thumbs-up',
+                        progress: 75,
+                        duration: 5000
+                    });
+                }
+            }, 8000);
+        }, 3000);
+    });
+
+    let selectedPostId = null;
 
     function confirmarExclusao(publicacaoId) {
-        selectedPostId = publicacaoId;  // Guarda o ID da publicação
-        $('#confirmDeleteModal').modal('show');  // Exibe o modal de confirmação
+        selectedPostId = publicacaoId;
+
+        // Animação do modal
+        const modal = document.getElementById('confirmDeleteModal');
+        $('#confirmDeleteModal').modal('show');
+
+        // Animar ícone de exclusão
+        anime({
+            targets: '.delete-icon i',
+            scale: [0.5, 1],
+            opacity: [0, 1],
+            easing: 'easeOutElastic(1, .5)',
+            duration: 800
+        });
+
+        // Animar texto
+        anime({
+            targets: '.delete-message',
+            opacity: [0, 1],
+            translateY: [10, 0],
+            easing: 'easeOutExpo',
+            duration: 600,
+            delay: 300
+        });
     }
 
     function apagarPublicacao(pubId) {
-        window.location.href = `/Publicacao/Excluir?pubId=${pubId}`; // Redireciona para exclusão
+        // Animação de saída antes de redirecionar
+        anime({
+            targets: `[data-id="${pubId}"]`.closest('.publicacao-card'),
+            opacity: 0,
+            scale: 0.8,
+            duration: 300,
+            easing: 'easeOutExpo',
+            complete: function() {
+                window.location.href = `/Publicacao/Excluir?pubId=${pubId}`;
+            }
+        });
     }
 
     document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
         if (selectedPostId !== null) {
-            apagarPublicacao(selectedPostId);
+            // Animar botão ao clicar
+            anime({
+                targets: this,
+                scale: 0.95,
+                duration: 100,
+                easing: 'easeOutQuad',
+                complete: function() {
+                    $('#confirmDeleteModal').modal('hide');
+                    apagarPublicacao(selectedPostId);
+                }
+            });
         }
     });
 </script>
-

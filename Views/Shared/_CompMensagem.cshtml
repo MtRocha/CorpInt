@@ -1,0 +1,75 @@
+﻿@model Intranet_NEW.Models.WEB.MensagemModel
+@{
+    var idUsuarioAtual = Convert.ToInt32(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+    bool isMinhaMensagem = Model.IdRemetente == idUsuarioAtual;
+}
+
+<div class="mensagem-item @(isMinhaMensagem ? "mensagem-enviada" : "mensagem-recebida") animated fade-in" data-id="@Model.Id">
+    <div class="mensagem-container">
+        @if (!isMinhaMensagem)
+        {
+            <div class="mensagem-avatar">
+                <div class="avatar-circle">
+                    <span>@(Model.Remetente.Substring(0, 1).ToUpper())</span>
+                </div>
+            </div>
+        }
+
+        <div class="mensagem-content">
+            @if (!isMinhaMensagem)
+            {
+                <div class="mensagem-sender">
+                    <span>@Model.Remetente</span>
+                </div>
+            }
+
+            <div class="mensagem-bubble">
+                <p class="mensagem-text">@Model.Mensagem</p>
+                <div class="mensagem-info">
+                    <span class="mensagem-time">
+                        @Model.DataEnvio.ToString("HH:mm")
+                    </span>
+                    @if (isMinhaMensagem)
+                    {
+                        <span class="mensagem-status">
+                            <i class="fas fa-check-double"></i>
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animar entrada da mensagem
+        anime({
+            targets: '[data-id="@Model.Id"]',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutExpo',
+            duration: 600
+        });
+
+        // Efeito de hover
+        const mensagemBubble = document.querySelector('[data-id="@Model.Id"] .mensagem-bubble');
+        mensagemBubble.addEventListener('mouseenter', function() {
+            anime({
+                targets: this,
+                scale: 1.02,
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        mensagemBubble.addEventListener('mouseleave', function() {
+            anime({
+                targets: this,
+                scale: 1,
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+    });
+</script>

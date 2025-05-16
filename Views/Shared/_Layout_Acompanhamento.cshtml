@@ -5,12 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="favcon.ico" />
-    <title>Home</title>
+    <title>Acompanhamento</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/animacao.css" />
-    <link rel="stylesheet" href="~/css/componentes.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/pages.css" />
+    <link rel="stylesheet" href="~/css/components.css" />
+    <link rel="stylesheet" href="~/css/chat.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -23,35 +26,120 @@
     <script src="~/js/Animacao.js"></script>
     <script src="~/js/Publicacao.js"></script>
     <script src="~/js/site.js"></script>
+    <script src="~/js/Chat.js"></script>
 </head>
 <body class="bg-light vh-100 d-flex flex-column justify-content-end">
-
     <!-- Header fixo com imagem de fundo -->
-    <header class="custom-header text-white py-3 px-4 fixed-top w-100">
-        <div class="profile-circle" style="background: url('/imagens/conta-icon.png') no-repeat center center;background-size:110% 115%;">
+    <header class="custom-header text-white py-3 px-4 fixed-top w-100 animated fade-in">
+        <div class="profile-circle animated fade-in-right animated-delay-1" style="background: url('/imagens/conta-icon.png') no-repeat center center;background-size:110% 115%;">
         </div>
-        <p class="user-name">@User.Identity.Name</p>
-        <p class="user-function">@User.FindFirst(ClaimTypes.Actor)?.Value</p>
+        <div class="d-flex flex-column animated fade-in-left animated-delay-2">
+            <p class="user-name">@User.Identity.Name</p>
+            <p class="user-function">@User.FindFirst(ClaimTypes.Actor)?.Value</p>
+        </div>
     </header>
 
-    <div class="d-flex" style="height:81%;">
-        <div class="sidebar" style="width:12%;">
-            <a class="menu-btn" onclick="activateButton(this)" >Resultado</a>
-            <a class="menu-btn" onclick="activateButton(this)" asp-action="Chat" asp-controller="Mensagens">Chat</a>
+    <div class="d-flex" style="height:88%;">
+        <div class="sidebar animated fade-in-left animated-delay-3" style="width:12%;">
+            <a class="menu-btn @(ViewContext.RouteData.Values["Action"].ToString() == "Resultado" ? "disabled" : "")" onclick="LoginApi()" >
+                <i class="fas fa-chart-bar me-2"></i>
+                <span>Resultado</span>
+            </a>
+            <a class="menu-btn @(ViewContext.RouteData.Values["Action"].ToString() == "Chat" ? "disabled" : "")" onclick="activateButton(this)" asp-action="Chat" asp-controller="Mensagens">
+                <i class="fas fa-comments me-2"></i>
+                <span>Chat</span>
+            </a>
 
-            <a asp-action="Feed" asp-controller="Home" class="logout-btn">
+            <a asp-action="Feed" asp-controller="Home" class="logout-btn animated pulse">
                 <img width="25" style="margin-right:10px" src="~/imagens/sair-icon.png" />
                 <span>Voltar</span>
             </a>
         </div>
 
         <!-- Conteúdo Principal -->
-        <main class="d-flex flex-column justify-content-start align-items-center" style="width:92%;overflow:hidden;">
+        <main class="d-flex flex-column justify-content-start align-items-center animated fade-in-up animated-delay-4" style="width:92%;overflow:hidden;">
             @RenderBody()
         </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <p style="display:none" id="tipoAcesso">@User.FindFirst(ClaimTypes.Role).Value</p>
+
+    <script>
+        // Animação para elementos ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animar elementos com classe .animated
+            anime({
+                targets: '.animated',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                easing: 'easeOutExpo',
+                duration: 800,
+                delay: anime.stagger(100)
+            });
+
+            // Efeito de hover nos botões do menu
+            const menuBtns = document.querySelectorAll('.menu-btn:not(.disabled)');
+            menuBtns.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    anime({
+                        targets: this,
+                        translateX: 5,
+                        backgroundColor: 'rgba(250, 100, 0, 0.1)',
+                        borderLeftColor: 'var(--cor-principal)',
+                        color: 'var(--cor-principal)',
+                        easing: 'easeOutExpo',
+                        duration: 300
+                    });
+                });
+
+                btn.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        anime({
+                            targets: this,
+                            translateX: 0,
+                            backgroundColor: 'rgba(0, 0, 0, 0)',
+                            borderLeftColor: 'transparent',
+                            color: 'var(--cor-secundaria)',
+                            easing: 'easeOutExpo',
+                            duration: 300
+                        });
+                    }
+                });
+            });
+        });
+
+        // Função para ativar botão do menu
+        function activateButton(element) {
+            if (element.classList.contains('disabled')) return;
+
+            const menuBtns = document.querySelectorAll('.menu-btn');
+            menuBtns.forEach(btn => {
+                if (btn !== element) {
+                    btn.classList.remove('active');
+                    anime({
+                        targets: btn,
+                        translateX: 0,
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
+                        borderLeftColor: 'transparent',
+                        color: '#495057',
+                        easing: 'easeOutExpo',
+                        duration: 300
+                    });
+                }
+            });
+
+            element.classList.add('active');
+            anime({
+                targets: element,
+                translateX: 5,
+                backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                borderLeftColor: '#4361ee',
+                color: '#4361ee',
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        }
+    </script>
 </body>
 </html>

@@ -1,11 +1,43 @@
-﻿ 
- 
-<div class="container d-flex flex-column w-100 justify-content-start align-items-center p-3" id="pub-container" style="overflow-y:auto;overflow-x:hidden;max-height:70vh;">
-
+﻿<div class="pub-container animated fade-in" id="pub-container">
+    <!-- Conteúdo será carregado dinamicamente -->
 </div>
 
 <!-- Loader -->
-<div id="loading" style="display:none;text-align: center; margin-top: 20px; position:relative;bottom:-10%">
-    <img src="~/imagens/loader.gif" width="100" />
+<div id="loading" class="loading-container" style="display:none;">
+    <div class="loading-spinner">
+        <i class="fas fa-circle-notch fa-spin"></i>
+    </div>
+    <p>Carregando publicações...</p>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animar container quando estiver visível
+        anime({
+            targets: '#pub-container',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutExpo',
+            duration: 800
+        });
+
+        // Animar loader quando aparecer
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === 'style') {
+                    const loader = document.getElementById('loading');
+                    if (loader.style.display !== 'none') {
+                        anime({
+                            targets: '#loading',
+                            opacity: [0, 1],
+                            easing: 'easeOutExpo',
+                            duration: 300
+                        });
+                    }
+                }
+            });
+        });
+
+        observer.observe(document.getElementById('loading'), { attributes: true });
+    });
+</script>

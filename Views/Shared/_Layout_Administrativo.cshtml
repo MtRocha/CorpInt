@@ -8,9 +8,11 @@
     <link rel="icon" type="image/x-icon" href="/favcon.ico" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/animacao.css" />
-    <link rel="stylesheet" href="~/css/componentes.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/pages.css" />
+    <link rel="stylesheet" href="~/css/components.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -25,46 +27,48 @@
     <script src="~/js/Comentario.js"></script>
     <script src="~/js/Publicacao.js"></script>
     <script src="~/js/site.js"></script>
-
-
 </head>
 <body style="background-color:#f3f3f3" class="vh-100 d-flex flex-column justify-content-between">
 
-
-
-    <header class="administrativo-header">
-
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 h-100">
-                <img src="~/imagens/logotipo_Black.png" width="250" style="padding:10px;margin-top:1%;" />
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/">@User.FindFirst(ClaimTypes.Name).Value</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Feed">Feed</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Administrativo" asp-action="Index">Administrativo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Login" asp-action="Logout">Sair</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-   
+    <header class="administrativo-header animated fade-in">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 h-100">
+            <img src="~/imagens/logotipo_Black.png" width="250" style="padding:10px;margin-top:1%;" class="animated fade-in-left animated-delay-1" />
+            <button class="navbar-toggler animated fade-in-right animated-delay-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end animated fade-in-right animated-delay-2" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="fas fa-user me-1"></i> @User.FindFirst(ClaimTypes.Name).Value
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Feed">
+                            <i class="fas fa-newspaper me-1"></i> Feed
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Administrativo" asp-action="Index">
+                            <i class="fas fa-cogs me-1"></i> Administrativo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Login" asp-action="Logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </header>
 
-    <main class="d-flex w-100" style=" height:85%;overflow:hidden;">
+    <main class="d-flex w-100 animated fade-in-up animated-delay-3" style="height:85%;overflow:hidden;">
         @RenderBody()
     </main>
 
-    <footer class="administrativo-footer bg-dark text-white text-center p-1">
+    <footer class="administrativo-footer bg-dark text-white text-center p-1 animated fade-in animated-delay-4">
         <p class="mb-0">© @DateTime.Now.Year Intranet - Administrativo | Desenvolvido pelo MIS - Caixa</p>
     </footer>
 
@@ -79,9 +83,46 @@
                 $("#postModal").modal('show'); // Exibir modal erro
                 divErro.style.display = 'block';
             }
+
+            // Animação para elementos ao carregar a página
+            anime({
+                targets: '.animated',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                easing: 'easeOutExpo',
+                duration: 800,
+                delay: anime.stagger(100)
+            });
+
+            // Efeito de hover nos botões de navegação
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    anime({
+                        targets: this,
+                        translateY: -2,
+                        color: 'var(--cor-principal3)',
+                        easing: 'easeOutExpo',
+                        duration: 300
+                    });
+                });
+
+                link.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        anime({
+                            targets: this,
+                            translateY: 0,
+                            color: 'rgba(255, 255, 255, 0.55)',
+                            easing: 'easeOutExpo',
+                            duration: 300
+                        });
+                    }
+                });
+            });
         });
     </script>
 
     <p style="display:none" id="tipoAcesso">@User.FindFirst(ClaimTypes.Role).Value</p>
+    @RenderSection("Modais", required: false)
 </body>
 </html>

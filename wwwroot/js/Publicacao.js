@@ -114,9 +114,7 @@
 
                 data.forEach(publicacao => {
                     let div = document.createElement("div");
-                    div.style.width = "100%";
                     div.innerHTML = publicacao;
-                    div.classList.add("Hidden-Frame");
 
                     // Adiciona a ação de exclusão para cada publicação
                     let deleteButton = div.querySelector('.delete-publication');

@@ -1,33 +1,106 @@
 ﻿@{
     Layout = "_Layout_Administrativo";
-    ViewData["Title"] = "Home - Admistrativo";
+    ViewData["Title"] = "Home - Administrativo";
 }
-<div class="row justify-content-center align-items-center h-100" style="width:101%;overflow:auto;">
-    <!-- Botão Colaboradores -->
-    <div class="administrativo-div-button">
-        <a href="#" class="d-flex flex-column btn administrativo-menu-button disabled">
-            <img src="~/imagens/audience-icon.png" width="200"/>
-            <span>Colaboradores</span>
 
-        </a>
-    </div> 
-    
-    <!-- Botão Publicações -->
-    <div class="administrativo-div-button">
-        <a  class="d-flex flex-column btn administrativo-menu-button" asp-controller="Publicacao" asp-action="Publicacao">
-            <img src="~/imagens/blog-post-icon.png" width="160" />
-           <br/>
-            <span>Publicações</span>
+<div class="admin-dashboard animated fade-in">
+    <div class="row justify-content-center align-items-center h-100">
+        <!-- Botão Colaboradores -->
+        <div class="admin-card-container animated fade-in-up animated-delay-1">
+            <a href="#" class="admin-card disabled">
+                <div class="admin-card-icon">
+                    <img src="~/imagens/audience-icon.png" alt="Colaboradores" />
+                </div>
+                <div class="admin-card-content">
+                    <h3>Colaboradores</h3>
+                    <p>Gerenciar usuários e permissões</p>
+                </div>
+                <div class="admin-card-badge">Em breve</div>
+            </a>
+        </div>
 
-        </a>
+        <!-- Botão Publicações -->
+        <div class="admin-card-container animated fade-in-up animated-delay-2">
+            <a class="admin-card" asp-controller="Publicacao" asp-action="Publicacao">
+                <div class="admin-card-icon">
+                    <img src="~/imagens/blog-post-icon.png" style="width:120%;" alt="Publicações" />
+                </div>
+                <div class="admin-card-content">
+                    <h3>Publicações</h3>
+                    <p>Gerenciar conteúdo e notícias</p>
+                </div>
+                <div class="admin-card-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
+        </div>
+
+        <!-- Botão Power BI -->
+        <div class="admin-card-container animated fade-in-up animated-delay-3">
+            <a class="admin-card" asp-controller="PowerBI" asp-action="PowerBI">
+                <div class="admin-card-icon">
+                    <img src="~/imagens/Power_BI_Logo.svg.png" alt="Power BI" />
+                </div>
+                <div class="admin-card-content">
+                    <h3>Power BI</h3>
+                    <p>Visualizar e gerenciar dashboards</p>
+                </div>
+                <div class="admin-card-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
+        </div>
     </div>
-
-    <!-- Botão Power BI -->
-    <div class="administrativo-div-button">
-        <a class="d-flex flex-column align-items-center btn administrativo-menu-button" asp-controller="PowerBI" disabled asp-action="PowerBI">
-            <img src="~/imagens/Power_BI_Logo.svg.png"  width="160" />
-            <br />
-            <span>Power BI</span>
-        </a>
-    </div> 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animação para os cards
+        anime({
+            targets: '.admin-card-container',
+            opacity: [0, 1],
+            translateY: [50, 0],
+            easing: 'easeOutExpo',
+            duration: 1000,
+            delay: anime.stagger(200)
+        });
+
+        // Efeito de hover nos cards
+        const cards = document.querySelectorAll('.admin-card:not(.disabled)');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    scale: 1.05,
+                    boxShadow: '0 15px 30px rgba(0, 0, 0, 0.2)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+
+                anime({
+                    targets: this.querySelector('.admin-card-arrow i'),
+                    translateX: 5,
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            card.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    scale: 1,
+                    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+
+                anime({
+                    targets: this.querySelector('.admin-card-arrow i'),
+                    translateX: 0,
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        });
+    });
+</script>

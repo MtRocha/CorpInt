@@ -2,63 +2,137 @@
 @using System.Text.Json
 @model Intranet_NEW.Models.WEB.PowerBiModel
 
-<div class="dashboard-card">
+<div class="dashboard-card animated fade-in" data-id="@Model.Id">
     <p style="display:none">@Model.Favorito</p>
-    <div class="d-flex w-100 justify-content-between">
-        <!-- Botão Favoritar -->
-        <button class="btn-favoritar" title="Favoritar este dashboard" onclick="FavoritarDashboard(@Model.Id, this)" data-id="@Model.Id">
-           @if (Model.Favorito == 1)
-            {
-                <i class="fas fa-star"></i>
-            }
-            else
-            {
-                <i class="far fa-star"></i>
-            }
-
-        </button>
-        @{
-            if (PerfilModel.Planejamento.Contains(Convert.ToInt32(User.FindFirst(ClaimTypes.PrimaryGroupSid).Value.ToString())))
-        {
-            
-        <div class="dropdown dashboard-options">
-            <button class="btn btn-light btn-sm" data-bs-toggle="dropdown">
-                <i class="fas fa-ellipsis-v"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                <li>
-                    <a class="dropdown-item btn-editar" style="color:#ff6600" data-id="@Model.Id">
-                        <i class="fas fa-edit me-2" ></i>Editar
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item text-danger" href="#" onclick="confirmarExclusao('@Model.Id')">
-                        <i class="fas fa-trash me-2"></i>Excluir
-                    </a>
-                </li>
-@*                 <li>
-                    <a class="dropdown-item text-secondary" href="#" data-bs-toggle="modal" data-bs-target="#modalHistorico">
-                        <i class="fas fa-history me-2"></i>Ver Histórico
-                    </a>
-                </li> *@
-            </ul>
-        </div>
-
-        }
-        }
-    </div>
     <div class="dashboard-header">
-        <img src="@Model.CaminhoImagem" alt="Dashboard" class="dashboard-img" />
-        <br/>
-        <div class="dashboard-info">
-            <h4 class="dashboard-title">@Model.Titulo</h4>
+        <!-- Ações do dashboard -->
+        <div class="dashboard-actions">
+            <button class="btn-favoritar" title="Favoritar este dashboard" onclick="FavoritarDashboard(@Model.Id, this)" data-id="@Model.Id">
+                @if (Model.Favorito == 1)
+                {
+                    <i class="fas fa-star"></i>
+                }
+                else
+                {
+                    <i class="far fa-star"></i>
+                }
+            </button>
+
+            @if (PerfilModel.Planejamento.Contains(Convert.ToInt32(User.FindFirst(ClaimTypes.PrimaryGroupSid).Value.ToString())))
+            {
+                <div class="dashboard-options">
+                    <button class="options-btn" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item btn-editar" data-id="@Model.Id"><i class="fas fa-edit me-2"></i>Editar</a></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="confirmarExclusao('@Model.Id')"><i class="fas fa-trash me-2"></i>Excluir</a></li>
+                    </ul>
+                </div>
+            }
         </div>
 
-        <!-- Nav de ações -->
+        <!-- Imagem e informações -->
+        <img src="@Model.CaminhoImagem" alt="@Model.Titulo" class="dashboard-img" />
+        <h3 class="dashboard-title">@Model.Titulo</h3>
+        <p class="dashboard-description">@Model.Descricao</p>
     </div>
 
-    <div class="dashboard-actions">
-        <button title="@Model.Descricao" onclick="window.open('VisualizarBI?id=@Model.Id', '_blank')" class="btn-dashboard">Acessar Dashboard</button>
-
+    <!-- Botão de acesso -->
+    <div class="dashboard-footer">
+        <button title="@Model.Descricao" onclick="window.open('VisualizarBI?id=@Model.Id', '_blank')" class="dashboard-btn">
+            <i class="fas fa-chart-bar me-2"></i>Acessar Dashboard
+        </button>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animações
+        anime({
+            targets: '[data-id="@Model.Id"]',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutExpo',
+            duration: 600,
+            delay: 100
+        });
+
+        // Efeitos de hover
+        const card = document.querySelector('[data-id="@Model.Id"]');
+        card.addEventListener('mouseenter', function() {
+            anime({
+                targets: this,
+                translateY: -10,
+                boxShadow: '0 15px 30px rgba(0, 0, 0, 0.15)',
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+
+            anime({
+                targets: this.querySelector('.dashboard-img'),
+                scale: 1.05,
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        card.addEventListener('mouseleave', function() {
+            anime({
+                targets: this,
+                translateY: 0,
+                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+
+            anime({
+                targets: this.querySelector('.dashboard-img'),
+                scale: 1,
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        // Efeitos para botões
+        const btnFavoritar = card.querySelector('.btn-favoritar');
+        btnFavoritar.addEventListener('mouseenter', function() {
+            anime({
+                targets: this,
+                scale: 1.2,
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        btnFavoritar.addEventListener('mouseleave', function() {
+            anime({
+                targets: this,
+                scale: 1,
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        const dashboardBtn = card.querySelector('.dashboard-btn');
+        dashboardBtn.addEventListener('mouseenter', function() {
+            anime({
+                targets: this,
+                translateY: -3,
+                boxShadow: '0 8px 15px rgba(250, 100, 0, 0.3)',
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+
+        dashboardBtn.addEventListener('mouseleave', function() {
+            anime({
+                targets: this,
+                translateY: 0,
+                boxShadow: '0 4px 10px rgba(250, 100, 0, 0.2)',
+                easing: 'easeOutExpo',
+                duration: 300
+            });
+        });
+    });
+</script>

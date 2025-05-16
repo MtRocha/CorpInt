@@ -6,104 +6,126 @@
     ViewData["Title"] = "Power BI";
 }
 
-<div class="d-flex flex-column justify-content-start align-items-start w-100" style="overflow-y:auto;overflow-x:hidden; height:contain; min-height:inherit;">
-    <br />
-    <div class="container-filtros justify-content-center align-items-center __"
-         style="height:50px; border-radius:150px; width:97%; opacity:0; animation:FadeRight 0.6s forwards; position:sticky; top:0; z-index:10;">
-        <label class="custom-label">🔎 Busca</label>
-        <div class="filtro" style="width:60%;">
-            <input type="text" id="termoFiltro" placeholder="Pesquisar..." class="input-filtro">
+<div class="powerbi-container animated fade-in">
+    <!-- Barra de filtros -->
+    <div class="filter-bar animated fade-in-down">
+        <div class="filter-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="termoFiltro" placeholder="Pesquisar dashboards..." class="search-input">
+            </div>
         </div>
-    @if (Convert.ToInt32(User.FindFirst(ClaimTypes.Role).Value) <= 4)
-    {
-        <br />
-            <button class="custom-btn" style=" height:50px;width:25%; border-radius:150px;" data-bs-toggle="modal" data-bs-target="#postModal">Criar DashBoard</button>
-        <br /> 
-    }
-    </div>
-    <br/>
-    <br/>
 
-
-    <div class=" d-flex flex-column justify-content-start align-items-start w-100 mx-3" style="height:contain;" id="fav-section">
-        <h3 class="custom-label">Meus Favoritos</h3>
-        <div class="section-divider"></div>
-    <br/>
-        <div class="d-flex flex-row justify-content-start align-items-start flex-wrap w-100" style="height:contain;" id="dash-container-fav"></div>
-    <br/>
-        <div class="section-divider"></div>
-    <br/>
+        @if (Convert.ToInt32(User.FindFirst(ClaimTypes.Role).Value) <= 4)
+        {
+            <div class="filter-actions">
+                <button class="action-button create-button animated pulse" data-bs-toggle="modal" data-bs-target="#postModal">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    Criar Dashboard
+                </button>
+            </div>
+        }
     </div>
 
-     <div class=" d-flex flex-row justify-content-start align-items-start flex-wrap w-100 h-100" id="dash-container">
-     </div>
-
-         <!-- Loader -->
-        <div id="loading" style="display:none;text-align: center; margin-top: 20px; position:relative;bottom:-10%">
-            <img src="~/imagens/loader.gif" width="100" />
+    <!-- Seção de favoritos -->
+    <div class="dashboard-section favorites-section animated fade-in-up animated-delay-1">
+        <div class="section-header">
+            <h2><i class="fas fa-star me-2"></i>Meus Favoritos</h2>
+            <div class="section-divider"></div>
         </div>
-    <br/>
+        <div class="dashboard-grid" id="dash-container-fav"></div>
+    </div>
+
+    <!-- Seção de todos os dashboards -->
+    <div class="dashboard-section all-dashboards-section animated fade-in-up animated-delay-2">
+        <div class="section-header">
+            <h2><i class="fas fa-chart-bar me-2"></i>Todos os Dashboards</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="dashboard-grid" id="dash-container"></div>
+    </div>
+
+    <!-- Loader -->
+    <div id="loading" class="loading-container" style="display:none;">
+        <div class="loading-spinner">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </div>
+        <p>Carregando dashboards...</p>
+    </div>
 </div>
 
+@section Modais {
 <!-- Modal de Edição -->
 <div class="modal fade" id="editModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="custom-label">Editar Dashboard</h5>
+                <h5 class="modal-title">
+                    <i class="fas fa-edit me-2"></i>
+                    Editar Dashboard
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-                <div class="alert-danger p-2 text-danger text-center rounded-2 shadow-sm mb-2" id="divErroEdit" style="display:none;">
+                <div class="alert alert-danger p-3 rounded-3 shadow-sm mb-3" id="divErroEdit" style="display:none;">
+                    <i class="fas fa-exclamation-circle me-2"></i>
                     @foreach (var erro in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                     {
-                        <p>@erro.ErrorMessage</p>
+                        <p class="mb-0">@erro.ErrorMessage</p>
                     }
                 </div>
 
-                <form enctype="multipart/form-data" id="editForm" method="post" asp-action="EditarDashBoard">
+                <form enctype="multipart/form-data" id="editForm" method="post" asp-action="EditarDashBoard" class="dashboard-form">
                     <input type="hidden" id="edit-id" name="Id" asp-for=Id />
-                    <div class="d-flex flex-column gap-3">
 
-                        <!-- Título -->
-                        <div class="d-flex flex-column">
-                            <label for="titulo" class="custom-label-small">Título</label>
-                            <input type="text" id="titulo" required asp-for="Titulo" class="custom-input" maxlength="120" name="Titulo" />
-                        </div>
+                    <!-- Título -->
+                    <div class="form-group">
+                        <label for="titulo" class="form-label">
+                            <i class="fas fa-heading me-2"></i>Título
+                        </label>
+                        <input type="text" id="titulo" required asp-for="Titulo" class="form-control" maxlength="120" name="Titulo" />
+                    </div>
 
-                        <!-- Tipo de Acesso -->
-                        <div class="d-flex flex-column">
-                            <label for="carteiraSelect" class="custom-label-small">Tipo de Acesso</label>
-                            <select class="custom-input" required id="carteiraSelect" asp-for="TipoAcesso" asp-items="ViewBag.Acessos">
-                            </select>
-                        </div>
+                    <!-- Tipo de Acesso -->
+                    <div class="form-group">
+                        <label for="carteiraSelect" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Tipo de Acesso
+                        </label>
+                        <select class="form-control" required id="carteiraSelect" asp-for="TipoAcesso" asp-items="ViewBag.Acessos">
+                        </select>
+                    </div>
 
-                        <!-- Link do Power BI -->
-                        <div class="d-flex flex-column">
-                            <label for="link" class="custom-label-small">Link do Power BI</label>
-                            <input type="text" id="link" required asp-for="Link" class="custom-input" name="Link" />
-                        </div>  
-                        
-                        <!-- Intervalo de Atualizacao -->
-                        <div class="d-flex flex-column">
-                            <label for="link" class="custom-label-small">Taxa de Atualização - Minutos</label>
-                            <input type="number" id="intAtt" required asp-for="IntervaloAtualizacao" class="custom-input" min="1" />
-                        </div>
+                    <!-- Link do Power BI -->
+                    <div class="form-group">
+                        <label for="link" class="form-label">
+                            <i class="fas fa-link me-2"></i>Link do Power BI
+                        </label>
+                        <input type="text" id="link" required asp-for="Link" class="form-control" name="Link" />
+                    </div>
 
-                        <!-- Descrição -->
-                        <div class="d-flex flex-column">
-                            <label for="editor" class="custom-label-small">Descrição</label>
-                            <textarea class="custom-input" maxlength="120" required id="descricao" asp-for="Descricao"></textarea>
-                        </div>
+                    <!-- Intervalo de Atualizacao -->
+                    <div class="form-group">
+                        <label for="intAtt" class="form-label">
+                            <i class="fas fa-clock me-2"></i>Taxa de Atualização (minutos)
+                        </label>
+                        <input type="number" id="intAtt" required asp-for="IntervaloAtualizacao" class="form-control" min="1" />
+                    </div>
 
-                        <!-- Botão -->
-                        <div class="d-flex">
-                            <button type="submit" class="custom-btn mt-3 w-100">Salvar Alterações</button>
-                        </div>
+                    <!-- Descrição -->
+                    <div class="form-group">
+                        <label for="descricao" class="form-label">
+                            <i class="fas fa-align-left me-2"></i>Descrição
+                        </label>
+                        <textarea class="form-control" maxlength="120" required id="descricao" asp-for="Descricao"></textarea>
+                    </div>
 
+                    <!-- Botão -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-save me-2"></i>Salvar Alterações
+                        </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -114,68 +136,84 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="custom-label">Novo DashBoard</h5>
+                <h5 class="modal-title">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    Novo Dashboard
+                </h5>
                 <button type="button" onclick="limparFormulario('Form-Dash')" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="alert-danger p-2 text-danger text-center rounded-2 shadow-sm mb-2" id="divErro" style="display:none;">
+                <div class="alert alert-danger p-3 rounded-3 shadow-sm mb-3" id="divErro" style="display:none;">
+                    <i class="fas fa-exclamation-circle me-2"></i>
                     @foreach (var erro in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                     {
-                        <p>@erro.ErrorMessage</p>
+                        <p class="mb-0">@erro.ErrorMessage</p>
                     }
                 </div>
-                <form enctype="multipart/form-data" asp-action="CriarDashboard" id="Form-Dash">
-                    <div class="d-flex flex-column gap-3">
 
-                        <!-- Título -->
-                        <div class="d-flex flex-column">
-                            <label for="titulo" class="custom-label-small">Título</label>
-                            <input type="text" id="titulo" required asp-for="Titulo" class="custom-input" maxlength="120" name="Titulo" />
+                <form enctype="multipart/form-data" asp-action="CriarDashboard" id="Form-Dash" class="dashboard-form">
+                    <!-- Título -->
+                    <div class="form-group">
+                        <label for="titulo" class="form-label">
+                            <i class="fas fa-heading me-2"></i>Título
+                        </label>
+                        <input type="text" id="titulo" required asp-for="Titulo" class="form-control" maxlength="120" name="Titulo" />
+                    </div>
+
+                    <!-- Upload da Imagem -->
+                    <div class="form-group">
+                        <label for="caminhoImagem" class="form-label">
+                            <i class="fas fa-image me-2"></i>Imagem (Opcional)
+                        </label>
+                        <div class="file-upload">
+                            <input type="file" id="caminhoImagem" asp-for="Imagem" class="form-control" accept="image/*" />
+                            <div class="file-upload-info">Arraste uma imagem ou clique para selecionar</div>
                         </div>
+                    </div>
 
-                        <!-- Upload da Imagem -->
-                        <div class="d-flex flex-column">
-                            <label for="caminhoImagem" class="custom-label-small">Imagem (Opcional)</label>
-                            <input type="file" id="caminhoImagem" asp-for="Imagem" class="custom-file-input" accept="image/*" />
-                        </div>
+                    <!-- Tipo de Acesso -->
+                    <div class="form-group">
+                        <label for="carteiraSelect" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Tipo de Acesso
+                        </label>
+                        <select class="form-control" required id="carteiraSelect" asp-for="TipoAcesso" asp-items="ViewBag.Acessos">
+                        </select>
+                    </div>
 
-                        <!-- Tipo de Acesso -->
-                        <div class="d-flex flex-column">
-                            <label for="carteiraSelect" class="custom-label-small">Tipo de Acesso</label>
-                            <select class="custom-input" required id="carteiraSelect" asp-for="TipoAcesso" asp-items="ViewBag.Acessos">
-                            </select>
-                        </div>
+                    <!-- Link do Power BI -->
+                    <div class="form-group">
+                        <label for="link" class="form-label">
+                            <i class="fas fa-link me-2"></i>Link do Power BI
+                        </label>
+                        <input type="text" id="link" required asp-for="Link" class="form-control" name="Link" />
+                    </div>
 
-                        <!-- Link do Power BI -->
-                        <div class="d-flex flex-column">
-                            <label for="link" class="custom-label-small">Link do Power BI</label>
-                            <input type="text" id="link" required asp-for="Link" class="custom-input" name="Link" />
-                        </div>
+                    <!-- Intervalo de Atualizacao -->
+                    <div class="form-group">
+                        <label for="intAtt" class="form-label">
+                            <i class="fas fa-clock me-2"></i>Taxa de Atualização (minutos)
+                        </label>
+                        <input type="number" id="intAtt" required asp-for="IntervaloAtualizacao" class="form-control" min="1" />
+                    </div>
 
-                        <!-- Intervalo de Atualizacao -->
-                        <div class="d-flex flex-column">
-                            <label for="link" class="custom-label-small">Taxa de Atualização - Minutos</label>
-                            <input type="number" id="intAtt" required asp-for="IntervaloAtualizacao" class="custom-input"  min="1" />  
-                        </div>
+                    <!-- Descrição -->
+                    <div class="form-group">
+                        <label for="editor" class="form-label">
+                            <i class="fas fa-align-left me-2"></i>Descrição
+                        </label>
+                        <textarea class="form-control" maxlength="120" required id="editor" asp-for="Descricao"></textarea>
+                    </div>
 
-                        <!-- Descrição -->
-                        <div class="d-flex flex-column">
-                            <label for="editor" class="custom-label-small">Descrição</label>
-                            <textarea class="custom-input" maxlength="120" required id="editor" asp-for="Descricao"></textarea>
-                        </div>
-
-                        <!-- Botão -->
-                        <div class="d-flex">
-                            <button type="submit" class="custom-btn mt-3 w-100">Publicar</button>
-                        </div>
-
+                    <!-- Botão -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus-circle me-2"></i>Publicar Dashboard
+                        </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
-    
 </div>
 
 <!-- Modal de Confirmação de Exclusão -->
@@ -183,14 +221,25 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
+                <h5 class="modal-title" id="confirmDeleteLabel">
+                    <i class="fas fa-trash-alt me-2"></i>
+                    Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body">
-                Tem certeza de que deseja excluir este DashBoard? Essa ação não pode ser desfeita.
+            <div class="modal-body text-center">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Tem certeza de que deseja excluir este Dashboard? Essa ação não pode ser desfeita.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash-alt me-2"></i>Excluir
+                </button>
             </div>
         </div>
     </div>
@@ -201,75 +250,184 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Histórico de alterações - @Model.Titulo</h5>
+                <h5 class="modal-title">
+                    <i class="fas fa-history me-2"></i>
+                    Histórico de alterações - @Model.Titulo
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-                <div id="historico-lista" class="list-group">
-                    <div class="list-group-item">
-                        <strong>10/04/2025 -</strong> Dashboard atualizado.
+                <div id="historico-lista" class="history-list">
+                    <div class="history-item">
+                        <div class="history-date">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            <strong>10/04/2025</strong>
+                        </div>
+                        <div class="history-content">
+                            Dashboard atualizado.
+                        </div>
                     </div>
-                    <div class="list-group-item">
-                        <strong>08/04/2025 -</strong> Descrição editada.
+                    <div class="history-item">
+                        <div class="history-date">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            <strong>08/04/2025</strong>
+                        </div>
+                        <div class="history-content">
+                            Descrição editada.
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 <script>
+    let selectedPostId = null;
 
     function confirmarExclusao(id) {
         selectedPostId = id;  // Guarda o ID da publicação
-        $('#confirmDeleteModal').modal('show');  // Exibe o modal de confirmação
+
+        // Animação do modal
+        const modal = document.getElementById('confirmDeleteModal');
+        $('#confirmDeleteModal').modal('show');
+
+        // Animar ícone de exclusão
+        anime({
+            targets: '.delete-icon i',
+            scale: [0.5, 1],
+            opacity: [0, 1],
+            easing: 'easeOutElastic(1, .5)',
+            duration: 800
+        });
+
+        // Animar texto
+        anime({
+            targets: '.delete-message',
+            opacity: [0, 1],
+            translateY: [10, 0],
+            easing: 'easeOutExpo',
+            duration: 600,
+            delay: 300
+        });
     }
 
     function apagarDashboard(pubId) {
-        window.location.href = `/PowerBi/Excluir?id=${pubId}`; // Redireciona para exclusão
+
+                window.location.href = `/PowerBi/Excluir?id=${pubId}`;
+
     }
 
     document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
         if (selectedPostId !== null) {
-            apagarDashboard(selectedPostId);
+            // Animar botão ao clicar
+            anime({
+                targets: this,
+                scale: 0.95,
+                duration: 100,
+                easing: 'easeOutQuad',
+                complete: function() {
+                    $('#confirmDeleteModal').modal('hide');
+                    apagarDashboard(selectedPostId);
+                }
+            });
         }
     });
 
-
-</script>
-
-
-<script>
     document.addEventListener("DOMContentLoaded", () => {
-        new PowerBI("dash-container","dash-container-fav","loading",{termo: document.getElementById("termoFiltro")});
+        // Inicializar PowerBI com animações
+        new PowerBI("dash-container", "dash-container-fav", "loading", {termo: document.getElementById("termoFiltro")});
 
+        // Verificar erros
         let erro = '@ViewBag.Erro';
         let erroEdit = '@ViewBag.ErroEdit';
         let edicao = '@ViewBag.Edicao'
         let divErro = document.getElementById('divErro')
         let divErroEdit = document.getElementById('divErroEdit')
-        if(erro === 'True')
-        {
-             divErro.style.display = 'flex'
-             $("#postModal").modal('show'); // Exibir modal erro
+
+        if(erro === 'True') {
+            divErro.style.display = 'flex';
+            $("#postModal").modal('show');
+
+            // Animar alerta de erro
+            anime({
+                targets: '#divErro',
+                opacity: [0, 1],
+                translateY: [-10, 0],
+                easing: 'easeOutExpo',
+                duration: 600
+            });
         }
-
-
 
         if (erroEdit === 'True' && edicao === 'True') {
-             divErroEdit.style.display = 'flex'
+            divErroEdit.style.display = 'flex';
             $('#editModal').modal('show');
 
+            // Animar alerta de erro
+            anime({
+                targets: '#divErroEdit',
+                opacity: [0, 1],
+                translateY: [-10, 0],
+                easing: 'easeOutExpo',
+                duration: 600
+            });
         }
 
-    
+        // Animações para elementos da página
+        anime({
+            targets: '.filter-bar',
+            opacity: [0, 1],
+            translateY: [-20, 0],
+            easing: 'easeOutExpo',
+            duration: 800
+        });
+
+        anime({
+            targets: '.section-header',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutExpo',
+            duration: 800,
+            delay: anime.stagger(200)
+        });
+
+        // Efeito de hover nos botões
+        document.querySelectorAll('.action-button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    scale: 1.05,
+                    boxShadow: '0 8px 15px rgba(250, 100, 0, 0.3)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            button.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    scale: 1,
+                    boxShadow: '0 4px 10px rgba(250, 100, 0, 0.2)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        });
+
+        // Animação para o input de arquivo
+        document.getElementById('caminhoImagem')?.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const fileInfo = document.querySelector('.file-upload-info');
+                fileInfo.textContent = `Arquivo selecionado: ${this.files[0].name}`;
+
+                anime({
+                    targets: fileInfo,
+                    opacity: [0, 1],
+                    translateY: [10, 0],
+                    easing: 'easeOutExpo',
+                    duration: 600
+                });
+            }
+        });
     });
-
 </script>
-
-
-
-
-
-
+}

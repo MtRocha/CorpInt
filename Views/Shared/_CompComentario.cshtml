@@ -1,12 +1,90 @@
 ﻿@model Intranet_NEW.Models.WEB.ComentarioModel
 
 <div class="comentario-item animated-comentario">
-    <div class="comentario-corpo p-3 rounded shadow-sm">
-        <div class="d-flex justify-content-start align-items-center mb-2">
-            <img src="~/imagens/conta-Icon.png" class="comentario-avatar rounded-circle shadow-sm" />
-            <span class="comentario-usuario fw-bold text-dark">@Model.UsuarioNome</span>
-            <span class="comentario-data text-muted small">@Model.dtComentario.ToString("dd/MM/yyyy HH:mm")</span>
+    <div class="comentario-corpo">
+        <div class="comentario-header">
+            <div class="comentario-user">
+                <div class="comentario-avatar">
+                    <img src="~/imagens/conta-Icon.png" alt="Avatar" />
+                </div>
+                <div class="comentario-info">
+                    <span class="comentario-usuario">@Model.UsuarioNome</span>
+                    <span class="comentario-data">
+                        <i class="fas fa-clock me-1"></i>
+                        @Model.dtComentario.ToString("dd/MM/yyyy HH:mm")
+                    </span>
+                </div>
+            </div>
+            <div class="comentario-actions">
+@*                 <button class="comentario-like-btn" title="Curtir">
+                    <i class="far fa-heart"></i>
+                </button>
+                <button class="comentario-reply-btn" title="Responder">
+                    <i class="far fa-comment"></i>
+                </button> *@
+            </div>
         </div>
-        <p class="comentario-mensagem m-0">@Model.Conteudo</p>
+        <div class="comentario-content">
+            <p class="comentario-mensagem">@Model.Conteudo</p>
+        </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animar entrada do comentário
+        const comentarios = document.querySelectorAll('.comentario-item');
+        anime({
+            targets: comentarios,
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutExpo',
+            duration: 600,
+            delay: anime.stagger(100)
+        });
+
+        // Efeito de hover
+        document.querySelectorAll('.comentario-corpo').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    translateY: -3,
+                    boxShadow: '0 8px 15px rgba(0, 0, 0, 0.1)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            item.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    translateY: 0,
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        });
+
+        // Efeito de hover nos botões
+        document.querySelectorAll('.comentario-like-btn, .comentario-reply-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this.querySelector('i'),
+                    scale: 1.2,
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            btn.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this.querySelector('i'),
+                    scale: 1,
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        });
+    });
+</script>

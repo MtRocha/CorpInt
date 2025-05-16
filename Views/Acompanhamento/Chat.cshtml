@@ -1,44 +1,172 @@
-﻿@{
+﻿@using Intranet_NEW.Models.WEB
+@using System.Security.Claims
+@model List<CanalModel>
+@{
     Layout = "_Layout_Acompanhamento";
     ViewData["Title"] = "Meu Acompanhamento";
 }
 
-<div class="d-flex" id="chat-wrapper">
+<div class="chat-wrapper animated fade-in">
     <!-- Sidebar de canais -->
-    <div id="chat-sidebar">
-        <div class="sidebar-header">Canais</div>
-        <div id="channel-list" class="chat-channels">
-            <div class="channel-item active">
-                <div class="channel-info">
-                    <div class="channel-name">Geral</div>
-                    <div class="channel-preview">Última mensagem aqui...</div>
-                </div>
-                <div class="channel-time">10:45</div>
-            </div>
-            <div class="channel-item">
-                <div class="channel-info">
-                    <div class="channel-name">Meu Supervisor</div>
-                    <div class="channel-preview">Atualizei o cronograma...</div>
-                </div>
-                <div class="channel-time">09:12</div>
-            </div>
-            <div class="channel-item">
-                <div class="channel-info">
-                    <div class="channel-name">Qualidade</div>
-                    <div class="channel-preview">Vamos revisar o deploy</div>
-                </div>
-                <div class="channel-time">Ontem</div>
-            </div>
+    <div class="chat-sidebar animated fade-in-left animated-delay-1">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-comments me-2"></i>Canais</h3>
+            <div class="sidebar-divider"></div>
+        </div>
+
+        <div class="channels-list">
+            @foreach (CanalModel item in Model)
+            {
+                @await Html.PartialAsync("_CompCanal", item)
+            }
         </div>
     </div>
 
+    <input type="hidden" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value.Trim()" id="userId" />
+    <input type="hidden" value="@User.FindFirst("CentroCusto").Value.Trim()" id="carteiraId" />
+    <input type="hidden" value="@User.FindFirst(ClaimTypes.PrimaryGroupSid).Value.Trim()" id="funcaoId" />
+
     <!-- Área principal do chat -->
-    <div id="chat-container" class="flex-grow-1 d-flex flex-column">
-        <div id="chat-header">Chat em Tempo Real</div>
-        <div id="chat-messages" class="d-flex flex-column"></div>
-        <div id="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Digite sua mensagem..." />
-            <button id="chat-send-btn">Enviar</button>
+    <div class="chat-container animated fade-in-right animated-delay-2">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <i class="fas fa-hashtag me-2"></i>
+                <h2 id="chat-name">Chat</h2>
+            </div>
+
+            @if (ViewBag.UsuarioQualidade == 1)
+            {
+                <div class="chat-header-actions">
+                    <div class="form-group">
+                        <label for="carteiraSelect">Carteira</label>
+                        <select id="carteiraSelect" asp-items="ViewBag.Carteiras">
+                        </select>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <input type="hidden" id="usuarioQualidade" value="@ViewBag.UsuarioQualidade" />
+
+        <div class="chat-messages" id="chat-messages">
+            <!-- Loader -->
+            <div class="chat-loading" id="loading">
+                <div class="loading-spinner">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                </div>
+                <p>Carregando mensagens...</p>
+            </div>
+        </div>
+
+        <div class="chat-input-area" id="chat-input-area">
+            @if (User.FindFirst(ClaimTypes.Role).Value != "10")
+            {
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <i class="fas fa-comment-dots"></i>
+                        <input type="text" id="chat-input" maxlength="400" placeholder="Digite sua mensagem..." />
+                    </div>
+                    <button id="chat-send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Enviar</span>
+                    </button>
+                </div>
+            }
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Inicializar o chat
+        new Chat("chat-messages", "loading", ".channel-item", "chat-input", "chat-send-btn");
+
+        // Selecionar o canal "Todos" por padrão
+        let todos = document.getElementById('Todos');
+        todos.click();
+
+        // Animações para elementos da página
+        anime({
+            targets: '.chat-header',
+            opacity: [0, 1],
+            translateY: [-20, 0],
+            easing: 'easeOutExpo',
+            duration: 800
+        });
+
+        anime({
+            targets: '.chat-input-area',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutExpo',
+            duration: 800
+        });
+
+        // Efeito de hover no botão de enviar
+        const sendBtn = document.getElementById('chat-send-btn');
+        if (sendBtn) {
+            sendBtn.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    scale: 1.05,
+                    backgroundColor: 'var(--cor-principal3)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            sendBtn.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    scale: 1,
+                    backgroundColor: 'var(--cor-principal)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        }
+
+        // Efeito de foco no input
+        const chatInput = document.getElementById('chat-input');
+        if (chatInput) {
+            chatInput.addEventListener('focus', function() {
+                anime({
+                    targets: '.chat-input-wrapper',
+                    boxShadow: '0 0 0 3px rgba(var(--primary-rgb), 0.25)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+
+            chatInput.addEventListener('blur', function() {
+                anime({
+                    targets: '.chat-input-wrapper',
+                    boxShadow: '0 0 0 0 rgba(var(--primary-rgb), 0)',
+                    easing: 'easeOutExpo',
+                    duration: 300
+                });
+            });
+        }
+
+        // Animação para novas mensagens
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1 && node.classList.contains('mensagem-item')) {
+                            anime({
+                                targets: node,
+                                opacity: [0, 1],
+                                translateY: [20, 0],
+                                easing: 'easeOutExpo',
+                                duration: 600
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        observer.observe(document.getElementById('chat-messages'), { childList: true });
+    });
+</script>

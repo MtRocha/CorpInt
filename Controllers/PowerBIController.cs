@@ -8,6 +8,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Intranet_NEW.Services.Handlers;
+using Intranet_NEW.Models;
 
 namespace Intranet_NEW.Controllers
 {
@@ -152,10 +153,11 @@ namespace Intranet_NEW.Controllers
         [Authorize]
         public IActionResult VisualizarBI(int id)
         {
-        
             PowerBiModel model = _powerBIService.BuscaDashBoard(id);
 
-            if (Convert.ToInt32(User.FindFirst(ClaimTypes.Role).Value) <= model.TipoAcesso)
+            if (Convert.ToInt32(User.FindFirst(ClaimTypes.Role).Value) <= model.TipoAcesso || 
+                PerfilModel.Planejamento.Contains(Convert.ToInt32(User.FindFirst(ClaimTypes.PrimaryGroupSid).Value)) || 
+                model.idAutor == Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value) )
                 return View("PowerBiVisualizar", model);
             else
                 return RedirectToAction("PowerBI");

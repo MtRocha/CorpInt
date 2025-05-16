@@ -1,0 +1,31 @@
+﻿@model string
+@using System.Security.Claims
+
+<div class="sidebar @(Model == "Acompanhamento" ? "sidebar-acompanhamento" : "")" style="@(Model == "Acompanhamento" ? "width:12%;" : "")">
+    @if (Model == "Home" || Model == null)
+    {
+        <a class="menu-btn disabled" onclick="activateButton(this)" asp-action="Feed" asp-controller="Home">Feed</a>
+        <a class="menu-btn" onclick="activateButton(this)">Perfil</a>
+        <a class="menu-btn" onclick="activateButton(this)" asp-action="Chat" asp-controller="Mensagens">Acompanhamento</a>
+        <a class="menu-btn" onclick="activateButton(this)">Treinamentos</a>
+        <a class="menu-btn" onclick="activateButton(this)">Quizz</a>
+        <a class="menu-btn" target="_blank" href="http://extobrasil142922.protheus.cloudtotvs.com.br:1604/meurh00/#/login" onclick="activateButton(this)">Meu RH</a>
+        @if (User.FindFirst(ClaimTypes.Role).Value != "10")
+        {
+            <a asp-controller="Administrativo" asp-action="Index" class="menu-btn" onclick="activateButton(this)">Administrativo</a>
+        }
+        <a asp-controller="Login" asp-action="Logout" class="logout-btn">
+            <img width="25" style="margin-right:10px" src="~/imagens/sair-icon.png" />
+            <span>Sair</span>
+        </a>
+    }
+    else if (Model == "Acompanhamento")
+    {
+        <a class="menu-btn" onclick="activateButton(this)">Resultado</a>
+        <a class="menu-btn" onclick="activateButton(this)" asp-action="Chat" asp-controller="Mensagens">Chat</a>
+        <a asp-action="Feed" asp-controller="Home" class="logout-btn">
+            <img width="25" style="margin-right:10px" src="~/imagens/sair-icon.png" />
+            <span>Voltar</span>
+        </a>
+    }
+</div>

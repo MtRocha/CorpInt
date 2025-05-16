@@ -1,122 +1,103 @@
-﻿/* ==========================
-   ANIMAÇÕES DE FADE
-   ========================== */
-
-@keyframes FadeDown {
-    0% {
+﻿/* Animações Gerais */
+@keyframes fadeIn {
+    from {
         opacity: 0;
-        transform: translateY(-100px);
     }
 
-    100% {
+    to {
         opacity: 1;
-        transform: translateY(0px);
     }
 }
 
-@keyframes FadeUp {
-    0% {
+@keyframes fadeInUp {
+    from {
         opacity: 0;
-        transform: translateY(100px);
+        transform: translateY(20px);
     }
 
-    100% {
+    to {
         opacity: 1;
-        transform: translateY(0px);
+        transform: translateY(0);
     }
 }
 
-@keyframes FadeLeft {
-    0% {
+@keyframes fadeInDown {
+    from {
         opacity: 0;
-        transform: translateX(-30px);
+        transform: translateY(-20px);
     }
 
-    100% {
+    to {
         opacity: 1;
-        transform: translateX(0px);
+        transform: translateY(0);
     }
 }
 
-@keyframes FadeRight {
-    0% {
+@keyframes fadeInLeft {
+    from {
         opacity: 0;
-        transform: translateX(30px);
+        transform: translateX(-20px);
     }
 
-    100% {
+    to {
         opacity: 1;
-        transform: translateX(0px);
+        transform: translateX(0);
     }
 }
 
-/* ==========================
-   ANIMAÇÕES DE TEXTO COM ROTAÇÃO
-   ========================== */
-
-@keyframes FadeDownTextVertical {
-    0% {
+@keyframes fadeInRight {
+    from {
         opacity: 0;
-        transform: translateY(-100px) rotate(-180deg);
+        transform: translateX(20px);
     }
 
-    100% {
+    to {
         opacity: 1;
-        transform: translateY(0px) rotate(-180deg);
+        transform: translateX(0);
     }
 }
 
-@keyframes FadeUpTextVertical {
-    0% {
-        opacity: 0;
-        transform: translateY(100px) rotate(-180deg);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0px) rotate(-180deg);
-    }
-}
-
-/* ==========================
-   ANIMAÇÃO DE EXPLOSÃO
-   ========================== */
-
-@keyframes explode {
+@keyframes pulse {
     0% {
         transform: scale(1);
-        opacity: 1;
     }
 
     50% {
-        transform: scale(1.5);
-        opacity: 0.7;
+        transform: scale(1.05);
     }
 
     100% {
-        transform: scale(2);
-        opacity: 0;
+        transform: scale(1);
     }
 }
 
-/* ==========================
-   ESTILOS DE EFEITOS
-   ========================== */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
 
-.explosion {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: #ff6000;
-    border-radius: 50%;
-    opacity: 1;
-    animation: explode 0.5s ease-out forwards;
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
 }
 
-/* Animações */
-@keyframes slide-in-user {
+@keyframes rotate {
     from {
-        transform: translateX(30px);
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
         opacity: 0;
     }
 
@@ -126,14 +107,1730 @@
     }
 }
 
-@keyframes slide-in-other {
+@keyframes expandWidth {
     from {
-        transform: translateX(-30px);
-        opacity: 0;
+        width: 0;
     }
 
     to {
-        transform: translateX(0);
-        opacity: 1;
+        width: 100%;
     }
 }
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+/* Classes de Animação */
+.animated {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+.animated-slow {
+    animation-duration: 0.4s;
+    animation-fill-mode: both;
+}
+
+.animated-delay-1 {
+    animation-delay: 0.1s;
+}
+
+.animated-delay-2 {
+    animation-delay: 0.2s;
+}
+
+.animated-delay-3 {
+    animation-delay: 0.3s;
+}
+
+.animated-delay-4 {
+    animation-delay: 0.4s;
+}
+
+.animated-delay-5 {
+    animation-delay: 0.5s;
+}
+
+.fade-in {
+    animation-name: fadeIn;
+}
+
+.fade-in-up {
+    animation-name: fadeInUp;
+}
+
+.fade-in-down {
+    animation-name: fadeInDown;
+}
+
+.fade-in-left {
+    animation-name: fadeInLeft;
+}
+
+.fade-in-right {
+    animation-name: fadeInRight;
+}
+
+.pulse {
+    animation-name: pulse;
+}
+
+.float {
+    animation-name: float;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.rotate {
+    animation-name: rotate;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.slide-in {
+    animation-name: slideIn;
+}
+
+/* Animações para Componentes Específicos */
+.animated-card {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+    .animated-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+.animated-button {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    .animated-button:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+    }
+
+    .animated-button:hover:after {
+        animation: ripple 1s ease-out;
+    }
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+.animated-icon {
+    transition: all 0.3s ease;
+}
+
+    .animated-icon:hover {
+        transform: scale(1.2);
+    }
+
+.animated-list-item {
+    transition: all 0.3s ease;
+    transform: translateX(0);
+}
+
+    .animated-list-item:hover {
+        transform: translateX(5px);
+    }
+
+.animated-input {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+    .animated-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25);
+    }
+
+.animated-comentario {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.animated-publicacao {
+    animation: fadeIn 0.8s ease forwards;
+}
+
+/* Efeito de Carregamento */
+.shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+/* Animações para Notificações */
+.notification-badge {
+    animation: pulse 1.5s infinite;
+}
+
+/* Animações para Menus */
+.menu-item {
+    transition: all 0.3s ease;
+}
+
+    .menu-item:hover {
+        transform: translateX(5px);
+        background-color: rgba(var(--primary-rgb), 0.1);
+    }
+
+/* Animações para Modais */
+.modal-content {
+    animation: fadeInDown 0.4s ease forwards;
+}
+
+/* Animações para Tooltips */
+.tooltip {
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+    .tooltip.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* Animações para Dropdowns */
+.dropdown-menu {
+    animation: fadeInDown 0.3s ease forwards;
+}
+
+/* Animações para Tabs */
+.tab-content > .tab-pane {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Animações para Acordeões */
+.accordion-button:not(.collapsed) {
+    transition: all 0.3s ease;
+}
+
+/* Animações para Carrosséis */
+.carousel-item {
+    transition: transform 0.6s ease-in-out;
+}
+
+/* Animações para Botões de Ação */
+.action-button {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    .action-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 14px rgba(0, 0, 0, 0.18);
+    }
+
+    .action-button:active {
+        transform: translateY(1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+/* Animações para Barras de Progresso */
+.progress-bar {
+    transition: width 0.6s ease;
+}
+
+/* Animações para Badges */
+.badge {
+    transition: all 0.3s ease;
+}
+
+    .badge:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Alertas */
+.alert {
+    animation: fadeInDown 0.5s ease forwards;
+}
+
+    .alert.closing {
+        animation: fadeOutUp 0.5s ease forwards;
+    }
+
+@keyframes fadeOutUp {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* Animações para Spinners */
+.spinner-border,
+.spinner-grow {
+    animation-duration: 1s;
+}
+
+/* Animações para Toasts */
+.toast.showing {
+    animation: fadeInRight 0.3s ease forwards;
+}
+
+.toast.hide {
+    animation: fadeOutRight 0.3s ease forwards;
+}
+
+@keyframes fadeOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+
+/* Animações para Paginação */
+.page-item {
+    transition: all 0.3s ease;
+}
+
+    .page-item:hover {
+        transform: translateY(-2px);
+    }
+
+/* Animações para Breadcrumbs */
+.breadcrumb-item {
+    transition: all 0.3s ease;
+}
+
+    .breadcrumb-item:hover {
+        transform: translateY(-2px);
+    }
+
+/* Animações para Listas */
+.list-group-item {
+    transition: all 0.3s ease;
+}
+
+    .list-group-item:hover {
+        transform: translateX(5px);
+        background-color: rgba(var(--primary-rgb), 0.05);
+    }
+
+/* Animações para Cards */
+.card {
+    transition: all 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+
+/* Animações para Imagens */
+.img-hover-zoom {
+    overflow: hidden;
+}
+
+    .img-hover-zoom img {
+        transition: transform 0.5s ease;
+    }
+
+    .img-hover-zoom:hover img {
+        transform: scale(1.1);
+    }
+
+/* Animações para Ícones */
+.icon-spin {
+    animation: rotate 2s linear infinite;
+}
+
+.icon-pulse {
+    animation: pulse 1.5s ease infinite;
+}
+
+/* Animações para Botões de Toggle */
+.toggle-button {
+    transition: all 0.3s ease;
+}
+
+    .toggle-button.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+/* Animações para Formulários */
+.form-control:focus {
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+}
+
+/* Animações para Checkboxes e Radios */
+.form-check-input {
+    transition: all 0.3s ease;
+}
+
+    .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+/* Animações para Switches */
+.form-switch .form-check-input {
+    transition: background-position 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Animações para Ranges */
+.form-range::-webkit-slider-thumb {
+    transition: all 0.3s ease;
+}
+
+    .form-range::-webkit-slider-thumb:active {
+        transform: scale(1.2);
+    }
+
+/* Animações para Select */
+.form-select {
+    transition: all 0.3s ease;
+}
+
+    .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+    }
+
+/* Animações para Botões de Fechar */
+.btn-close {
+    transition: all 0.3s ease;
+}
+
+    .btn-close:hover {
+        transform: rotate(90deg);
+    }
+
+/* Animações para Tooltips e Popovers */
+.tooltip,
+.popover {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Animações para Scrollspy */
+.scrollspy-item.active {
+    transition: all 0.3s ease;
+    transform: translateX(5px);
+}
+
+/* Animações para Navs e Tabs */
+.nav-link {
+    transition: all 0.3s ease;
+}
+
+    .nav-link:hover {
+        transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+        position: relative;
+    }
+
+        .nav-link.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+            animation: expandWidth 0.3s ease forwards;
+        }
+
+/* Animações para Offcanvas */
+.offcanvas {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Animações para Collapse */
+.collapse {
+    transition: height 0.35s ease;
+}
+
+/* Animações para Botões de Grupo */
+.btn-group > .btn {
+    transition: all 0.3s ease;
+}
+
+    .btn-group > .btn:hover {
+        z-index: 1;
+        transform: translateY(-2px);
+    }
+
+/* Animações para Inputs com Grupo */
+.input-group {
+    transition: all 0.3s ease;
+}
+
+    .input-group:focus-within {
+        box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+    }
+
+/* Animações para Placeholders */
+.placeholder {
+    animation: shimmer 2s infinite linear;
+}
+
+/* Animações para Spinners */
+.spinner-border {
+    animation: rotate 0.75s linear infinite;
+}
+
+.spinner-grow {
+    animation: spinner-grow 0.75s linear infinite;
+}
+
+/* Animações para Botões de Paginação */
+.pagination .page-link {
+    transition: all 0.3s ease;
+}
+
+    .pagination .page-link:hover {
+        transform: translateY(-2px);
+        z-index: 3;
+    }
+
+/* Animações para Botões de Navegação */
+.navbar-nav .nav-link {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+    .navbar-nav .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: var(--primary-color);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .navbar-nav .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-link.active::after {
+        width: 100%;
+    }
+
+/* Animações para Dropdown Toggle */
+.dropdown-toggle::after {
+    transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover::after {
+    transform: translateY(2px);
+}
+
+.show > .dropdown-toggle::after {
+    transform: rotate(180deg);
+}
+
+/* Animações para Botões de Ação Flutuantes */
+.btn-float {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+    .btn-float:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+/* Animações para Cartões de Perfil */
+.profile-card {
+    transition: all 0.3s ease;
+}
+
+    .profile-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+/* Animações para Avatares */
+.avatar {
+    transition: all 0.3s ease;
+}
+
+    .avatar:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.5);
+    }
+
+/* Animações para Botões de Mídia Social */
+.social-button {
+    transition: all 0.3s ease;
+}
+
+    .social-button:hover {
+        transform: translateY(-3px) rotate(5deg);
+    }
+
+/* Animações para Chips/Tags */
+.chip {
+    transition: all 0.3s ease;
+}
+
+    .chip:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+/* Animações para Barras de Pesquisa */
+.search-bar {
+    transition: all 0.3s ease;
+}
+
+    .search-bar:focus-within {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25);
+    }
+
+/* Animações para Botões de Filtro */
+.filter-button {
+    transition: all 0.3s ease;
+}
+
+    .filter-button.active {
+        background-color: var(--primary-color);
+        color: white;
+        transform: scale(1.05);
+    }
+
+/* Animações para Botões de Ordenação */
+.sort-button {
+    transition: all 0.3s ease;
+}
+
+    .sort-button:hover {
+        transform: translateY(-2px);
+    }
+
+    .sort-button.asc::after {
+        content: "↑";
+        margin-left: 5px;
+        animation: fadeIn 0.3s ease forwards;
+    }
+
+    .sort-button.desc::after {
+        content: "↓";
+        margin-left: 5px;
+        animation: fadeIn 0.3s ease forwards;
+    }
+
+/* Animações para Botões de Compartilhamento */
+.share-button {
+    transition: all 0.3s ease;
+}
+
+    .share-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Download */
+.download-button {
+    transition: all 0.3s ease;
+}
+
+    .download-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+    }
+
+        .download-button:hover::after {
+            content: "↓";
+            margin-left: 5px;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+/* Animações para Botões de Upload */
+.upload-button {
+    transition: all 0.3s ease;
+}
+
+    .upload-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+    }
+
+        .upload-button:hover::after {
+            content: "↑";
+            margin-left: 5px;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+/* Animações para Botões de Favoritos */
+.favorite-button {
+    transition: all 0.3s ease;
+}
+
+    .favorite-button:hover {
+        transform: scale(1.1);
+    }
+
+    .favorite-button.active {
+        color: #ff6b6b;
+        animation: pulse 0.5s ease;
+    }
+
+/* Animações para Botões de Curtir */
+.like-button {
+    transition: all 0.3s ease;
+}
+
+    .like-button:hover {
+        transform: scale(1.1);
+    }
+
+    .like-button.active {
+        color: #4c6ef5;
+        animation: pulse 0.5s ease;
+    }
+
+/* Animações para Botões de Comentário */
+.comment-button {
+    transition: all 0.3s ease;
+}
+
+    .comment-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Compartilhamento */
+.share-button {
+    transition: all 0.3s ease;
+}
+
+    .share-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Salvar */
+.save-button {
+    transition: all 0.3s ease;
+}
+
+    .save-button:hover {
+        transform: scale(1.1);
+    }
+
+    .save-button.active {
+        color: #20c997;
+        animation: pulse 0.5s ease;
+    }
+
+/* Animações para Botões de Edição */
+.edit-button {
+    transition: all 0.3s ease;
+}
+
+    .edit-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Exclusão */
+.delete-button {
+    transition: all 0.3s ease;
+}
+
+    .delete-button:hover {
+        transform: scale(1.1);
+        color: #fa5252;
+    }
+
+/* Animações para Botões de Adição */
+.add-button {
+    transition: all 0.3s ease;
+}
+
+    .add-button:hover {
+        transform: scale(1.1);
+        color: #40c057;
+    }
+
+/* Animações para Botões de Cancelamento */
+.cancel-button {
+    transition: all 0.3s ease;
+}
+
+    .cancel-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Confirmação */
+.confirm-button {
+    transition: all 0.3s ease;
+}
+
+    .confirm-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Rejeição */
+.reject-button {
+    transition: all 0.3s ease;
+}
+
+    .reject-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Aprovação */
+.approve-button {
+    transition: all 0.3s ease;
+}
+
+    .approve-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Envio */
+.submit-button {
+    transition: all 0.3s ease;
+}
+
+    .submit-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+    }
+
+/* Animações para Botões de Redefinição */
+.reset-button {
+    transition: all 0.3s ease;
+}
+
+    .reset-button:hover {
+        transform: translateY(-3px);
+    }
+
+/* Animações para Botões de Voltar */
+.back-button {
+    transition: all 0.3s ease;
+}
+
+    .back-button:hover {
+        transform: translateX(-5px);
+    }
+
+/* Animações para Botões de Avançar */
+.forward-button {
+    transition: all 0.3s ease;
+}
+
+    .forward-button:hover {
+        transform: translateX(5px);
+    }
+
+/* Animações para Botões de Atualização */
+.refresh-button {
+    transition: all 0.3s ease;
+}
+
+    .refresh-button:hover {
+        transform: rotate(180deg);
+    }
+
+/* Animações para Botões de Configuração */
+.settings-button {
+    transition: all 0.3s ease;
+}
+
+    .settings-button:hover {
+        transform: rotate(90deg);
+    }
+
+/* Animações para Botões de Ajuda */
+.help-button {
+    transition: all 0.3s ease;
+}
+
+    .help-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Informação */
+.info-button {
+    transition: all 0.3s ease;
+}
+
+    .info-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Alerta */
+.alert-button {
+    transition: all 0.3s ease;
+}
+
+    .alert-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Sucesso */
+.success-button {
+    transition: all 0.3s ease;
+}
+
+    .success-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Erro */
+.error-button {
+    transition: all 0.3s ease;
+}
+
+    .error-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Aviso */
+.warning-button {
+    transition: all 0.3s ease;
+}
+
+    .warning-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Notificação */
+.notification-button {
+    transition: all 0.3s ease;
+}
+
+    .notification-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Mensagem */
+.message-button {
+    transition: all 0.3s ease;
+}
+
+    .message-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Usuário */
+.user-button {
+    transition: all 0.3s ease;
+}
+
+    .user-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Grupo */
+.group-button {
+    transition: all 0.3s ease;
+}
+
+    .group-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Calendário */
+.calendar-button {
+    transition: all 0.3s ease;
+}
+
+    .calendar-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Relógio */
+.clock-button {
+    transition: all 0.3s ease;
+}
+
+    .clock-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Localização */
+.location-button {
+    transition: all 0.3s ease;
+}
+
+    .location-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Telefone */
+.phone-button {
+    transition: all 0.3s ease;
+}
+
+    .phone-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Email */
+.email-button {
+    transition: all 0.3s ease;
+}
+
+    .email-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Link */
+.link-button {
+    transition: all 0.3s ease;
+}
+
+    .link-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Impressão */
+.print-button {
+    transition: all 0.3s ease;
+}
+
+    .print-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Exportação */
+.export-button {
+    transition: all 0.3s ease;
+}
+
+    .export-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Importação */
+.import-button {
+    transition: all 0.3s ease;
+}
+
+    .import-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Filtro */
+.filter-button {
+    transition: all 0.3s ease;
+}
+
+    .filter-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Ordenação */
+.sort-button {
+    transition: all 0.3s ease;
+}
+
+    .sort-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Pesquisa */
+.search-button {
+    transition: all 0.3s ease;
+}
+
+    .search-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Visualização */
+.view-button {
+    transition: all 0.3s ease;
+}
+
+    .view-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Edição */
+.edit-button {
+    transition: all 0.3s ease;
+}
+
+    .edit-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Exclusão */
+.delete-button {
+    transition: all 0.3s ease;
+}
+
+    .delete-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Adição */
+.add-button {
+    transition: all 0.3s ease;
+}
+
+    .add-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Cancelamento */
+.cancel-button {
+    transition: all 0.3s ease;
+}
+
+    .cancel-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Confirmação */
+.confirm-button {
+    transition: all 0.3s ease;
+}
+
+    .confirm-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Rejeição */
+.reject-button {
+    transition: all 0.3s ease;
+}
+
+    .reject-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Aprovação */
+.approve-button {
+    transition: all 0.3s ease;
+}
+
+    .approve-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Envio */
+.submit-button {
+    transition: all 0.3s ease;
+}
+
+    .submit-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Redefinição */
+.reset-button {
+    transition: all 0.3s ease;
+}
+
+    .reset-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Voltar */
+.back-button {
+    transition: all 0.3s ease;
+}
+
+    .back-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Avançar */
+.forward-button {
+    transition: all 0.3s ease;
+}
+
+    .forward-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Atualização */
+.refresh-button {
+    transition: all 0.3s ease;
+}
+
+    .refresh-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Configuração */
+.settings-button {
+    transition: all 0.3s ease;
+}
+
+    .settings-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Ajuda */
+.help-button {
+    transition: all 0.3s ease;
+}
+
+    .help-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Informação */
+.info-button {
+    transition: all 0.3s ease;
+}
+
+    .info-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Alerta */
+.alert-button {
+    transition: all 0.3s ease;
+}
+
+    .alert-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Sucesso */
+.success-button {
+    transition: all 0.3s ease;
+}
+
+    .success-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Erro */
+.error-button {
+    transition: all 0.3s ease;
+}
+
+    .error-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Aviso */
+.warning-button {
+    transition: all 0.3s ease;
+}
+
+    .warning-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Notificação */
+.notification-button {
+    transition: all 0.3s ease;
+}
+
+    .notification-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Mensagem */
+.message-button {
+    transition: all 0.3s ease;
+}
+
+    .message-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Usuário */
+.user-button {
+    transition: all 0.3s ease;
+}
+
+    .user-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Grupo */
+.group-button {
+    transition: all 0.3s ease;
+}
+
+    .group-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Calendário */
+.calendar-button {
+    transition: all 0.3s ease;
+}
+
+    .calendar-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Relógio */
+.clock-button {
+    transition: all 0.3s ease;
+}
+
+    .clock-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Localização */
+.location-button {
+    transition: all 0.3s ease;
+}
+
+    .location-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Telefone */
+.phone-button {
+    transition: all 0.3s ease;
+}
+
+    .phone-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Email */
+.email-button {
+    transition: all 0.3s ease;
+}
+
+    .email-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Link */
+.link-button {
+    transition: all 0.3s ease;
+}
+
+    .link-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Impressão */
+.print-button {
+    transition: all 0.3s ease;
+}
+
+    .print-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Exportação */
+.export-button {
+    transition: all 0.3s ease;
+}
+
+    .export-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Importação */
+.import-button {
+    transition: all 0.3s ease;
+}
+
+    .import-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Filtro */
+.filter-button {
+    transition: all 0.3s ease;
+}
+
+    .filter-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Ordenação */
+.sort-button {
+    transition: all 0.3s ease;
+}
+
+    .sort-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Pesquisa */
+.search-button {
+    transition: all 0.3s ease;
+}
+
+    .search-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Visualização */
+.view-button {
+    transition: all 0.3s ease;
+}
+
+    .view-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Edição */
+.edit-button {
+    transition: all 0.3s ease;
+}
+
+    .edit-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Exclusão */
+.delete-button {
+    transition: all 0.3s ease;
+}
+
+    .delete-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Adição */
+.add-button {
+    transition: all 0.3s ease;
+}
+
+    .add-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Cancelamento */
+.cancel-button {
+    transition: all 0.3s ease;
+}
+
+    .cancel-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Confirmação */
+.confirm-button {
+    transition: all 0.3s ease;
+}
+
+    .confirm-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Rejeição */
+.reject-button {
+    transition: all 0.3s ease;
+}
+
+    .reject-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Aprovação */
+.approve-button {
+    transition: all 0.3s ease;
+}
+
+    .approve-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Envio */
+.submit-button {
+    transition: all 0.3s ease;
+}
+
+    .submit-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Redefinição */
+.reset-button {
+    transition: all 0.3s ease;
+}
+
+    .reset-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Voltar */
+.back-button {
+    transition: all 0.3s ease;
+}
+
+    .back-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Avançar */
+.forward-button {
+    transition: all 0.3s ease;
+}
+
+    .forward-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Atualização */
+.refresh-button {
+    transition: all 0.3s ease;
+}
+
+    .refresh-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Configuração */
+.settings-button {
+    transition: all 0.3s ease;
+}
+
+    .settings-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Ajuda */
+.help-button {
+    transition: all 0.3s ease;
+}
+
+    .help-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Informação */
+.info-button {
+    transition: all 0.3s ease;
+}
+
+    .info-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Alerta */
+.alert-button {
+    transition: all 0.3s ease;
+}
+
+    .alert-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Sucesso */
+.success-button {
+    transition: all 0.3s ease;
+}
+
+    .success-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Erro */
+.error-button {
+    transition: all 0.3s ease;
+}
+
+    .error-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Aviso */
+.warning-button {
+    transition: all 0.3s ease;
+}
+
+    .warning-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Notificação */
+.notification-button {
+    transition: all 0.3s ease;
+}
+
+    .notification-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Mensagem */
+.message-button {
+    transition: all 0.3s ease;
+}
+
+    .message-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Usuário */
+.user-button {
+    transition: all 0.3s ease;
+}
+
+    .user-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Grupo */
+.group-button {
+    transition: all 0.3s ease;
+}
+
+    .group-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Calendário */
+.calendar-button {
+    transition: all 0.3s ease;
+}
+
+    .calendar-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Relógio */
+.clock-button {
+    transition: all 0.3s ease;
+}
+
+    .clock-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Localização */
+.location-button {
+    transition: all 0.3s ease;
+}
+
+    .location-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Telefone */
+.phone-button {
+    transition: all 0.3s ease;
+}
+
+    .phone-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Email */
+.email-button {
+    transition: all 0.3s ease;
+}
+
+    .email-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Link */
+.link-button {
+    transition: all 0.3s ease;
+}
+
+    .link-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Impressão */
+.print-button {
+    transition: all 0.3s ease;
+}
+
+    .print-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Exportação */
+.export-button {
+    transition: all 0.3s ease;
+}
+
+    .export-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Importação */
+.import-button {
+    transition: all 0.3s ease;
+}
+
+    .import-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Filtro */
+.filter-button {
+    transition: all 0.3s ease;
+}
+
+    .filter-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Ordenação */
+.sort-button {
+    transition: all 0.3s ease;
+}
+
+    .sort-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Pesquisa */
+.search-button {
+    transition: all 0.3s ease;
+}
+
+    .search-button:hover {
+        transform: scale(1.1);
+    }
+
+/* Animações para Botões de Visualização */
+.view-button {
+    transition: all 0.3s ease;
+}
+
+    .view-button:hover {
+        transform: scale(1.1);
+    }

@@ -23,6 +23,7 @@ namespace Intranet_NEW.Models.WEB
         public string NM_FUNCAO_RH { get; set; }
         public string NR_FUNCAO_RH { get; set; }
         public string NR_ATIVIDADE_RH { get; set; } 
+        public string NM_ATIVIDADE_RH { get; set; }
         public string NM_SENHA { get; set; }
         public string NM_CONFIRMACAO_SENHA { get; set; }
         public string NR_COORDENADOR { get; set; }
